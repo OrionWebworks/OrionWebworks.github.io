@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chez Jean Pierre | Pizza Artisanale Paris</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,500;0,700;1,300&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #1a1614;
+      --bg-warm: #231e1b;
+      --fg: #f5f0e8;
+      --muted: #a89f94;
+      --accent: #e85d04;
+      --accent-glow: #ff7b2e;
+      --card: #2a2420;
+      --border: #3d352f;
+      --cream: #faf6f0;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background-color: var(--bg);
+      color: var(--fg);
+      overflow-x: hidden;
+    }
+
+    .font-display {
+      font-family: 'Cormorant Garamond', serif;
+    }
+
+    /* Noise overlay */
+    .noise-overlay {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.03;
+      z-index: 9999;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    }
+
+    /* Hero parallax */
+    .hero-container {
+      position: relative;
+      height: 100vh;
+      min-height: 700px;
+      overflow: hidden;
+    }
+
+    .hero-image {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 120%;
+      object-fit: cover;
+      transform: translateY(0);
+      transition: transform 0.1s linear;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(26, 22, 20, 0.4) 0%,
+        rgba(26, 22, 20, 0.2) 40%,
+        rgba(26, 22, 20, 0.6) 70%,
+        rgba(26, 22, 20, 1) 100%
+      );
+    }
+
+    /* Fire glow effect */
+    .fire-glow {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(232, 93, 4, 0.15) 0%, transparent 70%);
+      filter: blur(60px);
+      animation: firePulse 4s ease-in-out infinite;
+    }
+
+    @keyframes firePulse {
+      0%, 100% { transform: scale(1); opacity: 0.6; }
+      50% { transform: scale(1.2); opacity: 0.8; }
+    }
+
+    /* Text reveal animation */
+    .reveal-text {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal-text.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Stagger children */
+    .stagger-children > * {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    .stagger-children.visible > *:nth-child(1) { animation: fadeUp 0.7s 0.1s forwards cubic-bezier(0.16, 1, 0.3, 1); }
+    .stagger-children.visible > *:nth-child(2) { animation: fadeUp 0.7s 0.2s forwards cubic-bezier(0.16, 1, 0.3, 1); }
+    .stagger-children.visible > *:nth-child(3) { animation: fadeUp 0.7s 0.3s forwards cubic-bezier(0.16, 1, 0.3, 1); }
+    .stagger-children.visible > *:nth-child(4) { animation: fadeUp 0.7s 0.4s forwards cubic-bezier(0.16, 1, 0.3, 1); }
+    .stagger-children.visible > *:nth-child(5) { animation: fadeUp 0.7s 0.5s forwards cubic-bezier(0.16, 1, 0.3, 1); }
+
+    @keyframes fadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Process cards */
+    .process-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 16px;
+      background: var(--card);
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease;
+    }
+
+    .process-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .process-card img {
+      transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .process-card:hover img {
+      transform: scale(1.05);
+    }
+
+    .process-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(26, 22, 20, 0.9) 0%, transparent 60%);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* Menu item hover */
+    .menu-item {
+      position: relative;
+      padding: 1.5rem 0;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .menu-item::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--accent);
+      transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .menu-item:hover::after {
+      width: 100%;
+    }
+
+    .menu-item:hover .menu-name {
+      color: var(--accent);
+      padding-left: 8px;
+    }
+
+    .menu-item:hover .menu-price {
+      color: var(--fg);
+    }
+
+    .menu-name, .menu-price {
+      transition: all 0.3s ease;
+    }
+
+    /* Button styles */
+    .btn-primary {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem 2rem;
+      background: var(--accent);
+      color: var(--cream);
+      font-weight: 500;
+      border-radius: 100px;
+      border: none;
+      cursor: pointer;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transform: translateX(-100%);
+      transition: transform 0.6s ease;
+    }
+
+    .btn-primary:hover::before {
+      transform: translateX(100%);
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-glow);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(232, 93, 4, 0.3);
+    }
+
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem 2rem;
+      background: transparent;
+      color: var(--fg);
+      font-weight: 500;
+      border-radius: 100px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(232, 93, 4, 0.1);
+    }
+
+    /* Navigation */
+    .nav-link {
+      position: relative;
+      color: var(--muted);
+      transition: color 0.3s ease;
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--accent);
+      transition: width 0.3s ease;
+    }
+
+    .nav-link:hover {
+      color: var(--fg);
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    /* Floating elements */
+    .float-element {
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(2deg); }
+    }
+
+    /* Scroll indicator */
+    .scroll-indicator {
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(10px); }
+    }
+
+    /* Image gallery hover */
+    .gallery-item {
+      position: relative;
+      overflow: hidden;
+      border-radius: 12px;
+    }
+
+    .gallery-item::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(232, 93, 4, 0);
+      transition: background 0.4s ease;
+    }
+
+    .gallery-item:hover::after {
+      background: rgba(232, 93, 4, 0.2);
+    }
+
+    .gallery-item img {
+      transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.1);
+    }
+
+    /* Accent line */
+    .accent-line {
+      width: 60px;
+      height: 2px;
+      background: var(--accent);
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* Focus states */
+    *:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 4px;
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--accent);
+    }
+  </style>
+</head>
+<body>
+  <div class="noise-overlay"></div>
+
+  <!-- Navigation -->
+  <nav class="fixed top-0 left-0 right-0 z-50 px-6 py-4 lg:px-12 lg:py-6">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <a href="#" class="font-display text-2xl font-medium tracking-wide">Chez Jean Pierre</a>
+
+      <div class="hidden md:flex items-center gap-8">
+        <a href="#histoire" class="nav-link text-sm uppercase tracking-widest">Notre Histoire</a>
+        <a href="#menu" class="nav-link text-sm uppercase tracking-widest">Menu</a>
+        <a href="#artisanat" class="nav-link text-sm uppercase tracking-widest">Artisanat</a>
+        <a href="#contact" class="nav-link text-sm uppercase tracking-widest">Contact</a>
+      </div>
+
+      <a href="#reserver" class="btn-primary text-sm">
+        <span>Reserver</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </a>
+
+      <!-- Mobile menu button -->
+      <button class="md:hidden p-2" id="mobileMenuBtn" aria-label="Toggle menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="fixed inset-0 bg-black/95 z-40 hidden" id="mobileMenu">
+    <div class="flex flex-col items-center justify-center h-full gap-8">
+      <a href="#histoire" class="font-display text-3xl">Notre Histoire</a>
+      <a href="#menu" class="font-display text-3xl">Menu</a>
+      <a href="#artisanat" class="font-display text-3xl">Artisanat</a>
+      <a href="#contact" class="font-display text-3xl">Contact</a>
+    </div>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="hero-container">
+    <img
+      src="hero-pizza.jpg"
+      alt="Chez Jean Pierre - Intérieur du restaurant avec four à bois"
+      class="hero-image"
+      id="heroImage"
+    >
+    <div class="hero-overlay"></div>
+
+    <div class="fire-glow" style="top: 20%; left: 10%;"></div>
+    <div class="fire-glow" style="bottom: 30%; right: 5%; animation-delay: 2s;"></div>
+
+    <div class="absolute inset-0 flex flex-col justify-end pb-24 lg:pb-32 px-6 lg:px-12">
+      <div class="max-w-7xl mx-auto w-full">
+        <div class="stagger-children" id="heroContent">
+          <p class="text-sm uppercase tracking-[0.3em] text-[var(--muted)] mb-4">Paris, France</p>
+          <h1 class="font-display text-5xl md:text-7xl lg:text-8xl font-light leading-[0.9] mb-6">
+            Chez<br>
+            <span class="font-medium italic text-[var(--accent)]">Jean Pierre</span>
+          </h1>
+          <p class="text-lg md:text-xl text-[var(--muted)] max-w-xl mb-8 font-light">
+            Pizza artisanale au feu de bois depuis 1987.
+            Une tradition napolitaine dans le coeur de Paris.
+          </p>
+          <div class="flex flex-wrap gap-4">
+            <button class="btn-primary">
+              <span>Decouvrir le Menu</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </button>
+            <button class="btn-outline">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <polygon points="10 8 16 12 10 16 10 8" fill="currentColor"/>
+              </svg>
+              <span>Notre Histoire</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 scroll-indicator">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-[var(--muted)]">
+        <path d="M12 5v14M5 12l7 7 7-7"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- Story Section -->
+  <section id="histoire" class="py-24 lg:py-32 px-6 lg:px-12 bg-[var(--bg-warm)]">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid lg:grid-cols-2 gap-16 items-center">
+        <div class="reveal-text">
+          <div class="accent-line mb-6"></div>
+          <h2 class="font-display text-4xl md:text-5xl lg:text-6xl font-light mb-8 leading-tight">
+            Une histoire de<br>
+            <span class="italic text-[var(--accent)]">passion</span> et de feu
+          </h2>
+          <p class="text-[var(--muted)] text-lg leading-relaxed mb-6">
+            En 1987, Jean Pierre a ouvert les portes de sa pizzeria avec un seul four à bois
+            et une vision : apporter l'authenticité de Naples aux tables parisiennes.
+            Aujourd'hui, cette flamme brûle toujours.
+          </p>
+          <p class="text-[var(--muted)] text-lg leading-relaxed mb-8">
+            Chaque pizza est un hommage à la tradition — pâte levée 72 heures,
+            tomates San Marzano, mozzarella di bufala, cuites en 90 secondes
+            dans notre four à 485°C.
+          </p>
+          <div class="flex gap-12">
+            <div>
+              <span class="font-display text-4xl text-[var(--accent)]">37</span>
+              <p class="text-sm text-[var(--muted)] mt-1">Annees de tradition</p>
+            </div>
+            <div>
+              <span class="font-display text-4xl text-[var(--accent)]">485°</span>
+              <p class="text-sm text-[var(--muted)] mt-1">Degres de perfection</p>
+            </div>
+            <div>
+              <span class="font-display text-4xl text-[var(--accent)]">90s</span>
+              <p class="text-sm text-[var(--muted)] mt-1">Cuisson optimale</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 reveal-text">
+          <div class="gallery-item aspect-[3/4]">
+            <img
+              src="oven-pizza.png"
+              alt="Four à bois avec pizza"
+              class="w-full h-full object-cover"
+            >
+          </div>
+          <div class="gallery-item aspect-[3/4] mt-8">
+            <img
+              src="dough-prep.png"
+              alt="Préparation de la pâte"
+              class="w-full h-full object-cover"
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Menu Section -->
+  <section id="menu" class="py-24 lg:py-32 px-6 lg:px-12">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16 reveal-text">
+        <div class="accent-line mx-auto mb-6"></div>
+        <h2 class="font-display text-4xl md:text-5xl lg:text-6xl font-light mb-4">
+          Notre <span class="italic text-[var(--accent)]">Menu</span>
+        </h2>
+        <p class="text-[var(--muted)] text-lg max-w-2xl mx-auto">
+          Des classiques napolitains aux créations saisonnières,
+          chaque pizza raconte une histoire de saveurs authentiques.
+        </p>
+      </div>
+
+      <div class="grid lg:grid-cols-2 gap-8 lg:gap-16">
+        <!-- Menu Column 1 -->
+        <div class="reveal-text">
+          <h3 class="font-display text-2xl italic text-[var(--accent)] mb-6">Classiques</h3>
+
+          <div class="menu-item">
+            <div class="flex justify-between items-baseline">
+              <span class="menu-name font-medium text-lg">Margherita DOP</span>
+              <span class="menu-price text-[var(--muted)]">14.50 EUR</span>
+            </div>
+            <p class="text-sm text-[var(--muted)] mt-1">Tomate San Marzano, mozzarella di bufala, basilic frais</p>
+          </div>
+
+          <div class="menu-item">
+            <div class="flex justify-between items-baseline">
+              <span class="menu-name font-medium text-lg">Marinara</span>
+              <span class="menu-price text-[var(--muted)]">12.00 EUR</span>
+            </div>
+            <p class="text-sm text-[var(--muted)] mt-1">Tomate, ail, origan, huile d'olive extra vierge</p>
+          </div>
+
+          <div class="menu-item">
+            <div class="flex justify-between items-baseline">
+              <span class="menu-name font-medium text-lg">Quattro Formaggi</span>
+              <span class="menu-price text-[var(--muted)]">17.00 EUR</span>
+            </div>
+            <p class="text-sm text-[var(--muted)] mt-1">Mozzarella, gorgonzola, parmesan, provolone</p>
+          </div>
+
+          <div class="menu-item">
+            <div class="flex justify-between items-baseline">
+              <span class="menu-name font-medium text-lg">Diavola</span>
+              <span class="menu-price text-[var(--muted)]">16.00 EUR</span>
+            </div>
+            <p class="text-sm text-[var(--muted)] mt-1">Tomate, mozzarella, salami calabrais piquant</p>
+          </div>
+
+          <div class="menu-item">
+            <div class="flex justify-between items-baseline">
+              <span class="menu-name font-medium text-lg">Prosciutto e Rucola</span>
+              <span class="menu-price text-[var(--muted)]">18.50 EUR</span>
+            </div>
+            <p class="text-sm text-[var(--muted)] mt-1">Mozzarella, prosciutto di Parma, roquette, parmesan</p>
+          </div>
+        </div>
+
+        <!-- Menu Column 2 -->
+        <div class="reveal-text">
+          <h3 class="font-display text-2xl italic text-[var(--accent)] mb-6">Signatures</h3>
+
+          <div class="menu-item">
+            <div class="flex justify-between items-baseline">
+              <span class="menu-name font-medium text-lg">Jean Pierre</span>
+              <span class="menu-price text-[var(--muted)]">19.50 EUR</span>
+            </div>
+            <p class="text-sm text-[var(--muted)] mt-1">Crème de truffe, mozzarella, champignons, copeaux de parmesan</p>
+          </div>
+
+          <div class="menu-item">
+            <div class="flex justify-between items-baseline">
+              <span class="menu-name font-medium text-lg">Parisienne</span>
+              <span class="menu-price text-[var(--muted)]">18.00 EUR</span>
+            </div>
+            <p class="text-sm text-[var(--muted)] mt-1">Crème fraiche, lardons, oignons caramélisés, oeuf</p>
+          </div>
+
+          <div class="menu-item">
+            <div class="flex justify-between items-baseline">
+              <span class="menu-name font-medium text-lg">Mediterranea</span>
+              <span class="menu-price text-[var(--muted)]">17.50 EUR</span>
+            </div>
+            <p class="text-sm text-[var(--muted)] mt-1">Pesto maison, mozzarella, tomates séchées, olives taggiasche</p>
+          </div>
+
+          <div class="menu-item">
+            <div class="flex justify-between items-baseline">
+              <span class="menu-name font-medium text-lg">Saisonniere</span>
+              <span class="menu-price text-[var(--muted)]">20.00 EUR</span>
+            </div>
+            <p class="text-sm text-[var(--muted)] mt-1">Demandez notre création du moment</p>
+          </div>
+
+          <div class="mt-8 p-6 bg-[var(--card)] rounded-2xl border border-[var(--border)]">
+            <p class="text-sm text-[var(--muted)]">
+              <span class="text-[var(--accent)] font-medium">Note:</span>
+              Toutes nos pizzas sont préparées avec des ingrédients frais et locaux quand disponible.
+              Pâte sans gluten disponible sur demande.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Craft Section -->
+  <section id="artisanat" class="py-24 lg:py-32 px-6 lg:px-12 bg-[var(--bg-warm)]">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16 reveal-text">
+        <div class="accent-line mx-auto mb-6"></div>
+        <h2 class="font-display text-4xl md:text-5xl lg:text-6xl font-light mb-4">
+          L'<span class="italic text-[var(--accent)]">Artisanat</span>
+        </h2>
+        <p class="text-[var(--muted)] text-lg max-w-2xl mx-auto">
+          Chaque étape est un rituel. De la pâte à la dernière feuille de basilic,
+          rien n'est laissé au hasard.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="process-card group">
+          <img
+            src="step1-dough.png"
+            alt="Préparation de la pâte"
+            class="w-full aspect-[4/5] object-cover"
+          >
+          <div class="absolute bottom-0 left-0 right-0 p-6 z-10">
+            <span class="font-display text-5xl font-light text-[var(--accent)] opacity-50">01</span>
+            <h3 class="font-display text-xl mt-2">La Pate</h3>
+            <p class="text-sm text-[var(--muted)] mt-1">Levée 72h, pétrie à la main</p>
+          </div>
+        </div>
+
+        <div class="process-card group">
+          <img
+            src="step2-sauce.png"
+            alt="Ajout de la sauce tomate"
+            class="w-full aspect-[4/5] object-cover"
+          >
+          <div class="absolute bottom-0 left-0 right-0 p-6 z-10">
+            <span class="font-display text-5xl font-light text-[var(--accent)] opacity-50">02</span>
+            <h3 class="font-display text-xl mt-2">La Sauce</h3>
+            <p class="text-sm text-[var(--muted)] mt-1">San Marzano, origan, sel marin</p>
+          </div>
+        </div>
+
+        <div class="process-card group">
+          <img
+            src="step3-fire.png"
+            alt="Cuisson au four à bois"
+            class="w-full aspect-[4/5] object-cover"
+          >
+          <div class="absolute bottom-0 left-0 right-0 p-6 z-10">
+            <span class="font-display text-5xl font-light text-[var(--accent)] opacity-50">03</span>
+            <h3 class="font-display text-xl mt-2">Le Feu</h3>
+            <p class="text-sm text-[var(--muted)] mt-1">90 secondes à 485°C</p>
+          </div>
+        </div>
+
+        <div class="process-card group">
+          <img
+            src="step4-finish.png"
+            alt="Finitions et service"
+            class="w-full aspect-[4/5] object-cover"
+          >
+          <div class="absolute bottom-0 left-0 right-0 p-6 z-10">
+            <span class="font-display text-5xl font-light text-[var(--accent)] opacity-50">04</span>
+            <h3 class="font-display text-xl mt-2">La Finition</h3>
+            <p class="text-sm text-[var(--muted)] mt-1">Basilic frais, huile d'olive</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonial Section -->
+  <section class="py-24 lg:py-32 px-6 lg:px-12 relative overflow-hidden">
+    <div class="fire-glow" style="top: 50%; left: 50%; transform: translate(-50%, -50%);"></div>
+
+    <div class="max-w-4xl mx-auto text-center relative z-10 reveal-text">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" class="text-[var(--accent)] mx-auto mb-8 opacity-50">
+        <path d="M10 11L8 17L5 11C5 11 4 9 6 7C8 5 10 8 10 11Z" fill="currentColor"/>
+        <path d="M19 11L17 17L14 11C14 11 13 9 15 7C17 5 19 8 19 11Z" fill="currentColor"/>
+      </svg>
+
+      <blockquote class="font-display text-3xl md:text-4xl lg:text-5xl font-light leading-snug mb-8">
+        "La meilleure pizza de Paris, sans contestation.
+        La pâte est <span class="italic text-[var(--accent)]">parfaite</span>,
+        les ingrédients d'une fraîcheur incomparable."
+      </blockquote>
+
+      <div class="flex items-center justify-center gap-4">
+        <div class="w-12 h-12 rounded-full bg-[var(--card)] flex items-center justify-center">
+          <span class="font-display text-lg">ML</span>
+        </div>
+        <div class="text-left">
+          <p class="font-medium">Marie Laurent</p>
+          <p class="text-sm text-[var(--muted)]">Food Critic, Le Figaro</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="py-24 lg:py-32 px-6 lg:px-12 bg-[var(--bg-warm)]">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid lg:grid-cols-2 gap-16">
+        <div class="reveal-text">
+          <div class="accent-line mb-6"></div>
+          <h2 class="font-display text-4xl md:text-5xl lg:text-6xl font-light mb-8 leading-tight">
+            Rendez-vous<br>
+            <span class="italic text-[var(--accent)]">chez nous</span>
+          </h2>
+
+          <div class="space-y-8">
+            <div>
+              <h3 class="text-sm uppercase tracking-widest text-[var(--muted)] mb-2">Adresse</h3>
+              <p class="text-lg">42 Rue de la Roquette</p>
+              <p class="text-lg">75011 Paris, France</p>
+            </div>
+
+            <div>
+              <h3 class="text-sm uppercase tracking-widest text-[var(--muted)] mb-2">Horaires</h3>
+              <p class="text-lg">Mardi - Samedi: 12h - 14h30, 19h - 22h30</p>
+              <p class="text-lg">Dimanche: 12h - 15h</p>
+              <p class="text-[var(--muted)]">Fermé le lundi</p>
+            </div>
+
+            <div>
+              <h3 class="text-sm uppercase tracking-widest text-[var(--muted)] mb-2">Contact</h3>
+              <p class="text-lg">+33 1 43 55 67 89</p>
+              <p class="text-lg">bonjour@chezjeanpierre.fr</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal-text" id="reserver">
+          <form class="bg-[var(--card)] rounded-3xl p-8 border border-[var(--border)]">
+            <h3 class="font-display text-2xl mb-6">Reservez votre table</h3>
+
+            <div class="space-y-4">
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-sm text-[var(--muted)] mb-2" for="name">Nom</label>
+                  <input
+                    type="text"
+                    id="name"
+                    class="w-full bg-[var(--bg)] border border-[var(--border)] rounded-xl px-4 py-3 text-[var(--fg)] focus:border-[var(--accent)] transition-colors"
+                    placeholder="Votre nom"
+                  >
+                </div>
+                <div>
+                  <label class="block text-sm text-[var(--muted)] mb-2" for="guests">Personnes</label>
+                  <select
+                    id="guests"
+                    class="w-full bg-[var(--bg)] border border-[var(--border)] rounded-xl px-4 py-3 text-[var(--fg)] focus:border-[var(--accent)] transition-colors"
+                  >
+                    <option>2 personnes</option>
+                    <option>3 personnes</option>
+                    <option>4 personnes</option>
+                    <option>5 personnes</option>
+                    <option>6+ personnes</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-sm text-[var(--muted)] mb-2" for="date">Date</label>
+                  <input
+                    type="date"
+                    id="date"
+                    class="w-full bg-[var(--bg)] border border-[var(--border)] rounded-xl px-4 py-3 text-[var(--fg)] focus:border-[var(--accent)] transition-colors"
+                  >
+                </div>
+                <div>
+                  <label class="block text-sm text-[var(--muted)] mb-2" for="time">Heure</label>
+                  <select
+                    id="time"
+                    class="w-full bg-[var(--bg)] border border-[var(--border)] rounded-xl px-4 py-3 text-[var(--fg)] focus:border-[var(--accent)] transition-colors"
+                  >
+                    <option>12:00</option>
+                    <option>12:30</option>
+                    <option>13:00</option>
+                    <option>13:30</option>
+                    <option>19:00</option>
+                    <option>19:30</option>
+                    <option>20:00</option>
+                    <option>20:30</option>
+                    <option>21:00</option>
+                    <option>21:30</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-sm text-[var(--muted)] mb-2" for="email">Email</label>
+                <input
+                  type="email"
+                  id="email"
+                  class="w-full bg-[var(--bg)] border border-[var(--border)] rounded-xl px-4 py-3 text-[var(--fg)] focus:border-[var(--accent)] transition-colors"
+                  placeholder="votre@email.com"
+                >
+              </div>
+
+              <div>
+                <label class="block text-sm text-[var(--muted)] mb-2" for="notes">Notes (optionnel)</label>
+                <textarea
+                  id="notes"
+                  rows="3"
+                  class="w-full bg-[var(--bg)] border border-[var(--border)] rounded-xl px-4 py-3 text-[var(--fg)] focus:border-[var(--accent)] transition-colors resize-none"
+                  placeholder="Allergies, occasions spéciales..."
+                ></textarea>
+              </div>
+
+              <button type="submit" class="btn-primary w-full justify-center mt-4">
+                <span>Confirmer la reservation</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-12 px-6 lg:px-12 border-t border-[var(--border)]">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+        <div class="text-center md:text-left">
+          <p class="font-display text-2xl mb-2">Chez Jean Pierre</p>
+          <p class="text-sm text-[var(--muted)]">Pizza artisanale au feu de bois depuis 1987</p>
+        </div>
+
+        <div class="flex items-center gap-6">
+          <a href="#" class="text-[var(--muted)] hover:text-[var(--accent)] transition-colors" aria-label="Instagram">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="2" width="20" height="20" rx="5"/>
+              <circle cx="12" cy="12" r="4"/>
+              <circle cx="18" cy="6" r="1" fill="currentColor"/>
+            </svg>
+          </a>
+          <a href="#" class="text-[var(--muted)] hover:text-[var(--accent)] transition-colors" aria-label="Facebook">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/>
+            </svg>
+          </a>
+          <a href="#" class="text-[var(--muted)] hover:text-[var(--accent)] transition-colors" aria-label="TripAdvisor">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <circle cx="6.5" cy="13.5" r="2" fill="none" stroke="currentColor" stroke-width="2"/>
+              <circle cx="17.5" cy="13.5" r="2" fill="none" stroke="currentColor" stroke-width="2"/>
+              <path d="M2 9h20M7 9a5 5 0 0110 0" fill="none" stroke="currentColor" stroke-width="2"/>
+            </svg>
+          </a>
+        </div>
+
+        <div class="text-center md:text-right">
+          <p class="text-sm text-[var(--muted)] mb-1">
+            &copy; 2026 <a href="https://orionwebworks.github.io/" class="text-[var(--accent)] hover:text-[var(--accent-glow)] transition-colors" target="_blank" rel="noopener">Orion Web Works</a>. All rights reserved.
+          </p>
+          <p class="text-xs text-[var(--muted)] italic">
+            Made with <span class="text-[var(--accent)]">&hearts;</span> in Mauritius
+          </p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Initialize variables first
+    let ticking = false;
+    let heroImage = null;
+    let heroContent = null;
+    let mobileMenuBtn = null;
+    let mobileMenu = null;
+    let revealElements = null;
+    let staggerElements = null;
+
+    // DOM Ready
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize DOM references
+      heroImage = document.getElementById('heroImage');
+      heroContent = document.getElementById('heroContent');
+      mobileMenuBtn = document.getElementById('mobileMenuBtn');
+      mobileMenu = document.getElementById('mobileMenu');
+      revealElements = document.querySelectorAll('.reveal-text');
+      staggerElements = document.querySelectorAll('.stagger-children');
+
+      // Initialize all features
+      initParallax();
+      initMobileMenu();
+      initScrollReveal();
+      initHeroAnimation();
+    });
+
+    // Parallax effect for hero
+    function initParallax() {
+      if (!heroImage) return;
+
+      window.addEventListener('scroll', function() {
+        if (!ticking) {
+          window.requestAnimationFrame(function() {
+            const scrolled = window.pageYOffset;
+            const rate = scrolled * 0.3;
+
+            if (heroImage) {
+              heroImage.style.transform = 'translateY(' + rate + 'px)';
+            }
+            ticking = false;
+          });
+          ticking = true;
+        }
+      }, { passive: true });
+    }
+
+    // Mobile menu toggle
+    function initMobileMenu() {
+      if (!mobileMenuBtn || !mobileMenu) return;
+
+      mobileMenuBtn.addEventListener('click', function() {
+        mobileMenu.classList.toggle('hidden');
+        document.body.style.overflow = mobileMenu.classList.contains('hidden') ? '' : 'hidden';
+      });
+
+      // Close menu when clicking links
+      mobileMenu.querySelectorAll('a').forEach(function(link) {
+        link.addEventListener('click', function() {
+          mobileMenu.classList.add('hidden');
+          document.body.style.overflow = '';
+        });
+      });
+    }
+
+    // Scroll reveal animation
+    function initScrollReveal() {
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (prefersReducedMotion) {
+        // Show all elements immediately if reduced motion is preferred
+        if (revealElements) {
+          revealElements.forEach(function(el) {
+            el.classList.add('visible');
+          });
+        }
+        if (staggerElements) {
+          staggerElements.forEach(function(el) {
+            el.classList.add('visible');
+          });
+        }
+        return;
+      }
+
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      };
+
+      const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, observerOptions);
+
+      if (revealElements) {
+        revealElements.forEach(function(el) {
+          observer.observe(el);
+        });
+      }
+
+      if (staggerElements) {
+        staggerElements.forEach(function(el) {
+          observer.observe(el);
+        });
+      }
+    }
+
+    // Hero entrance animation
+    function initHeroAnimation() {
+      if (heroContent) {
+        setTimeout(function() {
+          heroContent.classList.add('visible');
+        }, 300);
+      }
+    }
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href');
+        const target = document.querySelector(targetId);
+
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+  </script>
+</body>
+</html>

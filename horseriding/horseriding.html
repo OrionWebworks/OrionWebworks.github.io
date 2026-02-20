@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Académie Équestre de Provence | L'Art de l'Équitation</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f0d0a;
+      --bg-warm: #1a1612;
+      --fg: #f5f0e8;
+      --fg-muted: #a89b8c;
+      --accent: #c9a962;
+      --accent-warm: #d4a54a;
+      --card: rgba(26, 22, 18, 0.85);
+      --border: rgba(201, 169, 98, 0.2);
+      --cream: #f5f0e8;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      overflow-x: hidden;
+    }
+
+    .font-display {
+      font-family: 'Cormorant Garamond', serif;
+    }
+
+    /* Grain texture overlay */
+    .grain-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1000;
+      opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    }
+
+    /* Hero Section */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .hero-bg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 30%;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(15, 13, 10, 0.3) 0%,
+        rgba(15, 13, 10, 0.5) 50%,
+        rgba(15, 13, 10, 0.95) 100%
+      );
+    }
+
+    .hero-radial {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 30% 40%, rgba(201, 169, 98, 0.08) 0%, transparent 60%);
+    }
+
+    /* Navigation */
+    .nav-link {
+      position: relative;
+      color: var(--fg-muted);
+      transition: color 0.3s ease;
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--accent);
+      transition: width 0.3s ease;
+    }
+
+    .nav-link:hover {
+      color: var(--accent);
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    /* Decorative line */
+    .deco-line {
+      width: 60px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    }
+
+    /* Button styles */
+    .btn-primary {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 36px;
+      background: transparent;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 500;
+      font-size: 13px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      cursor: pointer;
+      overflow: hidden;
+      transition: color 0.4s ease, border-color 0.4s ease;
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--accent);
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: -1;
+    }
+
+    .btn-primary:hover {
+      color: var(--bg);
+      border-color: var(--accent);
+    }
+
+    .btn-primary:hover::before {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+
+    .btn-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--fg-muted);
+      font-size: 13px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.3s ease, gap 0.3s ease;
+    }
+
+    .btn-secondary:hover {
+      color: var(--accent);
+      gap: 14px;
+    }
+
+    /* Program cards */
+    .program-card {
+      position: relative;
+      background: var(--card);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(10px);
+      overflow: hidden;
+      transition: transform 0.4s ease, border-color 0.3s ease;
+    }
+
+    .program-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--accent);
+    }
+
+    .program-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .program-card:hover::before {
+      opacity: 1;
+    }
+
+    /* Gallery */
+    .gallery-item {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .gallery-item img {
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.08);
+    }
+
+    .gallery-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(15, 13, 10, 0.8) 0%, transparent 50%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .gallery-item:hover .gallery-overlay {
+      opacity: 1;
+    }
+
+    /* Stats counter */
+    .stat-number {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(48px, 8vw, 72px);
+      font-weight: 300;
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    /* Scroll reveal animations */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    /* Floating elements */
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+
+    .float-animation {
+      animation: float 6s ease-in-out infinite;
+    }
+
+    /* Parallax sections */
+    .parallax-section {
+      position: relative;
+      background-attachment: fixed;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+
+    /* Testimonial */
+    .testimonial-quote {
+      position: relative;
+    }
+
+    .testimonial-quote::before {
+      content: '"';
+      position: absolute;
+      top: -20px;
+      left: -10px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 120px;
+      color: var(--accent);
+      opacity: 0.2;
+      line-height: 1;
+    }
+
+    /* Focus states */
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 4px;
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      html {
+        scroll-behavior: auto;
+      }
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--accent);
+      border-radius: 4px;
+    }
+
+    /* Mobile menu */
+    .mobile-menu {
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 32px;
+      transform: translateX(100%);
+      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .mobile-menu.active {
+      transform: translateX(0);
+    }
+
+    /* Form styles */
+    .form-input {
+      width: 100%;
+      padding: 16px 0;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--border);
+      color: var(--fg);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 15px;
+      transition: border-color 0.3s ease;
+    }
+
+    .form-input::placeholder {
+      color: var(--fg-muted);
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+  </style>
+</head>
+<body>
+  <div class="grain-overlay" aria-hidden="true"></div>
+
+  <!-- Navigation -->
+  <header class="fixed top-0 left-0 right-0 z-50 transition-all duration-500" id="navbar">
+    <nav class="max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
+      <a href="#" class="flex items-center gap-3">
+        <svg class="w-10 h-10 text-[var(--accent)]" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+          <path d="M20 4L36 12V28L20 36L4 28V12L20 4Z" stroke="currentColor" stroke-width="1"/>
+          <path d="M20 12C23 12 26 15 26 18C26 21 24 24 20 28C16 24 14 21 14 18C14 15 17 12 20 12Z" fill="currentColor" opacity="0.3"/>
+        </svg>
+        <div class="hidden sm:block">
+          <span class="font-display text-xl font-semibold tracking-wide">Académie Équestre</span>
+          <span class="block text-[10px] text-[var(--fg-muted)] tracking-[0.3em] uppercase">de Provence</span>
+        </div>
+      </a>
+
+      <div class="hidden lg:flex items-center gap-10">
+        <a href="#about" class="nav-link text-sm tracking-wider">À Propos</a>
+        <a href="#programs" class="nav-link text-sm tracking-wider">Programmes</a>
+        <a href="#gallery" class="nav-link text-sm tracking-wider">Galerie</a>
+        <a href="#contact" class="nav-link text-sm tracking-wider">Contact</a>
+      </div>
+
+      <button class="btn-primary hidden lg:flex" onclick="scrollToSection('contact')">
+        <span>Réserver</span>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+        </svg>
+      </button>
+
+      <button class="lg:hidden p-2" onclick="toggleMobileMenu()" aria-label="Menu">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+    </nav>
+  </header>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="absolute top-6 right-6 p-2" onclick="toggleMobileMenu()" aria-label="Fermer">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    </button>
+    <a href="#about" class="font-display text-3xl" onclick="toggleMobileMenu()">À Propos</a>
+    <a href="#programs" class="font-display text-3xl" onclick="toggleMobileMenu()">Programmes</a>
+    <a href="#gallery" class="font-display text-3xl" onclick="toggleMobileMenu()">Galerie</a>
+    <a href="#contact" class="font-display text-3xl" onclick="toggleMobileMenu()">Contact</a>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="hero" id="hero">
+    <div class="hero-bg">
+      <img src="hero-bg.jpg" alt="Cavalier élégant avec son cheval dans les prairies de Provence" loading="eager">
+    </div>
+    <div class="hero-overlay"></div>
+    <div class="hero-radial"></div>
+
+    <div class="relative z-10 min-h-screen flex flex-col justify-end pb-24 px-6">
+      <div class="max-w-7xl mx-auto w-full">
+        <div class="max-w-3xl">
+          <div class="flex items-center gap-4 mb-8">
+            <div class="deco-line"></div>
+            <span class="text-[var(--accent)] text-sm tracking-[0.2em] uppercase">Depuis 1892</span>
+          </div>
+
+          <h1 class="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-light leading-[0.95] mb-8">
+            L'Art de<br>
+            <span class="text-[var(--accent)] italic">l'Équitation</span>
+          </h1>
+
+          <p class="text-[var(--fg-muted)] text-lg md:text-xl max-w-xl mb-12 leading-relaxed">
+            Découvrez l'excellence équestre au cœur de la Provence.
+            Une académie d'exception où tradition et passion s'unissent.
+          </p>
+
+          <div class="flex flex-col sm:flex-row gap-6">
+            <button class="btn-primary" onclick="scrollToSection('programs')">
+              <span>Nos Programmes</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+              </svg>
+            </button>
+            <a href="#about" class="btn-secondary">
+              <span>Découvrir</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Scroll indicator -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50">
+          <span class="text-xs tracking-widest uppercase">Scroll</span>
+          <div class="w-px h-12 bg-gradient-to-b from-[var(--accent)] to-transparent"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="py-32 px-6 relative overflow-hidden" id="about">
+    <!-- Background decoration -->
+    <div class="absolute top-0 right-0 w-1/2 h-full opacity-5" aria-hidden="true">
+      <svg viewBox="0 0 400 400" class="w-full h-full">
+        <circle cx="200" cy="200" r="150" stroke="currentColor" fill="none" stroke-width="0.5"/>
+        <circle cx="200" cy="200" r="100" stroke="currentColor" fill="none" stroke-width="0.5"/>
+        <circle cx="200" cy="200" r="50" stroke="currentColor" fill="none" stroke-width="0.5"/>
+      </svg>
+    </div>
+
+    <div class="max-w-7xl mx-auto">
+      <div class="grid lg:grid-cols-2 gap-16 items-center">
+        <div class="reveal">
+          <div class="flex items-center gap-4 mb-6">
+            <span class="text-[var(--accent)] text-sm tracking-[0.2em] uppercase">Notre Histoire</span>
+            <div class="deco-line"></div>
+          </div>
+
+          <h2 class="font-display text-4xl md:text-5xl lg:text-6xl font-light mb-8 leading-tight">
+            Une passion<br>
+            <span class="text-[var(--accent)] italic">transmise</span> depuis<br>
+            quatre générations
+          </h2>
+
+          <p class="text-[var(--fg-muted)] text-lg leading-relaxed mb-8">
+            Fondée en 1892 par la famille Beaumont, l'Académie Équestre de Provence
+            perpétue un savoir-faire unique au service de l'excellence équestre.
+            Nichée au cœur de 200 hectares de prairies et de forêts provençales,
+            notre domaine offre un cadre d'exception pour l'apprentissage et la pratique de l'équitation.
+          </p>
+
+          <p class="text-[var(--fg-muted)] text-lg leading-relaxed mb-12">
+            Notre philosophie repose sur une approche respectueuse du cheval,
+            où l'harmonie entre le cavalier et sa monture prime sur toute autre considération.
+            Chaque cours est une invitation à découvrir le langage silencieux qui unit l'humain et l'animal.
+          </p>
+
+          <div class="flex items-center gap-8">
+            <div>
+              <div class="stat-number">130+</div>
+              <div class="text-[var(--fg-muted)] text-sm tracking-wider uppercase mt-2">Années d'excellence</div>
+            </div>
+            <div class="w-px h-16 bg-[var(--border)]"></div>
+            <div>
+              <div class="stat-number">45</div>
+              <div class="text-[var(--fg-muted)] text-sm tracking-wider uppercase mt-2">Chevaux de race</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="relative reveal reveal-delay-2">
+          <div class="relative">
+            <img src="about-image.png" alt="Intimité entre cavalier et cheval dans nos écuries" class="w-full h-[500px] object-cover">
+            <div class="absolute inset-0 border border-[var(--accent)] translate-x-4 translate-y-4 -z-10"></div>
+          </div>
+          <div class="absolute -bottom-8 -left-8 bg-[var(--card)] border border-[var(--border)] p-8 backdrop-blur-sm max-w-xs">
+            <p class="font-display text-xl italic text-[var(--accent)] mb-2">"L'équitation est l'art de faire passer son âme dans celle de son cheval."</p>
+            <span class="text-[var(--fg-muted)] text-sm">— Antoine de Pluvinel</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Banner -->
+  <section class="py-20 relative overflow-hidden" style="background: linear-gradient(135deg, var(--bg-warm) 0%, var(--bg) 100%);">
+    <div class="absolute inset-0 opacity-10" aria-hidden="true">
+      <svg width="100%" height="100%">
+        <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+          <path d="M 40 0 L 0 0 0 40" fill="none" stroke="currentColor" stroke-width="0.5"/>
+        </pattern>
+        <rect width="100%" height="100%" fill="url(#grid)"/>
+      </svg>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-12">
+        <div class="text-center reveal">
+          <div class="stat-number">500+</div>
+          <div class="text-[var(--fg-muted)] text-sm tracking-wider uppercase mt-2">Élèves formés</div>
+        </div>
+        <div class="text-center reveal reveal-delay-1">
+          <div class="stat-number">12</div>
+          <div class="text-[var(--fg-muted)] text-sm tracking-wider uppercase mt-2">Instructeurs experts</div>
+        </div>
+        <div class="text-center reveal reveal-delay-2">
+          <div class="stat-number">200</div>
+          <div class="text-[var(--fg-muted)] text-sm tracking-wider uppercase mt-2">Hectares de domaine</div>
+        </div>
+        <div class="text-center reveal reveal-delay-3">
+          <div class="stat-number">98%</div>
+          <div class="text-[var(--fg-muted)] text-sm tracking-wider uppercase mt-2">Clients satisfaits</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Programs Section -->
+  <section class="py-32 px-6" id="programs">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-20 reveal">
+        <div class="flex items-center justify-center gap-4 mb-6">
+          <div class="deco-line"></div>
+          <span class="text-[var(--accent)] text-sm tracking-[0.2em] uppercase">Nos Programmes</span>
+          <div class="deco-line"></div>
+        </div>
+        <h2 class="font-display text-4xl md:text-5xl lg:text-6xl font-light">
+          Une formation <span class="text-[var(--accent)] italic">sur mesure</span>
+        </h2>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Program 1 -->
+        <div class="program-card reveal">
+          <div class="relative h-64 overflow-hidden">
+            <img src="program-initiation.png" alt="Cours d'initiation équestre" class="w-full h-full object-cover">
+            <div class="absolute top-4 left-4 bg-[var(--accent)] text-[var(--bg)] px-3 py-1 text-xs tracking-wider uppercase">Débutant</div>
+          </div>
+          <div class="p-8">
+            <h3 class="font-display text-2xl mb-3">Initiation Découverte</h3>
+            <p class="text-[var(--fg-muted)] mb-6 leading-relaxed">Premiers pas dans le monde équestre. Approche douce et respectueuse du cheval, bases de l'équitation en toute sécurité.</p>
+            <div class="flex items-center justify-between">
+              <span class="text-[var(--accent)] font-display text-xl">À partir de 85€</span>
+              <button class="btn-secondary">
+                <span>En savoir plus</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Program 2 -->
+        <div class="program-card reveal reveal-delay-1">
+          <div class="relative h-64 overflow-hidden">
+            <img src="program-perfectionnement.png" alt="Perfectionnement équestre" class="w-full h-full object-cover">
+            <div class="absolute top-4 left-4 bg-[var(--fg)] text-[var(--bg)] px-3 py-1 text-xs tracking-wider uppercase">Intermédiaire</div>
+          </div>
+          <div class="p-8">
+            <h3 class="font-display text-2xl mb-3">Perfectionnement</h3>
+            <p class="text-[var(--fg-muted)] mb-6 leading-relaxed">Approfondissement des techniques, travail sur l'équilibre et la communication subtile avec votre monture.</p>
+            <div class="flex items-center justify-between">
+              <span class="text-[var(--accent)] font-display text-xl">À partir de 120€</span>
+              <button class="btn-secondary">
+                <span>En savoir plus</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Program 3 -->
+        <div class="program-card reveal reveal-delay-2">
+          <div class="relative h-64 overflow-hidden">
+            <img src="program-competition.png" alt="Compétition obstacle" class="w-full h-full object-cover">
+            <div class="absolute top-4 left-4 bg-[var(--accent)] text-[var(--bg)] px-3 py-1 text-xs tracking-wider uppercase">Expert</div>
+          </div>
+          <div class="p-8">
+            <h3 class="font-display text-2xl mb-3">Compétition CCE</h3>
+            <p class="text-[var(--fg-muted)] mb-6 leading-relaxed">Entraînement intensif aux concours complets. Dressage, cross et obstacle au plus haut niveau.</p>
+            <div class="flex items-center justify-between">
+              <span class="text-[var(--accent)] font-display text-xl">À partir de 250€</span>
+              <button class="btn-secondary">
+                <span>En savoir plus</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Program 4 -->
+        <div class="program-card reveal reveal-delay-3">
+          <div class="relative h-64 overflow-hidden">
+            <img src="program-stage.png" alt="Stage intensif" class="w-full h-full object-cover">
+            <div class="absolute top-4 left-4 bg-[var(--fg)] text-[var(--bg)] px-3 py-1 text-xs tracking-wider uppercase">Stage</div>
+          </div>
+          <div class="p-8">
+            <h3 class="font-display text-2xl mb-3">Stage Immersion</h3>
+            <p class="text-[var(--fg-muted)] mb-6 leading-relaxed">Une semaine complète d'immersion équestre. Hébergement sur le domaine, cours quotidiens et soins des chevaux.</p>
+            <div class="flex items-center justify-between">
+              <span class="text-[var(--accent)] font-display text-xl">950€ / semaine</span>
+              <button class="btn-secondary">
+                <span>En savoir plus</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Program 5 -->
+        <div class="program-card reveal reveal-delay-4">
+          <div class="relative h-64 overflow-hidden">
+            <img src="program-randonnee.png" alt="Randonnée équestre" class="w-full h-full object-cover">
+            <div class="absolute top-4 left-4 bg-[var(--accent)] text-[var(--bg)] px-3 py-1 text-xs tracking-wider uppercase">Nature</div>
+          </div>
+          <div class="p-8">
+            <h3 class="font-display text-2xl mb-3">Randonnée Provence</h3>
+            <p class="text-[var(--fg-muted)] mb-6 leading-relaxed">Explorez les sentiers de Provence à cheval. Excursions d'une journée ou randonnées itinérantes de plusieurs jours.</p>
+            <div class="flex items-center justify-between">
+              <span class="text-[var(--accent)] font-display text-xl">À partir de 150€</span>
+              <button class="btn-secondary">
+                <span>En savoir plus</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Program 6 -->
+        <div class="program-card bg-[var(--card)] border border-[var(--border)] flex flex-col justify-center items-center p-12 reveal reveal-delay-4">
+          <svg class="w-16 h-16 text-[var(--accent)] mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+          </svg>
+          <h3 class="font-display text-2xl mb-3 text-center">Programme Sur Mesure</h3>
+          <p class="text-[var(--fg-muted)] text-center mb-6">Construisez votre propre programme avec nos instructeurs</p>
+          <button class="btn-primary">
+            <span>Nous contacter</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonial Section -->
+  <section class="py-32 px-6 relative" style="background: linear-gradient(to bottom, var(--bg), var(--bg-warm), var(--bg));">
+    <div class="max-w-4xl mx-auto text-center">
+      <div class="testimonial-quote reveal">
+        <p class="font-display text-2xl md:text-3xl lg:text-4xl leading-relaxed mb-8">
+          L'Académie a transformé ma relation avec les chevaux. Ici, on n'apprend pas seulement à monter,
+          on apprend à <span class="text-[var(--accent)] italic">communiquer</span> avec un être sensible et intelligent.
+          Une expérience qui change la vie.
+        </p>
+        <div class="flex items-center justify-center gap-4">
+          <img src="hero-bg.jpg" alt="" class="w-14 h-14 rounded-full object-cover border-2 border-[var(--accent)]">
+          <div class="text-left">
+            <div class="font-display text-lg">Marie-Claire Durand</div>
+            <div class="text-[var(--fg-muted)] text-sm">Élève depuis 2019</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery Section -->
+  <section class="py-32 px-6" id="gallery">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-20 reveal">
+        <div class="flex items-center justify-center gap-4 mb-6">
+          <div class="deco-line"></div>
+          <span class="text-[var(--accent)] text-sm tracking-[0.2em] uppercase">Galerie</span>
+          <div class="deco-line"></div>
+        </div>
+        <h2 class="font-display text-4xl md:text-5xl lg:text-6xl font-light">
+          Moments de <span class="text-[var(--accent)] italic">grâce</span>
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+        <div class="gallery-item aspect-[4/5] reveal">
+          <img src="program-competition.png" alt="Saut d'obstacle en compétition" class="w-full h-full object-cover">
+          <div class="gallery-overlay flex items-end p-6">
+            <span class="font-display text-lg">Compétition CSI</span>
+          </div>
+        </div>
+
+        <div class="gallery-item aspect-square reveal reveal-delay-1">
+          <img src="program-initiation.png" alt="Moment de connexion" class="w-full h-full object-cover">
+          <div class="gallery-overlay flex items-end p-6">
+            <span class="font-display text-lg">Connexion</span>
+          </div>
+        </div>
+
+        <div class="gallery-item aspect-[4/5] reveal reveal-delay-2">
+          <img src="program-stage.png" alt="Saut élégant" class="w-full h-full object-cover">
+          <div class="gallery-overlay flex items-end p-6">
+            <span class="font-display text-lg">Élégance</span>
+          </div>
+        </div>
+
+        <div class="gallery-item aspect-square reveal reveal-delay-1">
+          <img src="program-perfectionnement.png" alt="Détail de l'équipement" class="w-full h-full object-cover">
+          <div class="gallery-overlay flex items-end p-6">
+            <span class="font-display text-lg">Équipement</span>
+          </div>
+        </div>
+
+        <div class="gallery-item aspect-[4/5] reveal reveal-delay-2">
+          <img src="program-randonnee.png" alt="Paysage provençal" class="w-full h-full object-cover">
+          <div class="gallery-overlay flex items-end p-6">
+            <span class="font-display text-lg">Paysages</span>
+          </div>
+        </div>
+
+        <div class="gallery-item aspect-square reveal reveal-delay-3">
+          <img src="about-image.png" alt="Intimité" class="w-full h-full object-cover">
+          <div class="gallery-overlay flex items-end p-6">
+            <span class="font-display text-lg">Intimité</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="py-32 px-6 relative" id="contact" style="background: linear-gradient(135deg, var(--bg-warm) 0%, var(--bg) 100%);">
+    <div class="absolute inset-0 opacity-5" aria-hidden="true">
+      <svg width="100%" height="100%">
+        <pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse">
+          <circle cx="2" cy="2" r="1" fill="currentColor"/>
+        </pattern>
+        <rect width="100%" height="100%" fill="url(#dots)"/>
+      </svg>
+    </div>
+
+    <div class="max-w-7xl mx-auto relative">
+      <div class="grid lg:grid-cols-2 gap-16">
+        <div class="reveal">
+          <div class="flex items-center gap-4 mb-6">
+            <div class="deco-line"></div>
+            <span class="text-[var(--accent)] text-sm tracking-[0.2em] uppercase">Contact</span>
+          </div>
+
+          <h2 class="font-display text-4xl md:text-5xl font-light mb-8">
+            Commencez votre<br>
+            <span class="text-[var(--accent)] italic">aventure</span> équestre
+          </h2>
+
+          <p class="text-[var(--fg-muted)] text-lg leading-relaxed mb-12">
+            Que vous soyez débutant ou cavalier confirmé, notre équipe est là pour vous accompagner.
+            Prenez rendez-vous pour une visite découverte de notre domaine.
+          </p>
+
+          <div class="space-y-8">
+            <div class="flex items-start gap-4">
+              <div class="w-12 h-12 border border-[var(--border)] flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5 text-[var(--accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+              </div>
+              <div>
+                <div class="font-display text-lg mb-1">Domaine de Beaumont</div>
+                <div class="text-[var(--fg-muted)]">Route des Alpilles<br>13210 Saint-Rémy-de-Provence, France</div>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-4">
+              <div class="w-12 h-12 border border-[var(--border)] flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5 text-[var(--accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                </svg>
+              </div>
+              <div>
+                <div class="font-display text-lg mb-1">Email</div>
+                <div class="text-[var(--fg-muted)]">contact@academie-equestre-provence.fr</div>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-4">
+              <div class="w-12 h-12 border border-[var(--border)] flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5 text-[var(--accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                </svg>
+              </div>
+              <div>
+                <div class="font-display text-lg mb-1">Téléphone</div>
+                <div class="text-[var(--fg-muted)]">+33 (0)4 90 92 45 67</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal reveal-delay-2">
+          <form class="bg-[var(--card)] border border-[var(--border)] p-8 md:p-12 backdrop-blur-sm" onsubmit="handleSubmit(event)">
+            <div class="space-y-8">
+              <div>
+                <input type="text" placeholder="Votre nom complet" class="form-input" required aria-label="Nom complet">
+              </div>
+              <div>
+                <input type="email" placeholder="Votre email" class="form-input" required aria-label="Email">
+              </div>
+              <div>
+                <input type="tel" placeholder="Votre téléphone" class="form-input" aria-label="Téléphone">
+              </div>
+              <div>
+                <select class="form-input" required aria-label="Programme souhaité">
+                  <option value="" disabled selected>Programme souhaité</option>
+                  <option value="initiation">Initiation Découverte</option>
+                  <option value="perfectionnement">Perfectionnement</option>
+                  <option value="competition">Compétition CCE</option>
+                  <option value="stage">Stage Immersion</option>
+                  <option value="randonnee">Randonnée Provence</option>
+                  <option value="surmesure">Programme Sur Mesure</option>
+                </select>
+              </div>
+              <div>
+                <textarea placeholder="Votre message" rows="4" class="form-input resize-none" aria-label="Message"></textarea>
+              </div>
+              <button type="submit" class="btn-primary w-full justify-center">
+                <span>Envoyer la demande</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                </svg>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-16 px-6 border-t border-[var(--border)]">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid md:grid-cols-4 gap-12 mb-16">
+        <div class="md:col-span-2">
+          <div class="flex items-center gap-3 mb-6">
+            <svg class="w-10 h-10 text-[var(--accent)]" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+              <path d="M20 4L36 12V28L20 36L4 28V12L20 4Z" stroke="currentColor" stroke-width="1"/>
+              <path d="M20 12C23 12 26 15 26 18C26 21 24 24 20 28C16 24 14 21 14 18C14 15 17 12 20 12Z" fill="currentColor" opacity="0.3"/>
+            </svg>
+            <div>
+              <span class="font-display text-xl font-semibold tracking-wide">Académie Équestre</span>
+              <span class="block text-[10px] text-[var(--fg-muted)] tracking-[0.3em] uppercase">de Provence</span>
+            </div>
+          </div>
+          <p class="text-[var(--fg-muted)] leading-relaxed max-w-md">
+            Une tradition d'excellence équestre au cœur de la Provence depuis 1892.
+            Formations, stages et randonnées pour tous les niveaux.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="font-display text-lg mb-6">Navigation</h4>
+          <ul class="space-y-3">
+            <li><a href="#about" class="text-[var(--fg-muted)] hover:text-[var(--accent)] transition-colors">À Propos</a></li>
+            <li><a href="#programs" class="text-[var(--fg-muted)] hover:text-[var(--accent)] transition-colors">Programmes</a></li>
+            <li><a href="#gallery" class="text-[var(--fg-muted)] hover:text-[var(--accent)] transition-colors">Galerie</a></li>
+            <li><a href="#contact" class="text-[var(--fg-muted)] hover:text-[var(--accent)] transition-colors">Contact</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-display text-lg mb-6">Horaires</h4>
+          <ul class="space-y-3 text-[var(--fg-muted)]">
+            <li>Lundi - Vendredi: 8h - 19h</li>
+            <li>Samedi: 9h - 18h</li>
+            <li>Dimanche: 9h - 17h</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="flex flex-col md:flex-row items-center justify-between gap-4 pt-8 border-t border-[var(--border)]">
+        <p class="text-[var(--fg-muted)] text-sm">
+          © 2026 <a href="https://orionwebworks.github.io/" class="text-[var(--accent)] hover:underline" target="_blank" rel="noopener">Orion Webworks</a>. Tous droits réservés.
+        </p>
+        <div class="flex items-center gap-2 text-[var(--fg-muted)] text-sm">
+          <span>Fait avec</span>
+          <svg class="w-4 h-4 text-red-500 animate-pulse" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+          </svg>
+          <span>par Orion Webworks</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Initialize variables first
+    let navbar = null;
+    let mobileMenu = null;
+    let reveals = [];
+    let lastScrollY = 0;
+
+    // DOM ready initialization
+    document.addEventListener('DOMContentLoaded', function() {
+      navbar = document.getElementById('navbar');
+      mobileMenu = document.getElementById('mobileMenu');
+      reveals = document.querySelectorAll('.reveal');
+
+      // Initialize scroll reveal
+      initScrollReveal();
+
+      // Initialize navbar scroll effect
+      initNavbarScroll();
+    });
+
+    // Scroll reveal with IntersectionObserver
+    function initScrollReveal() {
+      if (!reveals || reveals.length === 0) return;
+
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (prefersReducedMotion) {
+        reveals.forEach(function(el) {
+          el.classList.add('visible');
+        });
+        return;
+      }
+
+      const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      });
+
+      reveals.forEach(function(el) {
+        observer.observe(el);
+      });
+    }
+
+    // Navbar scroll effect
+    function initNavbarScroll() {
+      if (!navbar) return;
+
+      window.addEventListener('scroll', function() {
+        const currentScrollY = window.scrollY;
+
+        if (currentScrollY > 100) {
+          navbar.style.background = 'rgba(15, 13, 10, 0.95)';
+          navbar.style.backdropFilter = 'blur(10px)';
+          navbar.style.borderBottom = '1px solid rgba(201, 169, 98, 0.1)';
+        } else {
+          navbar.style.background = 'transparent';
+          navbar.style.backdropFilter = 'none';
+          navbar.style.borderBottom = 'none';
+        }
+
+        lastScrollY = currentScrollY;
+      }, { passive: true });
+    }
+
+    // Mobile menu toggle
+    function toggleMobileMenu() {
+      if (!mobileMenu) return;
+      mobileMenu.classList.toggle('active');
+      document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+    }
+
+    // Smooth scroll to section
+    function scrollToSection(id) {
+      var element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    // Form submission handler
+    function handleSubmit(event) {
+      event.preventDefault();
+
+      // Create success message
+      var form = event.target;
+      var formParent = form.parentElement;
+
+      form.innerHTML = '<div class="text-center py-12">' +
+        '<svg class="w-16 h-16 text-[var(--accent)] mx-auto mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">' +
+        '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M5 13l4 4L19 7"/>' +
+        '</svg>' +
+        '<h3 class="font-display text-2xl mb-3">Message envoyé</h3>' +
+        '<p class="text-[var(--fg-muted)]">Nous vous répondrons dans les plus brefs délais.</p>' +
+        '</div>';
+    }
+
+    // Parallax effect for hero
+    var heroSection = document.querySelector('.hero');
+    if (heroSection) {
+      var heroBg = heroSection.querySelector('.hero-bg img');
+
+      if (heroBg && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        window.addEventListener('scroll', function() {
+          var scrolled = window.scrollY;
+          var rate = scrolled * 0.3;
+          heroBg.style.transform = 'translateY(' + rate + 'px)';
+        }, { passive: true });
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chen Wei Lun | Film Academy Singapore</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #08080a;
+      --bg-elevated: #111114;
+      --fg: #f0f0f2;
+      --muted: #71717a;
+      --accent: #e89a30;
+      --accent-glow: rgba(232, 154, 48, 0.4);
+      --cyan: #22d3ee;
+      --card: rgba(20, 20, 24, 0.8);
+      --border: rgba(255, 255, 255, 0.08);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    .font-display {
+      font-family: 'Bebas Neue', sans-serif;
+      letter-spacing: 0.02em;
+    }
+
+    /* Film Grain Overlay */
+    .grain-overlay {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    }
+
+    /* Ambient Light Orbs */
+    .ambient-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(100px);
+      pointer-events: none;
+    }
+
+    .orb-amber {
+      background: var(--accent);
+      opacity: 0.15;
+    }
+
+    .orb-cyan {
+      background: var(--cyan);
+      opacity: 0.08;
+    }
+
+    /* Navigation */
+    .nav-link {
+      position: relative;
+      color: var(--muted);
+      transition: color 0.3s ease;
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--accent);
+      transition: width 0.3s ease;
+    }
+
+    .nav-link:hover {
+      color: var(--fg);
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    /* Hero */
+    .hero-title {
+      font-size: clamp(3.5rem, 12vw, 9rem);
+      line-height: 0.9;
+    }
+
+    .hero-image-container {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-image-container::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(232, 154, 48, 0.1) 0%, transparent 50%);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .hero-image-container::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 60%;
+      background: linear-gradient(to top, var(--bg) 0%, transparent 100%);
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .hero-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.05);
+      transition: transform 8s ease-out;
+    }
+
+    .hero-image-container:hover .hero-image {
+      transform: scale(1.1);
+    }
+
+    /* Scroll Reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    /* Cards */
+    .program-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(20px);
+      transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+      overflow: hidden;
+    }
+
+    .program-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--accent);
+      box-shadow: 0 20px 60px -20px var(--accent-glow);
+    }
+
+    .program-card img {
+      transition: transform 0.6s ease;
+    }
+
+    .program-card:hover img {
+      transform: scale(1.05);
+    }
+
+    /* Stats */
+    .stat-number {
+      background: linear-gradient(135deg, var(--fg) 0%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Button */
+    .btn-primary {
+      position: relative;
+      background: var(--accent);
+      color: var(--bg);
+      font-weight: 600;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transform: translateX(-100%);
+      transition: transform 0.6s ease;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 40px -10px var(--accent-glow);
+    }
+
+    .btn-primary:hover::before {
+      transform: translateX(100%);
+    }
+
+    .btn-outline {
+      border: 1px solid var(--border);
+      color: var(--fg);
+      transition: border-color 0.3s ease, background 0.3s ease;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--accent);
+      background: rgba(232, 154, 48, 0.1);
+    }
+
+    /* Timeline */
+    .timeline-item {
+      position: relative;
+      padding-left: 2rem;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, var(--accent), transparent);
+    }
+
+    .timeline-item::after {
+      content: '';
+      position: absolute;
+      left: -4px;
+      top: 6px;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 20px var(--accent-glow);
+    }
+
+    /* Testimonial */
+    .testimonial-card {
+      background: linear-gradient(135deg, var(--card) 0%, rgba(232, 154, 48, 0.05) 100%);
+      border: 1px solid var(--border);
+    }
+
+    /* Footer */
+    footer a {
+      transition: color 0.3s ease;
+    }
+
+    footer a:hover {
+      color: var(--accent);
+    }
+
+    /* Reduced Motion */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+
+      .hero-image {
+        transform: scale(1);
+      }
+
+      .hero-image-container:hover .hero-image {
+        transform: scale(1);
+      }
+    }
+
+    /* Mobile Nav */
+    .mobile-menu {
+      transform: translateX(100%);
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .mobile-menu.open {
+      transform: translateX(0);
+    }
+
+    /* Marquee */
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    .marquee-track {
+      animation: marquee 30s linear infinite;
+    }
+
+    /* Pulse */
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 20px var(--accent-glow); }
+      50% { box-shadow: 0 0 40px var(--accent-glow); }
+    }
+
+    .pulse-glow {
+      animation: pulse-glow 3s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body>
+  <!-- Film Grain -->
+  <div class="grain-overlay"></div>
+
+  <!-- Navigation -->
+  <nav class="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-[var(--bg)]/80 border-b border-[var(--border)]">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="#" class="font-display text-2xl tracking-wide">
+        <span class="text-[var(--accent)]">CW</span>L FILM ACADEMY
+      </a>
+
+      <!-- Desktop Nav -->
+      <div class="hidden md:flex items-center gap-8">
+        <a href="#about" class="nav-link text-sm uppercase tracking-widest">About</a>
+        <a href="#programs" class="nav-link text-sm uppercase tracking-widest">Programs</a>
+        <a href="#process" class="nav-link text-sm uppercase tracking-widest">Process</a>
+        <a href="#testimonials" class="nav-link text-sm uppercase tracking-widest">Stories</a>
+        <a href="#contact" class="btn-primary px-6 py-2.5 text-sm uppercase tracking-widest rounded">Enroll Now</a>
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <button id="menuBtn" class="md:hidden w-10 h-10 flex flex-col justify-center items-center gap-1.5" aria-label="Toggle menu">
+        <span class="w-6 h-0.5 bg-[var(--fg)] transition-all duration-300" id="menuLine1"></span>
+        <span class="w-6 h-0.5 bg-[var(--fg)] transition-all duration-300" id="menuLine2"></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div id="mobileMenu" class="mobile-menu fixed inset-0 z-40 bg-[var(--bg)] pt-24 px-8 md:hidden">
+    <div class="flex flex-col gap-6">
+      <a href="#about" class="font-display text-4xl border-b border-[var(--border)] pb-4">About</a>
+      <a href="#programs" class="font-display text-4xl border-b border-[var(--border)] pb-4">Programs</a>
+      <a href="#process" class="font-display text-4xl border-b border-[var(--border)] pb-4">Process</a>
+      <a href="#testimonials" class="font-display text-4xl border-b border-[var(--border)] pb-4">Stories</a>
+      <a href="#contact" class="btn-primary px-8 py-4 text-center font-display text-2xl rounded mt-4">Enroll Now</a>
+    </div>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="relative min-h-screen flex flex-col justify-end pb-12 lg:pb-20">
+    <!-- Ambient Orbs -->
+    <div class="ambient-orb orb-amber w-[600px] h-[600px] -top-40 -right-40 fixed"></div>
+    <div class="ambient-orb orb-cyan w-[400px] h-[400px] bottom-20 -left-20 fixed"></div>
+
+    <!-- Hero Image -->
+    <div class="hero-image-container absolute inset-0">
+      <img
+        src="hero-image.jpg"
+        alt="Chen Wei Lun filming outdoors"
+        class="hero-image"
+      >
+    </div>
+
+    <!-- Hero Content -->
+    <div class="relative z-10 max-w-7xl mx-auto px-6 w-full">
+      <div class="max-w-3xl">
+        <p class="text-[var(--accent)] uppercase tracking-[0.3em] text-sm mb-4 reveal">Singapore's Premier Film Academy</p>
+        <h1 class="font-display hero-title text-[var(--fg)] reveal reveal-delay-1">
+          CHEN WEI LUN
+        </h1>
+        <p class="font-display text-3xl md:text-5xl text-[var(--muted)] mb-8 reveal reveal-delay-2">
+          CRAFTING CINEMATIC VISIONARIES SINCE 2018
+        </p>
+        <p class="text-lg text-[var(--muted)] max-w-xl mb-10 reveal reveal-delay-3">
+          Transform your passion into profession. Learn the art and science of filmmaking from industry veterans in the heart of Singapore's creative district.
+        </p>
+        <div class="flex flex-wrap gap-4 reveal reveal-delay-4">
+          <a href="#programs" class="btn-primary px-8 py-4 rounded text-sm uppercase tracking-widest">
+            Explore Programs
+          </a>
+          <a href="#about" class="btn-outline px-8 py-4 rounded text-sm uppercase tracking-widest">
+            Meet Chen Wei Lun
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scroll Indicator -->
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-10">
+      <span class="text-[var(--muted)] text-xs uppercase tracking-widest">Scroll</span>
+      <div class="w-px h-12 bg-gradient-to-b from-[var(--accent)] to-transparent"></div>
+    </div>
+  </section>
+
+  <!-- Marquee Banner -->
+  <section class="py-6 border-y border-[var(--border)] bg-[var(--bg-elevated)] overflow-hidden">
+    <div class="marquee-track flex gap-12 whitespace-nowrap">
+      <span class="font-display text-2xl text-[var(--muted)]">DIRECTING</span>
+      <span class="text-[var(--accent)]">★</span>
+      <span class="font-display text-2xl text-[var(--muted)]">CINEMATOGRAPHY</span>
+      <span class="text-[var(--accent)]">★</span>
+      <span class="font-display text-2xl text-[var(--muted)]">EDITING</span>
+      <span class="text-[var(--accent)]">★</span>
+      <span class="font-display text-2xl text-[var(--muted)]">SOUND DESIGN</span>
+      <span class="text-[var(--accent)]">★</span>
+      <span class="font-display text-2xl text-[var(--muted)]">COLOR GRADING</span>
+      <span class="text-[var(--accent)]">★</span>
+      <span class="font-display text-2xl text-[var(--muted)]">PRODUCTION</span>
+      <span class="text-[var(--accent)]">★</span>
+      <span class="font-display text-2xl text-[var(--muted)]">DIRECTING</span>
+      <span class="text-[var(--accent)]">★</span>
+      <span class="font-display text-2xl text-[var(--muted)]">CINEMATOGRAPHY</span>
+      <span class="text-[var(--accent)]">★</span>
+      <span class="font-display text-2xl text-[var(--muted)]">EDITING</span>
+      <span class="text-[var(--accent)]">★</span>
+      <span class="font-display text-2xl text-[var(--muted)]">SOUND DESIGN</span>
+      <span class="text-[var(--accent)]">★</span>
+      <span class="font-display text-2xl text-[var(--muted)]">COLOR GRADING</span>
+      <span class="text-[var(--accent)]">★</span>
+      <span class="font-display text-2xl text-[var(--muted)]">PRODUCTION</span>
+      <span class="text-[var(--accent)]">★</span>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="py-24 lg:py-32 relative">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="grid lg:grid-cols-2 gap-16 items-center">
+        <!-- Image -->
+        <div class="reveal">
+          <div class="relative">
+            <div class="absolute -inset-4 bg-gradient-to-br from-[var(--accent)]/20 to-transparent rounded-lg blur-2xl"></div>
+            <img
+              src="about-image.png"
+              alt="Cinematographer at work"
+              class="relative rounded-lg w-full"
+            >
+            <div class="absolute -bottom-6 -right-6 bg-[var(--accent)] p-6 rounded-lg pulse-glow">
+              <span class="font-display text-4xl text-[var(--bg)]">8+ Years</span>
+              <p class="text-[var(--bg)] text-sm">Industry Experience</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Content -->
+        <div>
+          <p class="text-[var(--accent)] uppercase tracking-[0.3em] text-sm mb-4 reveal">The Visionary</p>
+          <h2 class="font-display text-5xl lg:text-6xl mb-6 reveal reveal-delay-1">MEET CHEN WEI LUN</h2>
+          <div class="space-y-6 text-[var(--muted)] reveal reveal-delay-2">
+            <p>
+              Chen Wei Lun began his journey behind the camera over a decade ago, cutting his teeth on independent films before transitioning to commercial production and eventually founding CWL Film Academy in Singapore.
+            </p>
+            <p>
+              His philosophy is simple: great filmmaking can be taught, but it requires more than technical knowledge. It demands mentorship, hands-on experience, and an environment that nurtures creative courage.
+            </p>
+            <p>
+              Today, CWL Film Academy stands as Southeast Asia's most sought-after filmmaking institution, with alumni working across major studios, streaming platforms, and advertising agencies worldwide.
+            </p>
+          </div>
+          <div class="mt-10 reveal reveal-delay-3">
+            <a href="#contact" class="btn-outline px-8 py-4 rounded text-sm uppercase tracking-widest inline-block">
+              Start Your Journey
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="py-16 border-y border-[var(--border)] bg-[var(--bg-elevated)]">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-4">
+        <div class="text-center reveal">
+          <span class="font-display stat-number text-5xl lg:text-7xl">500+</span>
+          <p class="text-[var(--muted)] mt-2 uppercase tracking-widest text-sm">Graduates</p>
+        </div>
+        <div class="text-center reveal reveal-delay-1">
+          <span class="font-display stat-number text-5xl lg:text-7xl">92%</span>
+          <p class="text-[var(--muted)] mt-2 uppercase tracking-widest text-sm">Employment Rate</p>
+        </div>
+        <div class="text-center reveal reveal-delay-2">
+          <span class="font-display stat-number text-5xl lg:text-7xl">15</span>
+          <p class="text-[var(--muted)] mt-2 uppercase tracking-widest text-sm">Industry Partners</p>
+        </div>
+        <div class="text-center reveal reveal-delay-3">
+          <span class="font-display stat-number text-5xl lg:text-7xl">4.9</span>
+          <p class="text-[var(--muted)] mt-2 uppercase tracking-widest text-sm">Student Rating</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Programs Section -->
+  <section id="programs" class="py-24 lg:py-32 relative">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center mb-16">
+        <p class="text-[var(--accent)] uppercase tracking-[0.3em] text-sm mb-4 reveal">Curriculum</p>
+        <h2 class="font-display text-5xl lg:text-7xl reveal reveal-delay-1">OUR PROGRAMS</h2>
+        <p class="text-[var(--muted)] max-w-2xl mx-auto mt-6 reveal reveal-delay-2">
+          From foundational courses to advanced masterclasses, find the perfect program to elevate your filmmaking journey.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Program 1 -->
+        <div class="program-card rounded-xl reveal">
+          <div class="overflow-hidden aspect-[4/3]">
+            <img
+              src="program1-cinematography.png"
+              alt="Cinematography course"
+              class="w-full h-full object-cover"
+            >
+          </div>
+          <div class="p-6">
+            <span class="text-[var(--accent)] text-xs uppercase tracking-widest">6 Weeks</span>
+            <h3 class="font-display text-2xl mt-2 mb-3">CINEMATOGRAPHY FUNDAMENTALS</h3>
+            <p class="text-[var(--muted)] text-sm mb-4">Master camera operation, lighting techniques, and visual storytelling in this intensive hands-on course.</p>
+            <a href="#contact" class="text-[var(--fg)] text-sm uppercase tracking-widest hover:text-[var(--accent)] transition-colors">Learn More →</a>
+          </div>
+        </div>
+
+        <!-- Program 2 -->
+        <div class="program-card rounded-xl reveal reveal-delay-1">
+          <div class="overflow-hidden aspect-[4/3]">
+            <img
+              src="program2-postproduction.png"
+              alt="Post-production course"
+              class="w-full h-full object-cover"
+            >
+          </div>
+          <div class="p-6">
+            <span class="text-[var(--accent)] text-xs uppercase tracking-widest">8 Weeks</span>
+            <h3 class="font-display text-2xl mt-2 mb-3">POST-PRODUCTION MASTERY</h3>
+            <p class="text-[var(--muted)] text-sm mb-4">Dive deep into editing, color grading, and sound design using industry-standard software and workflows.</p>
+            <a href="#contact" class="text-[var(--fg)] text-sm uppercase tracking-widest hover:text-[var(--accent)] transition-colors">Learn More →</a>
+          </div>
+        </div>
+
+        <!-- Program 3 -->
+        <div class="program-card rounded-xl reveal reveal-delay-2">
+          <div class="overflow-hidden aspect-[4/3]">
+            <img
+              src="program3-directing.png"
+              alt="Directing course"
+              class="w-full h-full object-cover"
+            >
+          </div>
+          <div class="p-6">
+            <span class="text-[var(--accent)] text-xs uppercase tracking-widest">12 Weeks</span>
+            <h3 class="font-display text-2xl mt-2 mb-3">DIRECTOR'S MASTERCLASS</h3>
+            <p class="text-[var(--muted)] text-sm mb-4">Learn to lead creative teams, develop your directorial voice, and bring compelling stories to life on screen.</p>
+            <a href="#contact" class="text-[var(--fg)] text-sm uppercase tracking-widest hover:text-[var(--accent)] transition-colors">Learn More →</a>
+          </div>
+        </div>
+
+        <!-- Program 4 -->
+        <div class="program-card rounded-xl reveal">
+          <div class="overflow-hidden aspect-[4/3]">
+            <img
+              src="program4-studio.png"
+              alt="Studio production"
+              class="w-full h-full object-cover"
+            >
+          </div>
+          <div class="p-6">
+            <span class="text-[var(--accent)] text-xs uppercase tracking-widest">4 Weeks</span>
+            <h3 class="font-display text-2xl mt-2 mb-3">STUDIO PRODUCTION</h3>
+            <p class="text-[var(--muted)] text-sm mb-4">Experience the energy of a professional film set. Learn crew coordination, equipment handling, and set protocol.</p>
+            <a href="#contact" class="text-[var(--fg)] text-sm uppercase tracking-widest hover:text-[var(--accent)] transition-colors">Learn More →</a>
+          </div>
+        </div>
+
+        <!-- Program 5 -->
+        <div class="program-card rounded-xl reveal reveal-delay-1">
+          <div class="overflow-hidden aspect-[4/3]">
+            <img
+              src="program5-advanced-cinematography.png"
+              alt="Advanced cinematography"
+              class="w-full h-full object-cover"
+            >
+          </div>
+          <div class="p-6">
+            <span class="text-[var(--accent)] text-xs uppercase tracking-widest">10 Weeks</span>
+            <h3 class="font-display text-2xl mt-2 mb-3">ADVANCED CINEMATOGRAPHY</h3>
+            <p class="text-[var(--muted)] text-sm mb-4">Push creative boundaries with advanced lighting setups, camera movement, and visual effects integration.</p>
+            <a href="#contact" class="text-[var(--fg)] text-sm uppercase tracking-widest hover:text-[var(--accent)] transition-colors">Learn More →</a>
+          </div>
+        </div>
+
+        <!-- Program 6 -->
+        <div class="program-card rounded-xl reveal reveal-delay-2">
+          <div class="overflow-hidden aspect-[4/3]">
+            <img
+              src="program6-film-production.png"
+              alt="Film production workshop"
+              class="w-full h-full object-cover"
+            >
+          </div>
+          <div class="p-6">
+            <span class="text-[var(--accent)] text-xs uppercase tracking-widest">16 Weeks</span>
+            <h3 class="font-display text-2xl mt-2 mb-3">FILM PRODUCTION INTENSIVE</h3>
+            <p class="text-[var(--muted)] text-sm mb-4">Our flagship program. Write, direct, and produce your own short film with full industry mentorship.</p>
+            <a href="#contact" class="text-[var(--fg)] text-sm uppercase tracking-widest hover:text-[var(--accent)] transition-colors">Learn More →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Process Section -->
+  <section id="process" class="py-24 lg:py-32 bg-[var(--bg-elevated)] relative overflow-hidden">
+    <!-- Background Glow -->
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[var(--accent)] opacity-[0.03] blur-[150px] rounded-full"></div>
+
+    <div class="max-w-7xl mx-auto px-6 relative">
+      <div class="grid lg:grid-cols-2 gap-16">
+        <!-- Left Column -->
+        <div>
+          <p class="text-[var(--accent)] uppercase tracking-[0.3em] text-sm mb-4 reveal">The Journey</p>
+          <h2 class="font-display text-5xl lg:text-6xl mb-6 reveal reveal-delay-1">YOUR PATH TO MASTERY</h2>
+          <p class="text-[var(--muted)] reveal reveal-delay-2">
+            Every filmmaker's journey is unique, but the path to mastery follows a proven rhythm. Here's how we'll transform your raw passion into professional excellence.
+          </p>
+        </div>
+
+        <!-- Right Column - Timeline -->
+        <div class="space-y-8">
+          <div class="timeline-item reveal">
+            <h3 class="font-display text-xl mb-2">DISCOVERY</h3>
+            <p class="text-[var(--muted)] text-sm">We assess your current skill level, creative goals, and learning style to craft a personalized roadmap.</p>
+          </div>
+          <div class="timeline-item reveal reveal-delay-1">
+            <h3 class="font-display text-xl mb-2">FOUNDATION</h3>
+            <p class="text-[var(--muted)] text-sm">Build rock-solid fundamentals through intensive workshops and hands-on equipment training.</p>
+          </div>
+          <div class="timeline-item reveal reveal-delay-2">
+            <h3 class="font-display text-xl mb-2">SPECIALIZATION</h3>
+            <p class="text-[var(--muted)] text-sm">Choose your focus area and dive deep with mentor-guided projects and industry simulations.</p>
+          </div>
+          <div class="timeline-item reveal reveal-delay-3">
+            <h3 class="font-display text-xl mb-2">PORTFOLIO</h3>
+            <p class="text-[var(--muted)] text-sm">Create professional-grade work that showcases your unique voice and technical prowess.</p>
+          </div>
+          <div class="timeline-item reveal reveal-delay-4">
+            <h3 class="font-display text-xl mb-2">LAUNCH</h3>
+            <p class="text-[var(--muted)] text-sm">Graduate with industry connections, a showreel that opens doors, and ongoing alumni support.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section id="testimonials" class="py-24 lg:py-32 relative">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center mb-16">
+        <p class="text-[var(--accent)] uppercase tracking-[0.3em] text-sm mb-4 reveal">Success Stories</p>
+        <h2 class="font-display text-5xl lg:text-7xl reveal reveal-delay-1">ALUMNI VOICES</h2>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="testimonial-card p-8 rounded-xl reveal">
+          <div class="flex items-center gap-1 mb-4">
+            <svg class="w-5 h-5 text-[var(--accent)]" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-5 h-5 text-[var(--accent)]" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-5 h-5 text-[var(--accent)]" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-5 h-5 text-[var(--accent)]" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-5 h-5 text-[var(--accent)]" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          </div>
+          <p class="text-[var(--muted)] mb-6">"Wei Lun's mentorship transformed my understanding of visual storytelling. Within 6 months of graduating, I landed a cinematographer role at a major production house."</p>
+          <div>
+            <p class="font-medium">Sarah Tan</p>
+            <p class="text-sm text-[var(--muted)]">Cinematographer, MediaCorp Studios</p>
+          </div>
+        </div>
+
+        <div class="testimonial-card p-8 rounded-xl reveal reveal-delay-1">
+          <div class="flex items-center gap-1 mb-4">
+            <svg class="w-5 h-5 text-[var(--accent)]" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-5 h-5 text-[var(--accent)]" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-5 h-5 text-[var(--accent)]" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-5 h-5 text-[var(--accent)]" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-5 h-5 text-[var(--accent)]" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          </div>
+          <p class="text-[var(--muted)] mb-6">"The hands-on approach at CWL Film Academy gave me confidence I never got from online courses. The industry connections alone were worth the investment."</p>
+          <div>
+            <p class="font-medium">Marcus Lim</p>
+            <p class="text-sm text-[var(--muted)]">Director, Netflix Southeast Asia</p>
+          </div>
+        </div>
+
+        <div class="testimonial-card p-8 rounded-xl reveal reveal-delay-2">
+          <div class="flex items-center gap-1 mb-4">
+            <svg class="w-5 h-5 text-[var(--accent)]" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-5 h-5 text-[var(--accent)]" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-5 h-5 text-[var(--accent)]" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-5 h-5 text-[var(--accent)]" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-5 h-5 text-[var(--accent)]" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          </div>
+          <p class="text-[var(--muted)] mb-6">"From complete beginner to editing commercials in 4 months. The curriculum is intense but incredibly rewarding. Chen Wei Lun is a true mentor."</p>
+          <div>
+            <p class="font-medium">Priya Sharma</p>
+            <p class="text-sm text-[var(--muted)]">Senior Editor, Ogilvy Singapore</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section id="contact" class="py-24 lg:py-32 relative overflow-hidden">
+    <!-- Background -->
+    <div class="absolute inset-0 bg-gradient-to-br from-[var(--accent)]/10 via-transparent to-[var(--cyan)]/5"></div>
+    <div class="absolute top-0 right-0 w-1/2 h-full bg-[var(--accent)] opacity-[0.03] blur-[100px]"></div>
+
+    <div class="max-w-4xl mx-auto px-6 text-center relative">
+      <p class="text-[var(--accent)] uppercase tracking-[0.3em] text-sm mb-4 reveal">Begin Your Story</p>
+      <h2 class="font-display text-5xl lg:text-7xl mb-6 reveal reveal-delay-1">READY TO CREATE?</h2>
+      <p class="text-[var(--muted)] text-lg max-w-2xl mx-auto mb-10 reveal reveal-delay-2">
+        Join our next cohort and transform your passion for filmmaking into a career. Limited seats available for our 2026 programs.
+      </p>
+
+      <div class="flex flex-col sm:flex-row gap-4 justify-center reveal reveal-delay-3">
+        <a href="mailto:hello@cwlfilmacademy.sg" class="btn-primary px-10 py-5 rounded text-sm uppercase tracking-widest inline-block">
+          Schedule a Consultation
+        </a>
+        <a href="#programs" class="btn-outline px-10 py-5 rounded text-sm uppercase tracking-widest inline-block">
+          View Programs
+        </a>
+      </div>
+
+      <div class="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-8 text-left reveal reveal-delay-4">
+        <div>
+          <p class="text-[var(--accent)] text-sm uppercase tracking-widest mb-2">Location</p>
+          <p class="text-[var(--muted)]">88 Beach Road<br>Singapore 199691</p>
+        </div>
+        <div>
+          <p class="text-[var(--accent)] text-sm uppercase tracking-widest mb-2">Contact</p>
+          <p class="text-[var(--muted)]">hello@cwlfilmacademy.sg<br>+65 9123 4567</p>
+        </div>
+        <div>
+          <p class="text-[var(--accent)] text-sm uppercase tracking-widest mb-2">Hours</p>
+          <p class="text-[var(--muted)]">Mon - Sat: 10AM - 8PM<br>Sunday: By Appointment</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-12 border-t border-[var(--border)]">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+        <div class="font-display text-xl">
+          <span class="text-[var(--accent)]">CW</span>L FILM ACADEMY
+        </div>
+        <div class="flex gap-6">
+          <a href="#" class="text-[var(--muted)] hover:text-[var(--fg)] transition-colors text-sm">Instagram</a>
+          <a href="#" class="text-[var(--muted)] hover:text-[var(--fg)] transition-colors text-sm">YouTube</a>
+          <a href="#" class="text-[var(--muted)] hover:text-[var(--fg)] transition-colors text-sm">Vimeo</a>
+          <a href="#" class="text-[var(--muted)] hover:text-[var(--fg)] transition-colors text-sm">LinkedIn</a>
+        </div>
+        <div class="text-center md:text-right">
+          <p class="text-[var(--muted)] text-sm">© 2026 <a href="https://orionwebworks.github.io/" class="hover:text-[var(--accent)] transition-colors">orionwebworks.github.io</a>. All rights reserved.</p>
+          <p class="text-[var(--accent)] text-xs mt-1">Made with ❤️</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Initialize after DOM is ready
+    document.addEventListener('DOMContentLoaded', function() {
+      // Mobile Menu Toggle
+      const menuBtn = document.getElementById('menuBtn');
+      const mobileMenu = document.getElementById('mobileMenu');
+      const menuLine1 = document.getElementById('menuLine1');
+      const menuLine2 = document.getElementById('menuLine2');
+      let menuOpen = false;
+
+      if (menuBtn && mobileMenu) {
+        menuBtn.addEventListener('click', function() {
+          menuOpen = !menuOpen;
+          mobileMenu.classList.toggle('open', menuOpen);
+
+          if (menuOpen) {
+            menuLine1.style.transform = 'rotate(45deg) translate(3px, 3px)';
+            menuLine2.style.transform = 'rotate(-45deg) translate(2px, -2px)';
+          } else {
+            menuLine1.style.transform = 'none';
+            menuLine2.style.transform = 'none';
+          }
+        });
+
+        // Close menu on link click
+        mobileMenu.querySelectorAll('a').forEach(function(link) {
+          link.addEventListener('click', function() {
+            menuOpen = false;
+            mobileMenu.classList.remove('open');
+            menuLine1.style.transform = 'none';
+            menuLine2.style.transform = 'none';
+          });
+        });
+      }
+
+      // Scroll Reveal
+      const revealElements = document.querySelectorAll('.reveal');
+
+      const revealObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      });
+
+      revealElements.forEach(function(el) {
+        revealObserver.observe(el);
+      });
+
+      // Smooth scroll for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+        anchor.addEventListener('click', function(e) {
+          const href = this.getAttribute('href');
+          if (href !== '#') {
+            e.preventDefault();
+            const target = document.querySelector(href);
+            if (target) {
+              target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+              });
+            }
+          }
+        });
+      });
+
+      // Parallax effect on ambient orbs (respects reduced motion)
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (!prefersReducedMotion) {
+        const orbs = document.querySelectorAll('.ambient-orb');
+        let ticking = false;
+
+        window.addEventListener('scroll', function() {
+          if (!ticking) {
+            window.requestAnimationFrame(function() {
+              const scrollY = window.scrollY;
+              orbs.forEach(function(orb, index) {
+                const speed = (index + 1) * 0.05;
+                orb.style.transform = 'translateY(' + (scrollY * speed) + 'px)';
+              });
+              ticking = false;
+            });
+            ticking = true;
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>

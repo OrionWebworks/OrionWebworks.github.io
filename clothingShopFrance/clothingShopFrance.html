@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L'Aube | Maison de Mode Parisienne</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Work+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #FAF8F5;
+            --bg-warm: #F5F0E8;
+            --fg: #1A1815;
+            --fg-muted: #6B6560;
+            --accent: #8B7355;
+            --accent-dark: #5C4A3A;
+            --card: #FFFFFF;
+            --border: #E5E0D8;
+            --cream: #EDE8E0;
+            --terracotta: #C4A484;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Work Sans', sans-serif;
+            background-color: var(--bg);
+            color: var(--fg);
+            overflow-x: hidden;
+        }
+
+        .font-display {
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        /* Noise texture overlay */
+        .noise-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Custom cursor */
+        .cursor {
+            width: 20px;
+            height: 20px;
+            border: 1px solid var(--accent-dark);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 10000;
+            transition: transform 0.15s ease, opacity 0.15s ease;
+            transform: translate(-50%, -50%);
+        }
+
+        .cursor-dot {
+            width: 4px;
+            height: 4px;
+            background: var(--accent-dark);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 10001;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Hero animations */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(60px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(2deg); }
+        }
+
+        @keyframes drift {
+            0%, 100% { transform: translate(0, 0); }
+            25% { transform: translate(10px, -15px); }
+            50% { transform: translate(-5px, -25px); }
+            75% { transform: translate(-15px, -10px); }
+        }
+
+        @keyframes revealLine {
+            from { transform: scaleX(0); }
+            to { transform: scaleX(1); }
+        }
+
+        .animate-fade-up {
+            animation: fadeUp 1s ease forwards;
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 1.2s ease forwards;
+        }
+
+        .animate-slide-in {
+            animation: slideIn 0.8s ease forwards;
+        }
+
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+        .delay-400 { animation-delay: 0.4s; }
+        .delay-500 { animation-delay: 0.5s; }
+        .delay-600 { animation-delay: 0.6s; }
+        .delay-700 { animation-delay: 0.7s; }
+        .delay-800 { animation-delay: 0.8s; }
+
+        .reveal-line {
+            transform-origin: left;
+            animation: revealLine 1.5s ease forwards;
+        }
+
+        /* Scroll reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Navigation */
+        .nav-link {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: var(--accent-dark);
+            transform: translateX(-101%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-link:hover::after {
+            transform: translateX(0);
+        }
+
+        /* Product cards */
+        .product-card {
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+        }
+
+        .product-card img {
+            transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1), filter 0.5s ease;
+        }
+
+        .product-card:hover img {
+            transform: scale(1.05);
+            filter: brightness(1.05);
+        }
+
+        /* Buttons */
+        .btn-primary {
+            position: relative;
+            overflow: hidden;
+            transition: color 0.4s ease;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--accent-dark);
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: -1;
+        }
+
+        .btn-primary:hover::before {
+            transform: translateY(0);
+        }
+
+        .btn-primary:hover {
+            color: var(--bg);
+        }
+
+        /* Image gallery hover */
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gallery-item::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(26, 24, 21, 0.4) 0%, transparent 50%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .gallery-item:hover::after {
+            opacity: 1;
+        }
+
+        .gallery-item img {
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        /* Floating elements */
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .drifting {
+            animation: drift 8s ease-in-out infinite;
+        }
+
+        /* Glassmorphism */
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        /* Menu overlay */
+        .menu-overlay {
+            clip-path: circle(0% at calc(100% - 40px) 40px);
+            transition: clip-path 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .menu-overlay.active {
+            clip-path: circle(150% at calc(100% - 40px) 40px);
+        }
+
+        /* Horizontal scroll */
+        .horizontal-scroll {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .horizontal-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Focus styles */
+        *:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 4px;
+        }
+
+        /* Reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+
+            .cursor, .cursor-dot {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Noise overlay -->
+    <div class="noise-overlay"></div>
+
+    <!-- Custom cursor -->
+    <div class="cursor hidden lg:block"></div>
+    <div class="cursor-dot hidden lg:block"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 w-full z-50 glass">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo -->
+                <a href="#" class="font-display text-2xl lg:text-3xl font-light tracking-wider text-[var(--fg)]">
+                    L'Aube
+                </a>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden lg:flex items-center space-x-12">
+                    <a href="#collections" class="nav-link text-sm tracking-widest uppercase text-[var(--fg-muted)] hover:text-[var(--fg)] transition-colors">Collections</a>
+                    <a href="#histoire" class="nav-link text-sm tracking-widest uppercase text-[var(--fg-muted)] hover:text-[var(--fg)] transition-colors">Notre Histoire</a>
+                    <a href="#atelier" class="nav-link text-sm tracking-widest uppercase text-[var(--fg-muted)] hover:text-[var(--fg)] transition-colors">L'Atelier</a>
+                    <a href="#contact" class="nav-link text-sm tracking-widest uppercase text-[var(--fg-muted)] hover:text-[var(--fg)] transition-colors">Contact</a>
+                </div>
+
+                <!-- Mobile Menu Toggle -->
+                <button id="menuToggle" class="lg:hidden relative w-8 h-8 flex flex-col justify-center items-center" aria-label="Menu">
+                    <span class="menu-line absolute w-6 h-px bg-[var(--fg)] transition-all duration-300"></span>
+                    <span class="menu-line absolute w-6 h-px bg-[var(--fg)] transition-all duration-300 translate-y-2"></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="menuOverlay" class="menu-overlay fixed inset-0 z-40 bg-[var(--bg-warm)] flex items-center justify-center">
+        <div class="text-center space-y-8">
+            <a href="#collections" class="block font-display text-4xl font-light text-[var(--fg)] hover:text-[var(--accent)] transition-colors">Collections</a>
+            <a href="#histoire" class="block font-display text-4xl font-light text-[var(--fg)] hover:text-[var(--accent)] transition-colors">Notre Histoire</a>
+            <a href="#atelier" class="block font-display text-4xl font-light text-[var(--fg)] hover:text-[var(--accent)] transition-colors">L'Atelier</a>
+            <a href="#contact" class="block font-display text-4xl font-light text-[var(--fg)] hover:text-[var(--accent)] transition-colors">Contact</a>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center overflow-hidden">
+        <!-- Background gradient -->
+        <div class="absolute inset-0 bg-gradient-to-br from-[var(--bg)] via-[var(--cream)] to-[var(--bg-warm)]"></div>
+
+        <!-- Decorative shapes -->
+        <div class="absolute top-20 right-10 w-64 h-64 rounded-full bg-[var(--cream)] opacity-60 drifting"></div>
+        <div class="absolute bottom-40 left-20 w-48 h-48 rounded-full bg-[var(--terracotta)] opacity-20 floating" style="animation-delay: -2s;"></div>
+        <div class="absolute top-1/3 right-1/4 w-32 h-32 border border-[var(--border)] rounded-full floating" style="animation-delay: -4s;"></div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 pt-32 pb-20 w-full">
+            <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+                <!-- Left content -->
+                <div class="order-2 lg:order-1">
+                    <div class="space-y-8">
+                        <p class="text-sm tracking-[0.3em] uppercase text-[var(--accent)] opacity-0 animate-fade-up">Maison de Mode Parisienne</p>
+
+                        <h1 class="font-display text-5xl sm:text-6xl lg:text-8xl font-light leading-[0.95] text-[var(--fg)]">
+                            <span class="block opacity-0 animate-fade-up delay-100">L'élégance</span>
+                            <span class="block opacity-0 animate-fade-up delay-200 font-normal italic text-[var(--accent-dark)]">intemporelle</span>
+                        </h1>
+
+                        <div class="h-px w-24 bg-[var(--accent)] opacity-0 reveal-line delay-400"></div>
+
+                        <p class="text-lg text-[var(--fg-muted)] max-w-md leading-relaxed opacity-0 animate-fade-up delay-500">
+                            Une collection exclusive de pièces raffinées, confectionnées avec passion dans notre atelier parisien. Découvrez l'essence du luxe discret.
+                        </p>
+
+                        <div class="flex flex-wrap gap-6 opacity-0 animate-fade-up delay-600">
+                            <a href="#collections" class="btn-primary relative inline-flex items-center px-8 py-4 border border-[var(--accent-dark)] text-[var(--fg)] text-sm tracking-widest uppercase transition-all">
+                                Explorer
+                            </a>
+                            <a href="#atelier" class="inline-flex items-center px-8 py-4 text-sm tracking-widest uppercase text-[var(--fg-muted)] hover:text-[var(--fg)] transition-colors">
+                                Notre Atelier
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right content - Image composition -->
+                <div class="order-1 lg:order-2 relative opacity-0 animate-fade-in delay-300">
+                    <div class="relative">
+                        <!-- Main image -->
+                        <div class="relative aspect-[3/4] overflow-hidden">
+                            <img src="hero-main.png"
+                                 alt="Collection L'Aube - Vêtements suspendus"
+                                 class="w-full h-full object-cover">
+                        </div>
+
+                        <!-- Floating accent image -->
+                        <div class="absolute -bottom-8 -left-12 w-40 h-48 overflow-hidden shadow-2xl floating" style="animation-delay: -3s;">
+                            <img src="hero-accent.png"
+                                 alt="Détail collection"
+                                 class="w-full h-full object-cover">
+                        </div>
+
+                        <!-- Decorative frame -->
+                        <div class="absolute -top-4 -right-4 w-full h-full border border-[var(--accent)] opacity-40 pointer-events-none"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scroll indicator -->
+        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-0 animate-fade-in delay-800">
+            <span class="text-xs tracking-widest uppercase text-[var(--fg-muted)]">Défiler</span>
+            <div class="w-px h-12 bg-gradient-to-b from-[var(--accent)] to-transparent"></div>
+        </div>
+    </section>
+
+    <!-- Marquee -->
+    <section class="py-6 bg-[var(--accent-dark)] overflow-hidden">
+        <div class="marquee-container">
+            <div class="flex animate-marquee whitespace-nowrap">
+                <span class="mx-8 text-sm tracking-[0.4em] uppercase text-[var(--bg)]">Collection Automne-Hiver 2026</span>
+                <span class="mx-8 text-sm tracking-[0.4em] uppercase text-[var(--bg)] opacity-50">★</span>
+                <span class="mx-8 text-sm tracking-[0.4em] uppercase text-[var(--bg)]">Fabriqué à Paris</span>
+                <span class="mx-8 text-sm tracking-[0.4em] uppercase text-[var(--bg)] opacity-50">★</span>
+                <span class="mx-8 text-sm tracking-[0.4em] uppercase text-[var(--bg)]">Élégance Naturelle</span>
+                <span class="mx-8 text-sm tracking-[0.4em] uppercase text-[var(--bg)] opacity-50">★</span>
+                <span class="mx-8 text-sm tracking-[0.4em] uppercase text-[var(--bg)]">Collection Automne-Hiver 2026</span>
+                <span class="mx-8 text-sm tracking-[0.4em] uppercase text-[var(--bg)] opacity-50">★</span>
+                <span class="mx-8 text-sm tracking-[0.4em] uppercase text-[var(--bg)]">Fabriqué à Paris</span>
+                <span class="mx-8 text-sm tracking-[0.4em] uppercase text-[var(--bg)] opacity-50">★</span>
+                <span class="mx-8 text-sm tracking-[0.4em] uppercase text-[var(--bg)]">Élégance Naturelle</span>
+                <span class="mx-8 text-sm tracking-[0.4em] uppercase text-[var(--bg)] opacity-50">★</span>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .animate-marquee {
+            animation: marquee 20s linear infinite;
+        }
+    </style>
+
+    <!-- Collections Section -->
+    <section id="collections" class="py-24 lg:py-32 bg-[var(--bg)]">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <!-- Section header -->
+            <div class="text-center mb-16 lg:mb-24 reveal">
+                <p class="text-sm tracking-[0.3em] uppercase text-[var(--accent)] mb-4">Nos Créations</p>
+                <h2 class="font-display text-4xl lg:text-6xl font-light text-[var(--fg)]">Collections 2026</h2>
+            </div>
+
+            <!-- Category filters -->
+            <div class="flex flex-wrap justify-center gap-4 mb-12 reveal">
+                <button class="filter-btn active px-6 py-2 text-sm tracking-widest uppercase border border-[var(--accent-dark)] text-[var(--fg)] transition-all hover:bg-[var(--accent-dark)] hover:text-[var(--bg)]" data-filter="all">Tout</button>
+                <button class="filter-btn px-6 py-2 text-sm tracking-widest uppercase border border-[var(--border)] text-[var(--fg-muted)] transition-all hover:border-[var(--accent-dark)] hover:text-[var(--fg)]" data-filter="robes">Robes</button>
+                <button class="filter-btn px-6 py-2 text-sm tracking-widest uppercase border border-[var(--border)] text-[var(--fg-muted)] transition-all hover:border-[var(--accent-dark)] hover:text-[var(--fg)]" data-filter="vestes">Vestes</button>
+                <button class="filter-btn px-6 py-2 text-sm tracking-widest uppercase border border-[var(--border)] text-[var(--fg-muted)] transition-all hover:border-[var(--accent-dark)] hover:text-[var(--fg)]" data-filter="accessoires">Accessoires</button>
+            </div>
+
+            <!-- Products grid -->
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12" id="productsGrid">
+                <!-- Product 1 -->
+                <article class="product-card reveal" data-category="robes">
+                    <div class="relative aspect-[3/4] overflow-hidden bg-[var(--cream)] mb-6">
+                        <img src="product-linen.png"
+                             alt="Robe Lin Naturel"
+                             class="w-full h-full object-cover">
+                        <div class="absolute top-4 left-4 px-3 py-1 bg-[var(--bg)] text-xs tracking-widest uppercase">Nouveau</div>
+                    </div>
+                    <h3 class="font-display text-xl text-[var(--fg)] mb-2">Robe Lin Naturel</h3>
+                    <p class="text-sm text-[var(--fg-muted)] mb-3">Collection Éternité</p>
+                    <p class="text-[var(--accent-dark)] font-medium">385 €</p>
+                </article>
+
+                <!-- Product 2 -->
+                <article class="product-card reveal" data-category="vestes">
+                    <div class="relative aspect-[3/4] overflow-hidden bg-[var(--cream)] mb-6">
+                        <img src="product-veste.png"
+                             alt="Veste Crème Intemporelle"
+                             class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="font-display text-xl text-[var(--fg)] mb-2">Veste Crème Intemporelle</h3>
+                    <p class="text-sm text-[var(--fg-muted)] mb-3">Collection Essence</p>
+                    <p class="text-[var(--accent-dark)] font-medium">520 €</p>
+                </article>
+
+                <!-- Product 3 -->
+                <article class="product-card reveal" data-category="robes">
+                    <div class="relative aspect-[3/4] overflow-hidden bg-[var(--cream)] mb-6">
+                        <img src="product-chemise.png"
+                             alt="Chemise Soie Blanc Cassé"
+                             class="w-full h-full object-cover">
+                        <div class="absolute top-4 left-4 px-3 py-1 bg-[var(--accent-dark)] text-[var(--bg)] text-xs tracking-widest uppercase">Exclusif</div>
+                    </div>
+                    <h3 class="font-display text-xl text-[var(--fg)] mb-2">Chemise Soie Blanc Cassé</h3>
+                    <p class="text-sm text-[var(--fg-muted)] mb-3">Collection Pureté</p>
+                    <p class="text-[var(--accent-dark)] font-medium">295 €</p>
+                </article>
+
+                <!-- Product 4 -->
+                <article class="product-card reveal" data-category="accessoires">
+                    <div class="relative aspect-[3/4] overflow-hidden bg-[var(--cream)] mb-6">
+                        <img src="product-chaussures.png"
+                             alt="Collection Chaussures"
+                             class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="font-display text-xl text-[var(--fg)] mb-2">Collection Chaussures</h3>
+                    <p class="text-sm text-[var(--fg-muted)] mb-3">Cuir Italien</p>
+                    <p class="text-[var(--accent-dark)] font-medium">À partir de 245 €</p>
+                </article>
+
+                <!-- Product 5 -->
+                <article class="product-card reveal" data-category="vestes">
+                    <div class="relative aspect-[3/4] overflow-hidden bg-[var(--cream)] mb-6">
+                        <img src="product-manteau.png"
+                             alt="Manteau Cachemire Beige"
+                             class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="font-display text-xl text-[var(--fg)] mb-2">Manteau Cachemire Beige</h3>
+                    <p class="text-sm text-[var(--fg-muted)] mb-3">Collection Hiver</p>
+                    <p class="text-[var(--accent-dark)] font-medium">890 €</p>
+                </article>
+
+                <!-- Product 6 -->
+                <article class="product-card reveal" data-category="accessoires">
+                    <div class="relative aspect-[3/4] overflow-hidden bg-[var(--cream)] mb-6">
+                        <img src="hero-accent.png"
+                             alt="Accessoires Maison"
+                             class="w-full h-full object-cover">
+                        <div class="absolute top-4 left-4 px-3 py-1 bg-[var(--bg)] text-xs tracking-widest uppercase">Limited</div>
+                    </div>
+                    <h3 class="font-display text-xl text-[var(--fg)] mb-2">Accessoires Maison</h3>
+                    <p class="text-sm text-[var(--fg-muted)] mb-3">Pièces Uniques</p>
+                    <p class="text-[var(--accent-dark)] font-medium">À partir de 85 €</p>
+                </article>
+            </div>
+
+            <!-- View all button -->
+            <div class="text-center mt-16 reveal">
+                <a href="#" class="btn-primary relative inline-flex items-center px-12 py-4 border border-[var(--accent-dark)] text-[var(--fg)] text-sm tracking-widest uppercase">
+                    Voir Toute la Collection
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Histoire Section -->
+    <section id="histoire" class="py-24 lg:py-32 bg-[var(--bg-warm)] relative overflow-hidden">
+        <!-- Decorative background -->
+        <div class="absolute top-0 right-0 w-1/2 h-full opacity-10">
+            <svg viewBox="0 0 400 400" class="w-full h-full">
+                <circle cx="200" cy="200" r="150" fill="none" stroke="var(--accent)" stroke-width="0.5"/>
+                <circle cx="200" cy="200" r="100" fill="none" stroke="var(--accent)" stroke-width="0.5"/>
+                <circle cx="200" cy="200" r="50" fill="none" stroke="var(--accent)" stroke-width="0.5"/>
+            </svg>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
+            <div class="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+                <!-- Images composition -->
+                <div class="relative reveal">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-4">
+                            <div class="aspect-[3/4] overflow-hidden">
+                                <img src="product-veste.png"
+                                     alt="Notre atelier"
+                                     class="w-full h-full object-cover">
+                            </div>
+                            <div class="aspect-square overflow-hidden">
+                                <img src="product-manteau.png"
+                                     alt="Détails"
+                                     class="w-full h-full object-cover">
+                            </div>
+                        </div>
+                        <div class="pt-12">
+                            <div class="aspect-[3/4] overflow-hidden">
+                                <img src="product-linen.png"
+                                     alt="Collections"
+                                     class="w-full h-full object-cover">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content -->
+                <div class="reveal">
+                    <p class="text-sm tracking-[0.3em] uppercase text-[var(--accent)] mb-6">Depuis 2018</p>
+                    <h2 class="font-display text-4xl lg:text-5xl font-light text-[var(--fg)] mb-8 leading-tight">
+                        L'Art du <span class="italic">Même</span> Savoir-Faire
+                    </h2>
+
+                    <div class="space-y-6 text-[var(--fg-muted)] leading-relaxed">
+                        <p>
+                            Fondée au cœur du Marais parisien, L'Aube incarne une vision de la mode où chaque pièce raconte une histoire. Notre engagement envers l'excellence artisanale se reflète dans chaque couture, chaque détail.
+                        </p>
+                        <p>
+                            Nous collaborons avec des artisans français et italiens, sélectionnant les plus beaux matériaux : lin biologique de Normandie, cachemire de Mongolie, soie naturelle de Lyon. Chaque création est pensée pour traverser le temps.
+                        </p>
+                    </div>
+
+                    <div class="mt-12 grid grid-cols-3 gap-8">
+                        <div>
+                            <p class="font-display text-4xl text-[var(--accent-dark)]">8</p>
+                            <p class="text-sm text-[var(--fg-muted)] mt-1">Années d'Excellence</p>
+                        </div>
+                        <div>
+                            <p class="font-display text-4xl text-[var(--accent-dark)]">47</p>
+                            <p class="text-sm text-[var(--fg-muted)] mt-1">Artisans Partenaires</p>
+                        </div>
+                        <div>
+                            <p class="font-display text-4xl text-[var(--accent-dark)]">100%</p>
+                            <p class="text-sm text-[var(--fg-muted)] mt-1">Fabriqué en France</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Atelier Section -->
+    <section id="atelier" class="py-24 lg:py-32 bg-[var(--fg)] text-[var(--bg)]">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
+                <div class="reveal">
+                    <p class="text-sm tracking-[0.3em] uppercase text-[var(--terracotta)] mb-6">L'Atelier Parisien</p>
+                    <h2 class="font-display text-4xl lg:text-5xl font-light mb-8 leading-tight">
+                        Où la Matière<br>
+                        <span class="italic text-[var(--cream)]">Prend Vie</span>
+                    </h2>
+
+                    <p class="text-[var(--cream)] leading-relaxed mb-8">
+                        Notre atelier du 12ème arrondissement est le cœur battant de L'Aube. C'est ici que nos designers et artisans travaillent ensemble, transformant les étoffes les plus nobles en pièces uniques. Chaque vêtement est confectionné avec une attention méticuleuse aux détails.
+                    </p>
+
+                    <ul class="space-y-4 mb-12">
+                        <li class="flex items-center gap-4">
+                            <span class="w-8 h-px bg-[var(--terracotta)]"></span>
+                            <span class="text-[var(--cream)]">Sur-mesure disponible sur rendez-vous</span>
+                        </li>
+                        <li class="flex items-center gap-4">
+                            <span class="w-8 h-px bg-[var(--terracotta)]"></span>
+                            <span class="text-[var(--cream)]">Visite privée de l'atelier</span>
+                        </li>
+                        <li class="flex items-center gap-4">
+                            <span class="w-8 h-px bg-[var(--terracotta)]"></span>
+                            <span class="text-[var(--cream)]">Conseil en style personnel</span>
+                        </li>
+                    </ul>
+
+                    <a href="#contact" class="inline-flex items-center gap-3 text-sm tracking-widest uppercase border-b border-[var(--terracotta)] pb-2 hover:text-[var(--terracotta)] transition-colors">
+                        Prendre Rendez-vous
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                        </svg>
+                    </a>
+                </div>
+
+                <!-- Gallery -->
+                <div class="grid grid-cols-2 gap-4 reveal">
+                    <div class="gallery-item aspect-[3/4] overflow-hidden">
+                        <img src="hero-main.png"
+                             alt="Atelier L'Aube"
+                             class="w-full h-full object-cover">
+                    </div>
+                    <div class="gallery-item aspect-[3/4] overflow-hidden mt-8">
+                        <img src="product-chaussures.png"
+                             alt="Détails Atelier"
+                             class="w-full h-full object-cover">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="py-24 lg:py-32 bg-[var(--cream)] relative overflow-hidden">
+        <div class="absolute inset-0 opacity-5">
+            <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
+                    <path d="M 10 0 L 0 0 0 10" fill="none" stroke="var(--accent-dark)" stroke-width="0.5"/>
+                </pattern>
+                <rect width="100%" height="100%" fill="url(#grid)"/>
+            </svg>
+        </div>
+
+        <div class="max-w-3xl mx-auto px-6 lg:px-12 text-center relative z-10 reveal">
+            <p class="text-sm tracking-[0.3em] uppercase text-[var(--accent)] mb-4">Restez Informé</p>
+            <h2 class="font-display text-3xl lg:text-5xl font-light text-[var(--fg)] mb-6">
+                L'Élégance en Héritage
+            </h2>
+            <p class="text-[var(--fg-muted)] mb-12 max-w-xl mx-auto">
+                Inscrivez-vous à notre newsletter pour découvrir nos nouvelles collections, les événements exclusifs et les coulisses de notre atelier parisien.
+            </p>
+
+            <form class="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto" id="newsletterForm">
+                <input type="email"
+                       placeholder="Votre adresse email"
+                       required
+                       class="flex-1 px-6 py-4 bg-[var(--bg)] border border-[var(--border)] text-[var(--fg)] placeholder-[var(--fg-muted)] focus:border-[var(--accent)] focus:outline-none transition-colors">
+                <button type="submit" class="btn-primary relative px-8 py-4 border border-[var(--accent-dark)] text-[var(--fg)] text-sm tracking-widest uppercase whitespace-nowrap">
+                    S'inscrire
+                </button>
+            </form>
+            <p class="text-xs text-[var(--fg-muted)] mt-4">
+                En vous inscrivant, vous acceptez notre politique de confidentialité.
+            </p>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-24 lg:py-32 bg-[var(--bg)]">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <div class="grid lg:grid-cols-2 gap-16">
+                <!-- Contact Info -->
+                <div class="reveal">
+                    <p class="text-sm tracking-[0.3em] uppercase text-[var(--accent)] mb-4">Contact</p>
+                    <h2 class="font-display text-4xl lg:text-5xl font-light text-[var(--fg)] mb-8">
+                        Rendez-nous Visite
+                    </h2>
+
+                    <div class="space-y-8">
+                        <div>
+                            <h3 class="font-display text-xl text-[var(--fg)] mb-2">Boutique</h3>
+                            <p class="text-[var(--fg-muted)]">
+                                24 Rue des Rosiers<br>
+                                75004 Paris, France
+                            </p>
+                        </div>
+
+                        <div>
+                            <h3 class="font-display text-xl text-[var(--fg)] mb-2">Horaires</h3>
+                            <p class="text-[var(--fg-muted)]">
+                                Lundi – Samedi : 10h00 – 19h00<br>
+                                Dimanche : Sur rendez-vous
+                            </p>
+                        </div>
+
+                        <div>
+                            <h3 class="font-display text-xl text-[var(--fg)] mb-2">Contact</h3>
+                            <p class="text-[var(--fg-muted)]">
+                                +33 1 42 72 86 45<br>
+                                bonjour@laube-paris.fr
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Social links -->
+                    <div class="flex gap-6 mt-12">
+                        <a href="#" class="text-[var(--fg-muted)] hover:text-[var(--accent-dark)] transition-colors" aria-label="Instagram">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-[var(--fg-muted)] hover:text-[var(--accent-dark)] transition-colors" aria-label="Pinterest">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 0c-6.627 0-12 5.372-12 12 0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738.098.119.112.224.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146 1.124.347 2.317.535 3.554.535 6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="text-[var(--fg-muted)] hover:text-[var(--accent-dark)] transition-colors" aria-label="LinkedIn">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Map placeholder -->
+                <div class="reveal">
+                    <div class="aspect-square lg:aspect-[4/3] bg-[var(--cream)] relative overflow-hidden">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="text-center">
+                                <svg class="w-16 h-16 mx-auto text-[var(--accent)] mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                </svg>
+                                <p class="font-display text-2xl text-[var(--fg)] mb-2">Le Marais, Paris</p>
+                                <p class="text-sm text-[var(--fg-muted)]">24 Rue des Rosiers, 75004</p>
+                            </div>
+                        </div>
+                        <!-- Decorative grid -->
+                        <svg class="absolute inset-0 w-full h-full opacity-10" viewBox="0 0 100 100" preserveAspectRatio="none">
+                            <pattern id="mapGrid" width="20" height="20" patternUnits="userSpaceOnUse">
+                                <path d="M 20 0 L 0 0 0 20" fill="none" stroke="var(--accent-dark)" stroke-width="0.3"/>
+                            </pattern>
+                            <rect width="100%" height="100%" fill="url(#mapGrid)"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 bg-[var(--fg)] text-[var(--cream)]">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <div class="grid md:grid-cols-4 gap-12 mb-12">
+                <!-- Logo & description -->
+                <div class="md:col-span-2">
+                    <a href="#" class="font-display text-3xl font-light tracking-wider">L'Aube</a>
+                    <p class="mt-4 text-sm text-[var(--cream)] opacity-60 max-w-md leading-relaxed">
+                        Maison de mode parisienne fondée en 2018. Créations artisanales confectionnées en France avec les plus beaux matériaux naturels.
+                    </p>
+                </div>
+
+                <!-- Quick links -->
+                <div>
+                    <h4 class="font-display text-lg mb-4">Navigation</h4>
+                    <ul class="space-y-2 text-sm opacity-60">
+                        <li><a href="#collections" class="hover:opacity-100 transition-opacity">Collections</a></li>
+                        <li><a href="#histoire" class="hover:opacity-100 transition-opacity">Notre Histoire</a></li>
+                        <li><a href="#atelier" class="hover:opacity-100 transition-opacity">L'Atelier</a></li>
+                        <li><a href="#contact" class="hover:opacity-100 transition-opacity">Contact</a></li>
+                    </ul>
+                </div>
+
+                <!-- Legal -->
+                <div>
+                    <h4 class="font-display text-lg mb-4">Informations</h4>
+                    <ul class="space-y-2 text-sm opacity-60">
+                        <li><a href="#" class="hover:opacity-100 transition-opacity">Livraison</a></li>
+                        <li><a href="#" class="hover:opacity-100 transition-opacity">Retours</a></li>
+                        <li><a href="#" class="hover:opacity-100 transition-opacity">CGV</a></li>
+                        <li><a href="#" class="hover:opacity-100 transition-opacity">Confidentialité</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="pt-8 border-t border-[var(--cream)] border-opacity-10 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-xs opacity-40">© 2026 <a href="https://orionwebworks.github.io/" class="hover:opacity-100 transition-opacity" target="_blank" rel="noopener">https://orionwebworks.github.io/</a> – Tous droits réservés</p>
+                <p class="text-xs opacity-40 font-display italic">Fait avec amour ✦</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize variables first
+        let cursor, cursorDot;
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        // DOM Ready
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize cursor elements
+            cursor = document.querySelector('.cursor');
+            cursorDot = document.querySelector('.cursor-dot');
+
+            // Mobile menu
+            const menuToggle = document.getElementById('menuToggle');
+            const menuOverlay = document.getElementById('menuOverlay');
+            const menuLines = menuToggle.querySelectorAll('.menu-line');
+            let menuOpen = false;
+
+            menuToggle.addEventListener('click', function() {
+                menuOpen = !menuOpen;
+                menuOverlay.classList.toggle('active');
+
+                if (menuOpen) {
+                    menuLines[0].style.transform = 'rotate(45deg) translateY(0)';
+                    menuLines[1].style.transform = 'rotate(-45deg) translateY(0)';
+                } else {
+                    menuLines[0].style.transform = 'rotate(0) translateY(-4px)';
+                    menuLines[1].style.transform = 'rotate(0) translateY(4px)';
+                }
+            });
+
+            // Close menu on link click
+            menuOverlay.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', function() {
+                    menuOpen = false;
+                    menuOverlay.classList.remove('active');
+                    menuLines[0].style.transform = 'rotate(0) translateY(-4px)';
+                    menuLines[1].style.transform = 'rotate(0) translateY(4px)';
+                });
+            });
+
+            // Custom cursor
+            if (cursor && cursorDot && !prefersReducedMotion) {
+                document.addEventListener('mousemove', function(e) {
+                    cursor.style.left = e.clientX + 'px';
+                    cursor.style.top = e.clientY + 'px';
+                    cursorDot.style.left = e.clientX + 'px';
+                    cursorDot.style.top = e.clientY + 'px';
+                });
+
+                // Cursor hover effects
+                const interactiveElements = document.querySelectorAll('a, button, .product-card');
+                interactiveElements.forEach(el => {
+                    el.addEventListener('mouseenter', function() {
+                        cursor.style.transform = 'translate(-50%, -50%) scale(1.5)';
+                        cursor.style.borderColor = 'var(--terracotta)';
+                    });
+                    el.addEventListener('mouseleave', function() {
+                        cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+                        cursor.style.borderColor = 'var(--accent-dark)';
+                    });
+                });
+            }
+
+            // Scroll reveal
+            const revealElements = document.querySelectorAll('.reveal');
+
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+
+            revealElements.forEach(el => revealObserver.observe(el));
+
+            // Filter buttons
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            const products = document.querySelectorAll('#productsGrid article');
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const filter = this.dataset.filter;
+
+                    // Update active state
+                    filterBtns.forEach(b => {
+                        b.classList.remove('active');
+                        b.classList.remove('border-[var(--accent-dark)]', 'text-[var(--fg)]');
+                        b.classList.add('border-[var(--border)]', 'text-[var(--fg-muted)]');
+                    });
+                    this.classList.add('active', 'border-[var(--accent-dark)]', 'text-[var(--fg)]');
+                    this.classList.remove('border-[var(--border)]', 'text-[var(--fg-muted)]');
+
+                    // Filter products
+                    products.forEach(product => {
+                        if (filter === 'all' || product.dataset.category === filter) {
+                            product.style.display = 'block';
+                            setTimeout(() => {
+                                product.style.opacity = '1';
+                                product.style.transform = 'translateY(0)';
+                            }, 50);
+                        } else {
+                            product.style.opacity = '0';
+                            product.style.transform = 'translateY(20px)';
+                            setTimeout(() => {
+                                product.style.display = 'none';
+                            }, 300);
+                        }
+                    });
+                });
+            });
+
+            // Newsletter form
+            const newsletterForm = document.getElementById('newsletterForm');
+            newsletterForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = this.querySelector('input[type="email"]').value;
+
+                // Simulate submission
+                const button = this.querySelector('button');
+                const originalText = button.textContent;
+                button.textContent = 'Merci !';
+                button.style.backgroundColor = 'var(--accent-dark)';
+                button.style.color = 'var(--bg)';
+
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.backgroundColor = '';
+                    button.style.color = '';
+                    this.reset();
+                }, 2000);
+            });
+
+            // Smooth scroll for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: prefersReducedMotion ? 'auto' : 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // Parallax effect on hero
+            if (!prefersReducedMotion) {
+                const heroShapes = document.querySelectorAll('.floating, .drifting');
+                window.addEventListener('scroll', function() {
+                    const scrollY = window.scrollY;
+                    heroShapes.forEach((shape, index) => {
+                        const speed = (index + 1) * 0.1;
+                        shape.style.transform = `translateY(${scrollY * speed}px)`;
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>

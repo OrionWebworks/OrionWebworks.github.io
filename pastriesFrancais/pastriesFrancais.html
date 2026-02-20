@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>L'Artisan Pâtisserie | Boulangerie d'Art</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              black: '#1A1A1A',
+              gold: '#C9A96E',
+              cream: '#FAF8F5',
+              gray: '#8A8A8A'
+            }
+          },
+          fontFamily: {
+            serif: ['Cormorant Garamond', 'serif'],
+            sans: ['Montserrat', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    :root {
+      --color-black: #1A1A1A;
+      --color-gold: #C9A96E;
+      --color-cream: #FAF8F5;
+    }
+    body {
+      font-family: 'Montserrat', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    .font-serif {
+      font-family: 'Cormorant Garamond', serif;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .glass-panel {
+      background: rgba(250, 248, 245, 0.8);
+      backdrop-filter: blur(12px);
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fadeUp {
+      animation: fadeUp 1.2s ease-out forwards;
+    }
+    .delay-100 { animation-delay: 0.1s; }
+    .delay-200 { animation-delay: 0.2s; }
+    .delay-300 { animation-delay: 0.3s; }
+    .hover-zoom {
+      transition: transform 0.7s ease;
+    }
+    .hover-zoom:hover {
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body class="bg-brand-cream text-brand-black">
+
+  <!-- Barre d'annonce -->
+  <aside class="bg-black text-white py-2">
+    <div class="max-w-7xl mx-auto px-6 flex items-center justify-center gap-2">
+      <iconify-icon icon="lucide:sparkles" class="text-brand-gold" width="14"></iconify-icon>
+      <p class="text-xs tracking-widest uppercase font-light">Nouvelle Collection Printemps 2026 · Livraison offerte dès 150€ d'achat</p>
+    </div>
+  </aside>
+
+  <!-- Navigation -->
+  <header class="sticky top-0 z-50 glass-panel border-b border-black/10">
+    <nav class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+      <a href="#" class="font-serif text-2xl lg:text-3xl font-medium tracking-tight">L'Artisan</a>
+
+      <div class="hidden lg:flex items-center gap-8">
+        <a href="#about" class="text-xs tracking-widest uppercase font-light hover:text-brand-gold transition-colors duration-150">À Propos</a>
+        <a href="#products" class="text-xs tracking-widest uppercase font-light hover:text-brand-gold transition-colors duration-150">Collections</a>
+        <a href="#signature" class="text-xs tracking-widest uppercase font-light hover:text-brand-gold transition-colors duration-150">Signature</a>
+        <a href="#contact" class="text-xs tracking-widest uppercase font-light hover:text-brand-gold transition-colors duration-150">Contact</a>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <button class="relative p-2 hover:text-brand-gold transition-colors">
+          <iconify-icon icon="lucide:shopping-bag" width="20"></iconify-icon>
+          <span class="absolute -top-0.5 -right-0.5 h-4 w-4 bg-brand-gold text-white text-[10px] rounded-full flex items-center justify-center">2</span>
+        </button>
+        <button class="lg:hidden p-2">
+          <iconify-icon icon="lucide:menu" width="20"></iconify-icon>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-6">
+
+    <!-- Section Hero -->
+    <section class="py-16 lg:py-24">
+      <div class="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+        <div class="lg:col-span-5 opacity-0 animate-fadeUp">
+          <p class="text-xs tracking-widest uppercase text-brand-gold mb-4">Depuis 2020 · Boulangerie Artisanale</p>
+          <h1 class="font-serif text-4xl lg:text-6xl font-light tracking-tight leading-tight mb-6">
+            Chaque bouchée<br>
+            <span class="italic">est un Art</span>
+          </h1>
+          <p class="text-sm text-brand-gray font-light leading-relaxed mb-8 max-w-md">
+            Nous croyons que la véritable art de la pâtisserie naît du respect des ingrédients et du dévouement à l'artisanat. Chaque création est le fruit du temps et de la passion.
+          </p>
+          <div class="flex flex-wrap gap-4">
+            <a href="#products" class="inline-flex items-center gap-2 bg-black text-white px-8 py-3 text-sm font-medium tracking-wide hover:bg-brand-gold transition-colors duration-150">
+              Explorer la Collection
+              <iconify-icon icon="lucide:arrow-right" width="16"></iconify-icon>
+            </a>
+            <a href="#about" class="inline-flex items-center gap-2 border border-black/20 px-8 py-3 text-sm font-medium tracking-wide hover:border-black transition-colors duration-150">
+              En Savoir Plus
+            </a>
+          </div>
+        </div>
+        <div class="lg:col-span-7 opacity-0 animate-fadeUp delay-200">
+          <div class="relative aspect-[4/5] lg:aspect-square rounded-2xl overflow-hidden">
+            <img
+              src="hero-croissant.jpg"
+              alt="Pâtisseries élégantes avec café"
+              class="w-full h-full object-cover hover-zoom"
+            >
+            <div class="absolute bottom-6 left-6 glass-panel rounded-lg px-4 py-3">
+              <p class="text-xs tracking-widest uppercase text-brand-gold">Coup de Cœur</p>
+              <p class="font-serif text-lg">Croissant au Chocolat</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section À Propos -->
+    <section id="about" class="py-16 border-t border-black/10">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div class="grid grid-cols-2 gap-4">
+          <img
+            src="vitrine-boulangerie.jpg"
+            alt="Vitrine de boulangerie variée"
+            class="rounded-lg aspect-square object-cover hover-zoom"
+          >
+          <img
+            src="croissants.jpg"
+            alt="Croissants fraîchement cuits"
+            class="rounded-lg aspect-square object-cover hover-zoom"
+          >
+        </div>
+        <div>
+          <p class="text-xs tracking-widest uppercase text-brand-gold mb-4">Notre Histoire</p>
+          <h2 class="font-serif text-3xl lg:text-4xl font-light tracking-tight mb-6">
+            Une Passion pour<br>L'Excellence Boulangère
+          </h2>
+          <p class="text-sm text-brand-gray font-light leading-relaxed mb-6">
+            L'Artisan est né d'un amour profond pour l'art de la pâtisserie française. Chacune de nos créations subit des dizaines d'itérations pour atteindre le goût et la texture parfaits.
+          </p>
+          <p class="text-sm text-brand-gray font-light leading-relaxed mb-8">
+            Des ingrédients soigneusement sélectionnés à la précision artisanale, en passant par un contrôle rigoureux de la température jusqu'à la présentation artistique, nous exigeons la perfection dans chaque détail.
+          </p>
+          <div class="grid grid-cols-3 gap-6">
+            <div class="text-center">
+              <p class="font-serif text-3xl text-brand-gold">100%</p>
+              <p class="text-xs tracking-widest uppercase text-brand-gray mt-1">Naturel</p>
+            </div>
+            <div class="text-center">
+              <p class="font-serif text-3xl text-brand-gold">50+</p>
+              <p class="text-xs tracking-widest uppercase text-brand-gray mt-1">Recettes</p>
+            </div>
+            <div class="text-center">
+              <p class="font-serif text-3xl text-brand-gold">6 Ans</p>
+              <p class="text-xs tracking-widest uppercase text-brand-gray mt-1">D'Expérience</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section Produits -->
+    <section id="products" class="py-16 border-t border-black/10">
+      <div class="text-center mb-12">
+        <p class="text-xs tracking-widest uppercase text-brand-gold mb-4">Nos Collections</p>
+        <h2 class="font-serif text-3xl lg:text-4xl font-light tracking-tight">Produits Vedettes</h2>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        <!-- Produit 1 -->
+        <div class="group">
+          <div class="relative aspect-[3/4] rounded-xl overflow-hidden mb-4 bg-[#F0EFED]">
+            <img
+              src="croissants.jpg"
+              alt="Série de Croissants Classiques"
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+            >
+            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-150"></div>
+            <button class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white text-black px-6 py-2 text-sm font-medium tracking-wide opacity-0 group-hover:opacity-100 transition-opacity duration-150">
+              Acheter
+            </button>
+          </div>
+          <h3 class="font-serif text-lg font-medium tracking-tight mb-1">Croissant Classique</h3>
+          <p class="text-sm text-brand-gray font-light">Feuilleté croustillant, arôme beurré</p>
+          <p class="text-sm font-light mt-2">4,50 € <span class="text-brand-gray line-through text-xs">6,00 €</span></p>
+        </div>
+
+        <!-- Produit 2 -->
+        <div class="group">
+          <div class="relative aspect-[3/4] rounded-xl overflow-hidden mb-4 bg-[#F0EFED]">
+            <img
+              src="coffret-gourmand.jpg"
+              alt="Coffret Pâtissier Gastronomique"
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+            >
+            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-150"></div>
+            <span class="absolute top-4 left-4 bg-brand-gold text-white text-[10px] tracking-widest uppercase px-3 py-1 rounded-full">Nouveau</span>
+            <button class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white text-black px-6 py-2 text-sm font-medium tracking-wide opacity-0 group-hover:opacity-100 transition-opacity duration-150">
+              Acheter
+            </button>
+          </div>
+          <h3 class="font-serif text-lg font-medium tracking-tight mb-1">Coffret Gourmand</h3>
+          <p class="text-sm text-brand-gray font-light">Pâtisseries assorties à partager</p>
+          <p class="text-sm font-light mt-2">32,00 €</p>
+        </div>
+
+        <!-- Produit 3 -->
+        <div class="group">
+          <div class="relative aspect-[3/4] rounded-xl overflow-hidden mb-4 bg-[#F0EFED]">
+            <img
+              src="desserts-artisanaux.jpg"
+              alt="Sélection de Desserts Artisanaux"
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+            >
+            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-150"></div>
+            <button class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white text-black px-6 py-2 text-sm font-medium tracking-wide opacity-0 group-hover:opacity-100 transition-opacity duration-150">
+              Acheter
+            </button>
+          </div>
+          <h3 class="font-serif text-lg font-medium tracking-tight mb-1">Desserts Artisanaux</h3>
+          <p class="text-sm text-brand-gray font-light">Saveurs créatives, délices visuels</p>
+          <p class="text-sm font-light mt-2">8,50 €</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section Signature -->
+    <section id="signature" class="py-16 border-t border-black/10">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div class="order-2 lg:order-1">
+          <p class="text-xs tracking-widest uppercase text-brand-gold mb-4">Signature</p>
+          <h2 class="font-serif text-3xl lg:text-4xl font-light tracking-tight mb-6">
+            Le Parfait<br>
+            <span class="italic text-brand-gold">Croissant</span>
+          </h2>
+          <p class="text-sm text-brand-gray font-light leading-relaxed mb-8">
+            Nos croissants sont préparés avec du beurre importé, fermentés 48 heures à basse température, et pliés à la main en 256 couches délicates. Chaque bouchée révèle un équilibre parfait entre texture croustillante et riche arôme beurré.
+          </p>
+          <ul class="space-y-4 mb-8">
+            <li class="flex items-center gap-3">
+              <iconify-icon icon="lucide:check" class="text-brand-gold" width="18"></iconify-icon>
+              <span class="text-sm font-light">Beurre Français AOP Importé</span>
+            </li>
+            <li class="flex items-center gap-3">
+              <iconify-icon icon="lucide:check" class="text-brand-gold" width="18"></iconify-icon>
+              <span class="text-sm font-light">Fermentation Lente de 48 Heures</span>
+            </li>
+            <li class="flex items-center gap-3">
+              <iconify-icon icon="lucide:check" class="text-brand-gold" width="18"></iconify-icon>
+              <span class="text-sm font-light">256 Couches Pliées à la Main</span>
+            </li>
+            <li class="flex items-center gap-3">
+              <iconify-icon icon="lucide:check" class="text-brand-gold" width="18"></iconify-icon>
+              <span class="text-sm font-light">Cuit Frais Chaque Jour</span>
+            </li>
+          </ul>
+          <a href="#" class="inline-flex items-center gap-2 text-sm font-medium tracking-wide border-b border-black pb-1 hover:border-brand-gold hover:text-brand-gold transition-colors duration-150">
+            Voir Toutes les Saveurs
+            <iconify-icon icon="lucide:arrow-right" width="14"></iconify-icon>
+          </a>
+        </div>
+        <div class="order-1 lg:order-2">
+          <div class="relative aspect-square rounded-2xl overflow-hidden">
+            <img
+              src="croissant-signature.jpg"
+              alt="Sélection de Croissants Signature"
+              class="w-full h-full object-cover hover-zoom"
+            >
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section Avantages -->
+    <section class="py-16 border-t border-black/10">
+      <div class="text-center mb-12">
+        <p class="text-xs tracking-widest uppercase text-brand-gold mb-4">Pourquoi Nous Choisir</p>
+        <h2 class="font-serif text-3xl lg:text-4xl font-light tracking-tight">Notre Engagement</h2>
+      </div>
+
+      <div class="grid md:grid-cols-4 gap-8">
+        <div class="text-center">
+          <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-black/5 flex items-center justify-center">
+            <iconify-icon icon="lucide:leaf" class="text-brand-gold" width="24"></iconify-icon>
+          </div>
+          <h3 class="font-serif text-lg font-medium mb-2">Ingrédients Naturels</h3>
+          <p class="text-sm text-brand-gray font-light">Uniquement les meilleurs ingrédients naturels, sans conservateurs</p>
+        </div>
+        <div class="text-center">
+          <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-black/5 flex items-center justify-center">
+            <iconify-icon icon="lucide:hand" class="text-brand-gold" width="24"></iconify-icon>
+          </div>
+          <h3 class="font-serif text-lg font-medium mb-2">Fait Main</h3>
+          <p class="text-sm text-brand-gray font-light">Chaque pâtisserie est méticuleusement façonnée par nos artisans</p>
+        </div>
+        <div class="text-center">
+          <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-black/5 flex items-center justify-center">
+            <iconify-icon icon="lucide:clock" class="text-brand-gold" width="24"></iconify-icon>
+          </div>
+          <h3 class="font-serif text-lg font-medium mb-2">Fraîcheur Quotidienne</h3>
+          <p class="text-sm text-brand-gray font-light">Cuit chaque matin pour une fraîcheur optimale</p>
+        </div>
+        <div class="text-center">
+          <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-black/5 flex items-center justify-center">
+            <iconify-icon icon="lucide:heart" class="text-brand-gold" width="24"></iconify-icon>
+          </div>
+          <h3 class="font-serif text-lg font-medium mb-2">Fait avec Amour</h3>
+          <p class="text-sm text-brand-gray font-light">Coffrets cadeaux personnalisés et services de livraison</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section Témoignages -->
+    <section class="py-16 border-t border-black/10">
+      <div class="text-center mb-12">
+        <p class="text-xs tracking-widest uppercase text-brand-gold mb-4">Avis</p>
+        <h2 class="font-serif text-3xl lg:text-4xl font-light tracking-tight">Ce Que Disent Nos Clients</h2>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="bg-white rounded-xl p-6">
+          <div class="flex items-center gap-1 mb-4">
+            <iconify-icon icon="lucide:star" class="text-brand-gold" width="14"></iconify-icon>
+            <iconify-icon icon="lucide:star" class="text-brand-gold" width="14"></iconify-icon>
+            <iconify-icon icon="lucide:star" class="text-brand-gold" width="14"></iconify-icon>
+            <iconify-icon icon="lucide:star" class="text-brand-gold" width="14"></iconify-icon>
+            <iconify-icon icon="lucide:star" class="text-brand-gold" width="14"></iconify-icon>
+          </div>
+          <p class="text-sm text-brand-gray font-light leading-relaxed mb-4">
+            "Le meilleur croissant que j'ai jamais goûté ! Parfaitement feuilleté, croustillant à l'extérieur et moelleux à l'intérieur. L'arôme de beurre est incroyable. Je passe chaque semaine."
+          </p>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-brand-cream flex items-center justify-center font-serif text-lg">E</div>
+            <div>
+              <p class="text-sm font-medium">Emma Dubois</p>
+              <p class="text-xs text-brand-gray">Cliente Fidèle</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl p-6">
+          <div class="flex items-center gap-1 mb-4">
+            <iconify-icon icon="lucide:star" class="text-brand-gold" width="14"></iconify-icon>
+            <iconify-icon icon="lucide:star" class="text-brand-gold" width="14"></iconify-icon>
+            <iconify-icon icon="lucide:star" class="text-brand-gold" width="14"></iconify-icon>
+            <iconify-icon icon="lucide:star" class="text-brand-gold" width="14"></iconify-icon>
+            <iconify-icon icon="lucide:star" class="text-brand-gold" width="14"></iconify-icon>
+          </div>
+          <p class="text-sm text-brand-gray font-light leading-relaxed mb-4">
+            "Le coffret thétime est absolument magnifique. Chaque pâtisserie est une œuvre d'art. L'emballage est soigné – parfait pour offrir !"
+          </p>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-brand-cream flex items-center justify-center font-serif text-lg">M</div>
+            <div>
+              <p class="text-sm font-medium">Martin Leroy</p>
+              <p class="text-xs text-brand-gray">Membre</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl p-6">
+          <div class="flex items-center gap-1 mb-4">
+            <iconify-icon icon="lucide:star" class="text-brand-gold" width="14"></iconify-icon>
+            <iconify-icon icon="lucide:star" class="text-brand-gold" width="14"></iconify-icon>
+            <iconify-icon icon="lucide:star" class="text-brand-gold" width="14"></iconify-icon>
+            <iconify-icon icon="lucide:star" class="text-brand-gold" width="14"></iconify-icon>
+            <iconify-icon icon="lucide:star" class="text-brand-gold" width="14"></iconify-icon>
+          </div>
+          <p class="text-sm text-brand-gray font-light leading-relaxed mb-4">
+            "En tant que personne très exigeante sur les desserts, leurs tartes aux fruits m'ont ébloui. Fruits frais avec une crème onctueuse – absolument parfait !"
+          </p>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-brand-cream flex items-center justify-center font-serif text-lg">S</div>
+            <div>
+              <p class="text-sm font-medium">Sophie Martin</p>
+              <p class="text-xs text-brand-gray">Blogueuse Culinaire</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section Contact -->
+    <section id="contact" class="py-16 border-t border-black/10">
+      <div class="grid lg:grid-cols-2 gap-12">
+        <div>
+          <p class="text-xs tracking-widest uppercase text-brand-gold mb-4">Nous Rendre Visite</p>
+          <h2 class="font-serif text-3xl lg:text-4xl font-light tracking-tight mb-6">
+            Visitez Notre Boulangerie
+          </h2>
+          <p class="text-sm text-brand-gray font-light leading-relaxed mb-8">
+            Venez découvrir notre boutique pour ressentir l'atmosphère chaleureuse de notre boulangerie et déguster nos délices fraîchement sortis du four.
+          </p>
+
+          <div class="space-y-6">
+            <div class="flex items-start gap-4">
+              <iconify-icon icon="lucide:map-pin" class="text-brand-gold mt-1" width="20"></iconify-icon>
+              <div>
+                <p class="font-medium mb-1">Adresse</p>
+                <p class="text-sm text-brand-gray font-light">12 Rue de la Paix, 75002 Paris, France</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <iconify-icon icon="lucide:clock" class="text-brand-gold mt-1" width="20"></iconify-icon>
+              <div>
+                <p class="font-medium mb-1">Heures d'Ouverture</p>
+                <p class="text-sm text-brand-gray font-light">Lun - Ven : 8h00 - 21h00</p>
+                <p class="text-sm text-brand-gray font-light">Week-ends : 9h00 - 22h00</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-4">
+              <iconify-icon icon="lucide:phone" class="text-brand-gold mt-1" width="20"></iconify-icon>
+              <div>
+                <p class="font-medium mb-1">Téléphone</p>
+                <p class="text-sm text-brand-gray font-light">+33 1 23 45 67 89</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl p-8">
+          <h3 class="font-serif text-xl font-medium mb-6">Réserver une Consultation</h3>
+          <form class="space-y-4">
+            <div>
+              <label class="text-xs tracking-widest uppercase text-brand-gray mb-2 block">Nom</label>
+              <input type="text" placeholder="Votre Nom" class="w-full bg-brand-cream rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-black">
+            </div>
+            <div>
+              <label class="text-xs tracking-widest uppercase text-brand-gray mb-2 block">Téléphone</label>
+              <input type="tel" placeholder="Votre Numéro de Téléphone" class="w-full bg-brand-cream rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-black">
+            </div>
+            <div>
+              <label class="text-xs tracking-widest uppercase text-brand-gray mb-2 block">Message</label>
+              <textarea rows="4" placeholder="Décrivez vos besoins (gâteaux personnalisés, événements d'entreprise, etc.)" class="w-full bg-brand-cream rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-black resize-none"></textarea>
+            </div>
+            <button type="submit" class="w-full bg-black text-white py-3 text-sm font-medium tracking-wide hover:bg-brand-gold transition-colors duration-150 rounded-lg">
+              Envoyer la Demande
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Pied de Page -->
+  <footer class="bg-black text-white py-16">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="grid md:grid-cols-4 gap-8 mb-12">
+        <div>
+          <h4 class="font-serif text-2xl font-medium mb-4">L'Artisan</h4>
+          <p class="text-sm text-white/60 font-light leading-relaxed">
+            Boulangerie artisanale façonnée avec passion et dévouement pour l'excellence.
+          </p>
+        </div>
+        <div>
+          <h5 class="text-xs tracking-widest uppercase mb-4">Explorer</h5>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-sm text-white/60 font-light hover:text-white transition-colors">Collections</a></li>
+            <li><a href="#" class="text-sm text-white/60 font-light hover:text-white transition-colors">Notre Histoire</a></li>
+            <li><a href="#" class="text-sm text-white/60 font-light hover:text-white transition-colors">Emplacements</a></li>
+            <li><a href="#" class="text-sm text-white/60 font-light hover:text-white transition-colors">Carrières</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5 class="text-xs tracking-widest uppercase mb-4">Services</h5>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-sm text-white/60 font-light hover:text-white transition-colors">Commandes Entreprise</a></li>
+            <li><a href="#" class="text-sm text-white/60 font-light hover:text-white transition-colors">Gâteaux Sur Mesure</a></li>
+            <li><a href="#" class="text-sm text-white/60 font-light hover:text-white transition-colors">Coffrets Cadeaux</a></li>
+            <li><a href="#" class="text-sm text-white/60 font-light hover:text-white transition-colors">Livraison</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5 class="text-xs tracking-widest uppercase mb-4">Suivez-Nous</h5>
+          <div class="flex items-center gap-4">
+            <a href="#" class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center hover:border-brand-gold hover:text-brand-gold transition-colors">
+              <iconify-icon icon="lucide:instagram" width="18"></iconify-icon>
+            </a>
+            <a href="#" class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center hover:border-brand-gold hover:text-brand-gold transition-colors">
+              <iconify-icon icon="lucide:twitter" width="18"></iconify-icon>
+            </a>
+            <a href="#" class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center hover:border-brand-gold hover:text-brand-gold transition-colors">
+              <iconify-icon icon="lucide:mail" width="18"></iconify-icon>
+            </a>
+          </div>
+          <p class="text-sm text-white/60 font-light mt-4">Email<br>contact@lartisan.fr</p>
+        </div>
+      </div>
+
+      <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+        <p class="text-xs text-white/40 font-light">© 2026 <a href="https://orionwebworks.github.io/" class="hover:text-brand-gold transition-colors">Orion WebWorks</a>. Tous droits réservés.</p>
+        <div class="flex items-center gap-2 text-xs text-white/40 font-light">
+          <span>Fait avec</span>
+          <iconify-icon icon="lucide:heart" class="text-brand-gold" width="12"></iconify-icon>
+          <span>par Orion WebWorks</span>
+        </div>
+        <div class="flex items-center gap-6">
+          <a href="#" class="text-xs text-white/40 font-light hover:text-white transition-colors">Politique de Confidentialité</a>
+          <a href="#" class="text-xs text-white/40 font-light hover:text-white transition-colors">Conditions d'Utilisation</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bouton Flottant -->
+  <a href="#" class="fixed bottom-6 right-6 w-14 h-14 bg-black rounded-full flex items-center justify-center shadow-xl hover:bg-brand-gold transition-colors duration-150">
+    <iconify-icon icon="lucide:message-circle" class="text-white" width="24"></iconify-icon>
+  </a>
+
+</body>
+</html>

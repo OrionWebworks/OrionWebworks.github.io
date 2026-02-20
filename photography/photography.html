@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nguyen Photography Academy | Singapore's Premier Photography Coaching</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --bg-elevated: #141414;
+      --fg: #f5f5f0;
+      --muted: #8a8a80;
+      --accent: #d4a853;
+      --accent-glow: rgba(212, 168, 83, 0.3);
+      --card: #1a1a1a;
+      --border: #2a2a2a;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      overflow-x: hidden;
+    }
+
+    .font-display {
+      font-family: 'Instrument Serif', serif;
+    }
+
+    /* Noise texture overlay */
+    .noise-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--accent);
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(60px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-80px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes scaleIn {
+      from {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% {
+        box-shadow: 0 0 20px var(--accent-glow), 0 0 40px var(--accent-glow);
+      }
+      50% {
+        box-shadow: 0 0 30px var(--accent-glow), 0 0 60px var(--accent-glow);
+      }
+    }
+
+    .reveal {
+      opacity: 0;
+    }
+
+    .reveal.active {
+      animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .reveal-left.active {
+      animation: slideInLeft 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .reveal-scale.active {
+      animation: scaleIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .stagger-1 { animation-delay: 0.1s; }
+    .stagger-2 { animation-delay: 0.2s; }
+    .stagger-3 { animation-delay: 0.3s; }
+    .stagger-4 { animation-delay: 0.4s; }
+    .stagger-5 { animation-delay: 0.5s; }
+    .stagger-6 { animation-delay: 0.6s; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal, .reveal-left, .reveal-scale {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+      }
+    }
+
+    /* Hero section */
+    .hero {
+      min-height: 100vh;
+      position: relative;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .hero-bg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.4);
+    }
+
+    .hero-gradient {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(10,10,10,0.9) 0%, rgba(10,10,10,0.6) 50%, rgba(10,10,10,0.8) 100%);
+    }
+
+    .hero-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.4;
+      animation: float 8s ease-in-out infinite;
+    }
+
+    .orb-1 {
+      width: 400px;
+      height: 400px;
+      background: var(--accent);
+      top: -100px;
+      right: -100px;
+    }
+
+    .orb-2 {
+      width: 300px;
+      height: 300px;
+      background: #8b5a2b;
+      bottom: 10%;
+      left: -100px;
+      animation-delay: -4s;
+    }
+
+    /* Navigation */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 1.5rem 2rem;
+      transition: all 0.4s ease;
+    }
+
+    .nav.scrolled {
+      background: rgba(10,10,10,0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-link {
+      position: relative;
+      color: var(--muted);
+      transition: color 0.3s ease;
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--accent);
+      transition: width 0.3s ease;
+    }
+
+    .nav-link:hover {
+      color: var(--fg);
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    /* Buttons */
+    .btn-primary {
+      background: var(--accent);
+      color: var(--bg);
+      padding: 1rem 2rem;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transform: translateX(-100%);
+      transition: transform 0.5s ease;
+    }
+
+    .btn-primary:hover::before {
+      transform: translateX(100%);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px var(--accent-glow);
+    }
+
+    .btn-outline {
+      border: 1px solid var(--border);
+      color: var(--fg);
+      padding: 1rem 2rem;
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(212, 168, 83, 0.05);
+    }
+
+    /* Cards */
+    .program-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .program-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      transform: scaleX(0);
+      transition: transform 0.4s ease;
+    }
+
+    .program-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .program-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(212, 168, 83, 0.3);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    }
+
+    /* Gallery */
+    .gallery-item {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .gallery-item img {
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.1);
+    }
+
+    .gallery-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(10,10,10,0.9) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      display: flex;
+      align-items: flex-end;
+      padding: 1.5rem;
+    }
+
+    .gallery-item:hover .gallery-overlay {
+      opacity: 1;
+    }
+
+    /* Stats counter */
+    .stat-number {
+      font-size: clamp(3rem, 8vw, 5rem);
+      font-weight: 300;
+      line-height: 1;
+      color: var(--accent);
+    }
+
+    /* Testimonial */
+    .testimonial-card {
+      background: linear-gradient(135deg, var(--card) 0%, var(--bg-elevated) 100%);
+      border: 1px solid var(--border);
+      position: relative;
+    }
+
+    .testimonial-card::before {
+      content: '"';
+      font-family: 'Instrument Serif', serif;
+      font-size: 8rem;
+      position: absolute;
+      top: -20px;
+      left: 20px;
+      color: var(--accent);
+      opacity: 0.2;
+      line-height: 1;
+    }
+
+    /* Marquee */
+    .marquee-container {
+      overflow: hidden;
+      white-space: nowrap;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-elevated);
+    }
+
+    .marquee-content {
+      display: inline-flex;
+      animation: marquee 30s linear infinite;
+    }
+
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    .marquee-item {
+      padding: 2rem 3rem;
+      color: var(--muted);
+      font-size: 1.25rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .marquee-item span {
+      color: var(--accent);
+    }
+
+    /* Form */
+    .form-input {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--fg);
+      padding: 1rem 1.25rem;
+      width: 100%;
+      transition: all 0.3s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    .form-input::placeholder {
+      color: var(--muted);
+    }
+
+    /* Footer */
+    .footer-link {
+      color: var(--muted);
+      transition: color 0.3s ease;
+    }
+
+    .footer-link:hover {
+      color: var(--accent);
+    }
+
+    /* Mobile menu */
+    .mobile-menu {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 100%;
+      height: 100vh;
+      background: var(--bg);
+      z-index: 200;
+      transform: translateX(100%);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .mobile-menu.active {
+      transform: translateX(0);
+    }
+
+    .mobile-menu-link {
+      font-size: 2rem;
+      color: var(--fg);
+      font-family: 'Instrument Serif', serif;
+      transition: color 0.3s ease;
+    }
+
+    .mobile-menu-link:hover {
+      color: var(--accent);
+    }
+
+    .hamburger {
+      width: 32px;
+      height: 24px;
+      position: relative;
+      cursor: pointer;
+      z-index: 300;
+    }
+
+    .hamburger span {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--fg);
+      transition: all 0.3s ease;
+    }
+
+    .hamburger span:nth-child(1) { top: 0; }
+    .hamburger span:nth-child(2) { top: 50%; transform: translateY(-50%); }
+    .hamburger span:nth-child(3) { bottom: 0; }
+
+    .hamburger.active span:nth-child(1) {
+      top: 50%;
+      transform: translateY(-50%) rotate(45deg);
+    }
+
+    .hamburger.active span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .hamburger.active span:nth-child(3) {
+      bottom: 50%;
+      transform: translateY(50%) rotate(-45deg);
+    }
+
+    /* Floating label */
+    .floating-label {
+      position: absolute;
+      left: 1.25rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      pointer-events: none;
+      transition: all 0.3s ease;
+    }
+
+    .form-group:focus-within .floating-label {
+      top: 0;
+      transform: translateY(-50%);
+      font-size: 0.75rem;
+      background: var(--card);
+      padding: 0 0.5rem;
+      color: var(--accent);
+    }
+  </style>
+</head>
+<body>
+  <div class="noise-overlay"></div>
+
+  <!-- Navigation -->
+  <nav class="nav" id="navbar">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <a href="#" class="flex items-center gap-3">
+        <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+          <circle cx="20" cy="20" r="18" stroke="var(--accent)" stroke-width="2"/>
+          <circle cx="20" cy="20" r="8" fill="var(--accent)"/>
+          <path d="M20 4V12M20 28V36M4 20H12M28 20H36" stroke="var(--accent)" stroke-width="2"/>
+        </svg>
+        <span class="font-display text-xl">Nguyen</span>
+      </a>
+
+      <div class="hidden md:flex items-center gap-8">
+        <a href="#about" class="nav-link">About</a>
+        <a href="#programs" class="nav-link">Programs</a>
+        <a href="#gallery" class="nav-link">Gallery</a>
+        <a href="#testimonials" class="nav-link">Stories</a>
+        <a href="#contact" class="btn-primary text-sm">Book a Session</a>
+      </div>
+
+      <div class="hamburger md:hidden" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#about" class="mobile-menu-link">About</a>
+    <a href="#programs" class="mobile-menu-link">Programs</a>
+    <a href="#gallery" class="mobile-menu-link">Gallery</a>
+    <a href="#testimonials" class="mobile-menu-link">Stories</a>
+    <a href="#contact" class="mobile-menu-link">Contact</a>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="hero" id="hero">
+    <div class="hero-bg">
+      <img src="hero-bg.jpg" alt="Professional photographer with camera equipment" loading="eager">
+      <div class="hero-gradient"></div>
+    </div>
+    <div class="hero-orb orb-1"></div>
+    <div class="hero-orb orb-2"></div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-6 md:px-8 pt-32 pb-20">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <p class="text-sm tracking-[0.3em] text-[var(--accent)] mb-6 reveal active stagger-1">SINGAPORE'S PREMIER PHOTOGRAPHY ACADEMY</p>
+          <h1 class="font-display text-5xl md:text-7xl lg:text-8xl leading-[0.95] mb-6 reveal active stagger-2">
+            See the world<br>
+            <em class="text-[var(--accent)]">differently</em>
+          </h1>
+          <p class="text-lg md:text-xl text-[var(--muted)] max-w-lg mb-10 reveal active stagger-3">
+            Master the art of visual storytelling with personalized coaching from award-winning photographer Nguyen. From fundamentals to advanced techniques, transform your passion into mastery.
+          </p>
+          <div class="flex flex-wrap gap-4 reveal active stagger-4">
+            <a href="#programs" class="btn-primary">Explore Programs</a>
+            <a href="#contact" class="btn-outline">Free Consultation</a>
+          </div>
+        </div>
+
+        <div class="hidden lg:block">
+          <div class="relative reveal active stagger-5">
+            <div class="absolute -top-4 -left-4 w-24 h-24 border border-[var(--accent)] opacity-30"></div>
+            <div class="absolute -bottom-4 -right-4 w-32 h-32 border border-[var(--accent)] opacity-20"></div>
+            <div class="bg-[var(--card)] p-6 border border-[var(--border)] backdrop-blur-sm">
+              <p class="text-sm text-[var(--muted)] mb-2">Next Cohort Starts</p>
+              <p class="font-display text-3xl text-[var(--accent)]">March 15, 2026</p>
+              <div class="mt-4 pt-4 border-t border-[var(--border)] flex justify-between text-sm">
+                <span class="text-[var(--muted)]">Seats Available</span>
+                <span class="text-[var(--fg)]">4 of 12</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="absolute bottom-10 left-1/2 -translate-x-1/2 reveal active stagger-6">
+        <div class="w-6 h-10 border-2 border-[var(--muted)] rounded-full flex justify-center">
+          <div class="w-1 h-3 bg-[var(--accent)] rounded-full mt-2 animate-bounce"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Marquee -->
+  <div class="marquee-container">
+    <div class="marquee-content">
+      <span class="marquee-item">Street Photography <span>*</span></span>
+      <span class="marquee-item">Portrait Mastery <span>*</span></span>
+      <span class="marquee-item">Landscape Art <span>*</span></span>
+      <span class="marquee-item">Light & Composition <span>*</span></span>
+      <span class="marquee-item">Post-Processing <span>*</span></span>
+      <span class="marquee-item">Visual Storytelling <span>*</span></span>
+      <span class="marquee-item">Street Photography <span>*</span></span>
+      <span class="marquee-item">Portrait Mastery <span>*</span></span>
+      <span class="marquee-item">Landscape Art <span>*</span></span>
+      <span class="marquee-item">Light & Composition <span>*</span></span>
+      <span class="marquee-item">Post-Processing <span>*</span></span>
+      <span class="marquee-item">Visual Storytelling <span>*</span></span>
+    </div>
+  </div>
+
+  <!-- About Section -->
+  <section class="py-24 md:py-32" id="about">
+    <div class="max-w-7xl mx-auto px-6 md:px-8">
+      <div class="grid lg:grid-cols-2 gap-16 items-center">
+        <div class="reveal">
+          <p class="text-sm tracking-[0.3em] text-[var(--accent)] mb-4">MEET YOUR MENTOR</p>
+          <h2 class="font-display text-4xl md:text-5xl lg:text-6xl mb-6">
+            Nguyen Tran
+          </h2>
+          <p class="text-lg text-[var(--muted)] mb-6">
+            With over 15 years behind the lens and a decade of teaching experience, I've helped hundreds of aspiring photographers find their unique voice. My work has been featured in National Geographic, Sony Asia, and the Singapore Art Museum.
+          </p>
+          <p class="text-lg text-[var(--muted)] mb-8">
+            I believe photography isn't just about technical perfection — it's about capturing moments that make people feel something. My coaching philosophy combines rigorous technical training with artistic exploration.
+          </p>
+
+          <div class="grid grid-cols-3 gap-6">
+            <div>
+              <p class="stat-number">15+</p>
+              <p class="text-sm text-[var(--muted)]">Years Experience</p>
+            </div>
+            <div>
+              <p class="stat-number">500+</p>
+              <p class="text-sm text-[var(--muted)]">Students Mentored</p>
+            </div>
+            <div>
+              <p class="stat-number">28</p>
+              <p class="text-sm text-[var(--muted)]">Awards Won</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="relative reveal-left">
+          <div class="grid grid-cols-2 gap-4">
+            <div class="space-y-4">
+              <div class="gallery-item aspect-[3/4]">
+                <img src="landscape-1.png" alt="Mountain landscape photography" class="w-full h-full object-cover">
+              </div>
+              <div class="gallery-item aspect-square">
+                <img src="macro-butterfly.png" alt="Macro photography of butterfly" class="w-full h-full object-cover">
+              </div>
+            </div>
+            <div class="space-y-4 pt-8">
+              <div class="gallery-item aspect-square">
+                <img src="outdoor-flower.png" alt="Outdoor flower photography" class="w-full h-full object-cover">
+              </div>
+              <div class="gallery-item aspect-[3/4]">
+                <img src="studio-setup.png" alt="Studio photography setup" class="w-full h-full object-cover">
+              </div>
+            </div>
+          </div>
+          <div class="absolute -bottom-6 -right-6 w-48 h-48 bg-[var(--accent)] opacity-10 blur-3xl"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Programs Section -->
+  <section class="py-24 md:py-32 bg-[var(--bg-elevated)]" id="programs">
+    <div class="max-w-7xl mx-auto px-6 md:px-8">
+      <div class="text-center mb-16 reveal">
+        <p class="text-sm tracking-[0.3em] text-[var(--accent)] mb-4">PROGRAMS</p>
+        <h2 class="font-display text-4xl md:text-5xl lg:text-6xl mb-6">
+          Find your path
+        </h2>
+        <p class="text-lg text-[var(--muted)] max-w-2xl mx-auto">
+          Whether you're picking up a camera for the first time or refining your professional portfolio, there's a program designed for your journey.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Program 1 -->
+        <div class="program-card p-8 reveal stagger-1">
+          <div class="w-12 h-12 rounded-full bg-[var(--accent)] bg-opacity-10 flex items-center justify-center mb-6">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 6v6l4 2"/>
+            </svg>
+          </div>
+          <h3 class="font-display text-2xl mb-3">Fundamentals</h3>
+          <p class="text-[var(--muted)] mb-6">8-week foundation course covering exposure, composition, and camera mechanics. Perfect for beginners.</p>
+          <div class="flex items-center justify-between pt-4 border-t border-[var(--border)]">
+            <span class="text-[var(--accent)]">SGD 1,200</span>
+            <span class="text-sm text-[var(--muted)]">Weekly classes</span>
+          </div>
+        </div>
+
+        <!-- Program 2 -->
+        <div class="program-card p-8 reveal stagger-2">
+          <div class="w-12 h-12 rounded-full bg-[var(--accent)] bg-opacity-10 flex items-center justify-center mb-6">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+          </div>
+          <div class="absolute top-4 right-4 px-3 py-1 bg-[var(--accent)] text-[var(--bg)] text-xs font-semibold">POPULAR</div>
+          <h3 class="font-display text-2xl mb-3">Mentorship</h3>
+          <p class="text-[var(--muted)] mb-6">3-month intensive 1-on-1 coaching. Build your portfolio, develop your style, and prepare for professional work.</p>
+          <div class="flex items-center justify-between pt-4 border-t border-[var(--border)]">
+            <span class="text-[var(--accent)]">SGD 3,500</span>
+            <span class="text-sm text-[var(--muted)]">Bi-weekly sessions</span>
+          </div>
+        </div>
+
+        <!-- Program 3 -->
+        <div class="program-card p-8 reveal stagger-3">
+          <div class="w-12 h-12 rounded-full bg-[var(--accent)] bg-opacity-10 flex items-center justify-center mb-6">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+            </svg>
+          </div>
+          <h3 class="font-display text-2xl mb-3">Masterclass</h3>
+          <p class="text-[var(--muted)] mb-6">Advanced workshops on specialized topics: street photography, studio lighting, and post-processing mastery.</p>
+          <div class="flex items-center justify-between pt-4 border-t border-[var(--border)]">
+            <span class="text-[var(--accent)]">SGD 800</span>
+            <span class="text-sm text-[var(--muted)]">Per workshop</span>
+          </div>
+        </div>
+
+        <!-- Program 4 -->
+        <div class="program-card p-8 reveal stagger-4">
+          <div class="w-12 h-12 rounded-full bg-[var(--accent)] bg-opacity-10 flex items-center justify-center mb-6">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+              <line x1="16" y1="2" x2="16" y2="6"/>
+              <line x1="8" y1="2" x2="8" y2="6"/>
+              <line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+          </div>
+          <h3 class="font-display text-2xl mb-3">Photowalks</h3>
+          <p class="text-[var(--muted)] mb-6">Guided street photography sessions across Singapore's most photogenic locations. Learn while shooting.</p>
+          <div class="flex items-center justify-between pt-4 border-t border-[var(--border)]">
+            <span class="text-[var(--accent)]">SGD 150</span>
+            <span class="text-sm text-[var(--muted)]">Per session</span>
+          </div>
+        </div>
+
+        <!-- Program 5 -->
+        <div class="program-card p-8 reveal stagger-5">
+          <div class="w-12 h-12 rounded-full bg-[var(--accent)] bg-opacity-10 flex items-center justify-center mb-6">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+              <line x1="12" y1="22.08" x2="12" y2="12"/>
+            </svg>
+          </div>
+          <h3 class="font-display text-2xl mb-3">Online Course</h3>
+          <p class="text-[var(--muted)] mb-6">Self-paced video curriculum with assignments and feedback. Access from anywhere in the world.</p>
+          <div class="flex items-center justify-between pt-4 border-t border-[var(--border)]">
+            <span class="text-[var(--accent)]">SGD 600</span>
+            <span class="text-sm text-[var(--muted)]">Lifetime access</span>
+          </div>
+        </div>
+
+        <!-- Program 6 -->
+        <div class="program-card p-8 reveal stagger-6 bg-gradient-to-br from-[var(--card)] to-[rgba(212,168,83,0.05)]">
+          <div class="w-12 h-12 rounded-full bg-[var(--accent)] bg-opacity-10 flex items-center justify-center mb-6">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+          </div>
+          <h3 class="font-display text-2xl mb-3">Private Coaching</h3>
+          <p class="text-[var(--muted)] mb-6">Customized one-on-one sessions tailored to your specific goals and schedule. Maximum flexibility.</p>
+          <div class="flex items-center justify-between pt-4 border-t border-[var(--border)]">
+            <span class="text-[var(--accent)]">SGD 300/hr</span>
+            <span class="text-sm text-[var(--muted)]">On-demand</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery Section -->
+  <section class="py-24 md:py-32" id="gallery">
+    <div class="max-w-7xl mx-auto px-6 md:px-8">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 reveal">
+        <div>
+          <p class="text-sm tracking-[0.3em] text-[var(--accent)] mb-4">STUDENT WORK</p>
+          <h2 class="font-display text-4xl md:text-5xl lg:text-6xl">
+            From our community
+          </h2>
+        </div>
+        <a href="#" class="btn-outline">View All Work</a>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="gallery-item col-span-2 row-span-2 aspect-square reveal stagger-1">
+          <img src="landscape-1.png" alt="Student landscape photography" class="w-full h-full object-cover">
+          <div class="gallery-overlay">
+            <div>
+              <p class="text-sm text-[var(--muted)]">By Sarah L.</p>
+              <p class="font-display text-lg">Mountain Serenity</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="gallery-item aspect-square reveal stagger-2">
+          <img src="macro-butterfly.png" alt="Student macro photography" class="w-full h-full object-cover">
+          <div class="gallery-overlay">
+            <div>
+              <p class="text-sm text-[var(--muted)]">By Michael T.</p>
+              <p class="font-display text-lg">Nature's Detail</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="gallery-item aspect-square reveal stagger-3">
+          <img src="outdoor-flower.png" alt="Student outdoor photography" class="w-full h-full object-cover">
+          <div class="gallery-overlay">
+            <div>
+              <p class="text-sm text-[var(--muted)]">By Jennifer K.</p>
+              <p class="font-display text-lg">Golden Hour</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="gallery-item aspect-square reveal stagger-4">
+          <img src="studio-greens.png" alt="Student studio photography" class="w-full h-full object-cover">
+          <div class="gallery-overlay">
+            <div>
+              <p class="text-sm text-[var(--muted)]">By David W.</p>
+              <p class="font-display text-lg">Studio Greens</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="gallery-item aspect-square reveal stagger-5">
+          <img src="minimalist-setup.png" alt="Student product photography" class="w-full h-full object-cover">
+          <div class="gallery-overlay">
+            <div>
+              <p class="text-sm text-[var(--muted)]">By Rachel M.</p>
+              <p class="font-display text-lg">Minimalist Setup</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="py-24 md:py-32 bg-[var(--bg-elevated)]" id="testimonials">
+    <div class="max-w-7xl mx-auto px-6 md:px-8">
+      <div class="text-center mb-16 reveal">
+        <p class="text-sm tracking-[0.3em] text-[var(--accent)] mb-4">TESTIMONIALS</p>
+        <h2 class="font-display text-4xl md:text-5xl lg:text-6xl">
+          Stories of transformation
+        </h2>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="testimonial-card p-8 reveal stagger-1">
+          <p class="text-[var(--muted)] mb-6 relative z-10">
+            "Nguyen transformed my understanding of light. Within three months, I went from hobbyist to booking paid gigs. His teaching style is patient yet challenging."
+          </p>
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 rounded-full bg-[var(--accent)] bg-opacity-20 flex items-center justify-center">
+              <span class="font-display text-[var(--accent)]">A</span>
+            </div>
+            <div>
+              <p class="font-medium">Amanda Chen</p>
+              <p class="text-sm text-[var(--muted)]">Portrait Photographer</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card p-8 reveal stagger-2">
+          <p class="text-[var(--muted)] mb-6 relative z-10">
+            "The mentorship program was exactly what I needed. Nguyen helped me find my unique style and build a portfolio that got me accepted into art school."
+          </p>
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 rounded-full bg-[var(--accent)] bg-opacity-20 flex items-center justify-center">
+              <span class="font-display text-[var(--accent)]">R</span>
+            </div>
+            <div>
+              <p class="font-medium">Raymond Tan</p>
+              <p class="text-sm text-[var(--muted)]">Documentary Photographer</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card p-8 reveal stagger-3">
+          <p class="text-[var(--muted)] mb-6 relative z-10">
+            "I've taken courses elsewhere, but Nguyen's approach is different. He teaches you to see, not just to shoot. That shift in perspective changed everything."
+          </p>
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 rounded-full bg-[var(--accent)] bg-opacity-20 flex items-center justify-center">
+              <span class="font-display text-[var(--accent)]">S</span>
+            </div>
+            <div>
+              <p class="font-medium">Sarah Lim</p>
+              <p class="text-sm text-[var(--muted)]">Travel Photographer</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="py-24 md:py-32" id="contact">
+    <div class="max-w-7xl mx-auto px-6 md:px-8">
+      <div class="grid lg:grid-cols-2 gap-16">
+        <div class="reveal">
+          <p class="text-sm tracking-[0.3em] text-[var(--accent)] mb-4">GET IN TOUCH</p>
+          <h2 class="font-display text-4xl md:text-5xl lg:text-6xl mb-6">
+            Start your journey
+          </h2>
+          <p class="text-lg text-[var(--muted)] mb-8">
+            Ready to transform your photography? Schedule a free 30-minute consultation to discuss your goals and find the right program for you.
+          </p>
+
+          <div class="space-y-6">
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 rounded-full border border-[var(--border)] flex items-center justify-center">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                  <circle cx="12" cy="10" r="3"/>
+                </svg>
+              </div>
+              <div>
+                <p class="text-[var(--muted)] text-sm">Studio Location</p>
+                <p>73A Duxton Road, Singapore 089538</p>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 rounded-full border border-[var(--border)] flex items-center justify-center">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                  <polyline points="22,6 12,13 2,6"/>
+                </svg>
+              </div>
+              <div>
+                <p class="text-[var(--muted)] text-sm">Email</p>
+                <p>hello@nguyenphoto.sg</p>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 rounded-full border border-[var(--border)] flex items-center justify-center">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                  <line x1="16" y1="2" x2="16" y2="6"/>
+                  <line x1="8" y1="2" x2="8" y2="6"/>
+                  <line x1="3" y1="10" x2="21" y2="10"/>
+                </svg>
+              </div>
+              <div>
+                <p class="text-[var(--muted)] text-sm">Studio Hours</p>
+                <p>Tue - Sat, 10am - 7pm</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal-scale">
+          <form class="space-y-6 bg-[var(--card)] p-8 border border-[var(--border)]" id="contactForm">
+            <div class="grid md:grid-cols-2 gap-6">
+              <div>
+                <label for="name" class="block text-sm text-[var(--muted)] mb-2">Name</label>
+                <input type="text" id="name" name="name" required class="form-input" placeholder="Your name">
+              </div>
+              <div>
+                <label for="email" class="block text-sm text-[var(--muted)] mb-2">Email</label>
+                <input type="email" id="email" name="email" required class="form-input" placeholder="your@email.com">
+              </div>
+            </div>
+
+            <div>
+              <label for="interest" class="block text-sm text-[var(--muted)] mb-2">Interested In</label>
+              <select id="interest" name="interest" class="form-input cursor-pointer">
+                <option value="">Select a program</option>
+                <option value="fundamentals">Fundamentals Course</option>
+                <option value="mentorship">3-Month Mentorship</option>
+                <option value="masterclass">Masterclass Workshop</option>
+                <option value="photowalk">Photowalk Session</option>
+                <option value="online">Online Course</option>
+                <option value="private">Private Coaching</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="message" class="block text-sm text-[var(--muted)] mb-2">Tell me about your photography journey</label>
+              <textarea id="message" name="message" rows="4" class="form-input resize-none" placeholder="What are your goals? What do you hope to achieve?"></textarea>
+            </div>
+
+            <button type="submit" class="btn-primary w-full">
+              Schedule Free Consultation
+            </button>
+
+            <p class="text-center text-sm text-[var(--muted)]">
+              Usually respond within 24 hours
+            </p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-12 border-t border-[var(--border)]">
+    <div class="max-w-7xl mx-auto px-6 md:px-8">
+      <div class="grid md:grid-cols-4 gap-8 mb-12">
+        <div class="md:col-span-2">
+          <div class="flex items-center gap-3 mb-4">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+              <circle cx="20" cy="20" r="18" stroke="var(--accent)" stroke-width="2"/>
+              <circle cx="20" cy="20" r="8" fill="var(--accent)"/>
+              <path d="M20 4V12M20 28V36M4 20H12M28 20H36" stroke="var(--accent)" stroke-width="2"/>
+            </svg>
+            <span class="font-display text-xl">Nguyen Photography Academy</span>
+          </div>
+          <p class="text-[var(--muted)] max-w-md">
+            Empowering photographers in Singapore and beyond to see the world differently and capture moments that matter.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="font-medium mb-4">Quick Links</h4>
+          <ul class="space-y-2">
+            <li><a href="#about" class="footer-link">About</a></li>
+            <li><a href="#programs" class="footer-link">Programs</a></li>
+            <li><a href="#gallery" class="footer-link">Gallery</a></li>
+            <li><a href="#contact" class="footer-link">Contact</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-medium mb-4">Connect</h4>
+          <ul class="space-y-2">
+            <li><a href="#" class="footer-link">Instagram</a></li>
+            <li><a href="#" class="footer-link">YouTube</a></li>
+            <li><a href="#" class="footer-link">LinkedIn</a></li>
+            <li><a href="#" class="footer-link">Newsletter</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="flex flex-col md:flex-row items-center justify-between pt-8 border-t border-[var(--border)] gap-4">
+        <p class="text-sm text-[var(--muted)]">
+          &copy; 2026 <a href="https://orionwebworks.github.io/" class="footer-link" target="_blank" rel="noopener">Orion Webworks</a>. All rights reserved.
+        </p>
+        <p class="text-sm text-[var(--muted)] italic font-display">
+          Made with &hearts;
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Initialize variables first
+    const navbar = document.getElementById('navbar');
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const mobileMenuLinks = document.querySelectorAll('.mobile-menu-link');
+
+    // Scroll reveal with IntersectionObserver
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.reveal, .reveal-left, .reveal-scale').forEach(el => {
+      observer.observe(el);
+    });
+
+    // Navbar scroll effect
+    let lastScroll = 0;
+    window.addEventListener('scroll', () => {
+      const currentScroll = window.pageYOffset;
+
+      if (currentScroll > 100) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+
+      lastScroll = currentScroll;
+    });
+
+    // Mobile menu toggle
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('active');
+      mobileMenu.classList.toggle('active');
+      document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+    });
+
+    // Close mobile menu on link click
+    mobileMenuLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        hamburger.classList.remove('active');
+        mobileMenu.classList.remove('active');
+        document.body.style.overflow = '';
+      });
+    });
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          const offsetTop = target.offsetTop - 80;
+          window.scrollTo({
+            top: offsetTop,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+
+    // Form submission
+    const contactForm = document.getElementById('contactForm');
+    contactForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const submitBtn = contactForm.querySelector('button[type="submit"]');
+      const originalText = submitBtn.textContent;
+
+      submitBtn.textContent = 'Sending...';
+      submitBtn.disabled = true;
+
+      // Simulate form submission
+      setTimeout(() => {
+        submitBtn.textContent = 'Message Sent!';
+        submitBtn.style.background = '#22c55e';
+
+        setTimeout(() => {
+          submitBtn.textContent = originalText;
+          submitBtn.style.background = '';
+          submitBtn.disabled = false;
+          contactForm.reset();
+        }, 2000);
+      }, 1500);
+    });
+
+    // Parallax effect for hero orbs
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (!prefersReducedMotion) {
+      document.addEventListener('mousemove', (e) => {
+        const orbs = document.querySelectorAll('.hero-orb');
+        const mouseX = e.clientX / window.innerWidth;
+        const mouseY = e.clientY / window.innerHeight;
+
+        orbs.forEach((orb, index) => {
+          const speed = (index + 1) * 20;
+          const x = (mouseX - 0.5) * speed;
+          const y = (mouseY - 0.5) * speed;
+          orb.style.transform = `translate(${x}px, ${y}px)`;
+        });
+      });
+    }
+
+    // Counter animation
+    const animateCounter = (el, target) => {
+      const duration = 2000;
+      const start = 0;
+      const startTime = performance.now();
+
+      const update = (currentTime) => {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+        const current = Math.floor(start + (target - start) * easeOutQuart);
+
+        el.textContent = current + (target >= 100 ? '+' : target >= 15 ? '+' : '');
+
+        if (progress < 1) {
+          requestAnimationFrame(update);
+        }
+      };
+
+      requestAnimationFrame(update);
+    };
+
+    // Observe stat numbers for counter animation
+    const statObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !prefersReducedMotion) {
+          const el = entry.target;
+          const text = el.textContent;
+          const number = parseInt(text.replace(/\D/g, ''));
+          animateCounter(el, number);
+          statObserver.unobserve(el);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('.stat-number').forEach(stat => {
+      statObserver.observe(stat);
+    });
+  </script>
+</body>
+</html>

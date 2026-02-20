@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wu Lei | Interior Design Studio Singapore</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['Cormorant Garamond', 'serif'],
+            body: ['Outfit', 'sans-serif'],
+          },
+          colors: {
+            bg: 'var(--bg)',
+            fg: 'var(--fg)',
+            muted: 'var(--muted)',
+            accent: 'var(--accent)',
+            card: 'var(--card)',
+            border: 'var(--border)',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    :root {
+      --bg: #1a1917;
+      --fg: #f5f2ed;
+      --muted: #9a958c;
+      --accent: #c4785a;
+      --card: #242320;
+      --border: #3a3835;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background-color: var(--bg);
+      color: var(--fg);
+      overflow-x: hidden;
+    }
+
+    .font-display {
+      font-family: 'Cormorant Garamond', serif;
+    }
+
+    /* Noise texture overlay */
+    .noise-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    }
+
+    /* Hero gradient */
+    .hero-gradient {
+      background: linear-gradient(
+        135deg,
+        rgba(26, 25, 23, 0.95) 0%,
+        rgba(26, 25, 23, 0.7) 40%,
+        rgba(26, 25, 23, 0.4) 70%,
+        rgba(26, 25, 23, 0.2) 100%
+      );
+    }
+
+    /* Reveal animations */
+    .reveal {
+      opacity: 0;
+      transform: translateY(60px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+    .reveal-delay-5 { transition-delay: 0.5s; }
+
+    /* Image hover effects */
+    .project-image {
+      overflow: hidden;
+    }
+
+    .project-image img {
+      transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .project-card:hover .project-image img {
+      transform: scale(1.05);
+    }
+
+    .project-card:hover .project-overlay {
+      opacity: 1;
+    }
+
+    .project-overlay {
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    /* Button styles */
+    .btn-primary {
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s ease;
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: var(--accent);
+      transition: left 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: -1;
+    }
+
+    .btn-primary:hover::before {
+      left: 0;
+    }
+
+    .btn-primary:hover {
+      color: var(--fg);
+      border-color: var(--accent);
+    }
+
+    /* Nav link hover */
+    .nav-link {
+      position: relative;
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--accent);
+      transition: width 0.3s ease;
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    /* Horizontal scroll section */
+    .scroll-section {
+      display: flex;
+      gap: 2rem;
+    }
+
+    /* Custom cursor */
+    .custom-cursor {
+      width: 20px;
+      height: 20px;
+      border: 1px solid var(--accent);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9998;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+      mix-blend-mode: difference;
+    }
+
+    .custom-cursor.hovering {
+      transform: scale(2);
+      background: rgba(196, 120, 90, 0.2);
+    }
+
+    /* Stats counter */
+    .stat-number {
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Focus states */
+    a:focus-visible,
+    button:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 4px;
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      .reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+
+      .project-image img {
+        transition: none;
+      }
+
+      * {
+        animation: none !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* Marquee animation */
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .marquee-content {
+      animation: marquee 30s linear infinite;
+    }
+
+    /* Floating animation */
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .floating {
+      animation: float 6s ease-in-out infinite;
+    }
+
+    /* Line drawing animation */
+    @keyframes drawLine {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+
+    .draw-line {
+      animation: drawLine 1.5s ease-out forwards;
+    }
+  </style>
+</head>
+<body>
+  <!-- Noise Overlay -->
+  <div class="noise-overlay"></div>
+
+  <!-- Custom Cursor -->
+  <div class="custom-cursor hidden md:block" id="cursor"></div>
+
+  <!-- Navigation -->
+  <nav class="fixed top-0 left-0 right-0 z-50 px-6 md:px-12 py-6 flex justify-between items-center">
+    <a href="#" class="font-display text-2xl tracking-wide text-fg">Wu Lei</a>
+    <div class="hidden md:flex items-center gap-10">
+      <a href="#about" class="nav-link text-sm tracking-widest uppercase text-muted hover:text-fg transition-colors">About</a>
+      <a href="#work" class="nav-link text-sm tracking-widest uppercase text-muted hover:text-fg transition-colors">Work</a>
+      <a href="#services" class="nav-link text-sm tracking-widest uppercase text-muted hover:text-fg transition-colors">Services</a>
+      <a href="#contact" class="nav-link text-sm tracking-widest uppercase text-muted hover:text-fg transition-colors">Contact</a>
+    </div>
+    <button id="menu-toggle" class="md:hidden text-fg" aria-label="Toggle menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </button>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" class="fixed inset-0 bg-bg z-40 flex flex-col items-center justify-center gap-8 opacity-0 pointer-events-none transition-opacity duration-500">
+    <a href="#about" class="mobile-nav-link font-display text-4xl text-fg">About</a>
+    <a href="#work" class="mobile-nav-link font-display text-4xl text-fg">Work</a>
+    <a href="#services" class="mobile-nav-link font-display text-4xl text-fg">Services</a>
+    <a href="#contact" class="mobile-nav-link font-display text-4xl text-fg">Contact</a>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="relative min-h-screen flex items-center">
+    <div class="absolute inset-0">
+      <img
+        src="hero-image.jpg"
+        alt="Wu Lei in her design studio"
+        class="w-full h-full object-cover"
+      >
+      <div class="hero-gradient absolute inset-0"></div>
+    </div>
+
+    <div class="relative z-10 px-6 md:px-12 lg:px-24 max-w-7xl mx-auto w-full pt-32">
+      <div class="max-w-3xl">
+        <p class="reveal text-accent text-sm tracking-[0.3em] uppercase mb-6">Interior Design Studio</p>
+        <h1 class="reveal reveal-delay-1 font-display text-5xl md:text-7xl lg:text-8xl font-light leading-[0.95] mb-8">
+          Crafting spaces<br>
+          <span class="italic text-muted">that breathe</span>
+        </h1>
+        <p class="reveal reveal-delay-2 text-muted text-lg md:text-xl max-w-xl mb-12 leading-relaxed">
+          Singapore-based interior design studio dedicated to creating meaningful,
+          sustainable spaces that tell your story through thoughtful details and timeless aesthetics.
+        </p>
+        <div class="reveal reveal-delay-3 flex flex-col sm:flex-row gap-4">
+          <a href="#work" class="btn-primary inline-flex items-center justify-center px-8 py-4 border border-fg text-fg text-sm tracking-widest uppercase hover:text-bg">
+            View Projects
+          </a>
+          <a href="#contact" class="inline-flex items-center justify-center px-8 py-4 text-muted hover:text-fg text-sm tracking-widest uppercase transition-colors">
+            Get in Touch
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
+      <span class="text-muted text-xs tracking-widest uppercase">Scroll</span>
+      <div class="w-px h-12 bg-gradient-to-b from-muted to-transparent"></div>
+    </div>
+  </section>
+
+  <!-- Marquee Section -->
+  <div class="py-8 border-y border-border overflow-hidden">
+    <div class="marquee-content flex items-center gap-12 whitespace-nowrap">
+      <span class="font-display text-3xl md:text-4xl text-muted/30">Residential Design</span>
+      <span class="text-accent">*</span>
+      <span class="font-display text-3xl md:text-4xl text-muted/30">Commercial Spaces</span>
+      <span class="text-accent">*</span>
+      <span class="font-display text-3xl md:text-4xl text-muted/30">Sustainable Interiors</span>
+      <span class="text-accent">*</span>
+      <span class="font-display text-3xl md:text-4xl text-muted/30">Boutique Hotels</span>
+      <span class="text-accent">*</span>
+      <span class="font-display text-3xl md:text-4xl text-muted/30">Residential Design</span>
+      <span class="text-accent">*</span>
+      <span class="font-display text-3xl md:text-4xl text-muted/30">Commercial Spaces</span>
+      <span class="text-accent">*</span>
+      <span class="font-display text-3xl md:text-4xl text-muted/30">Sustainable Interiors</span>
+      <span class="text-accent">*</span>
+      <span class="font-display text-3xl md:text-4xl text-muted/30">Boutique Hotels</span>
+      <span class="text-accent">*</span>
+    </div>
+  </div>
+
+  <!-- About Section -->
+  <section id="about" class="py-24 md:py-32 px-6 md:px-12 lg:px-24">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+        <div>
+          <p class="reveal text-accent text-sm tracking-[0.3em] uppercase mb-6">About</p>
+          <h2 class="reveal reveal-delay-1 font-display text-4xl md:text-5xl lg:text-6xl font-light leading-tight mb-8">
+            Design is not just what it looks like. Design is how it makes you feel.
+          </h2>
+          <div class="reveal reveal-delay-2 space-y-6 text-muted leading-relaxed">
+            <p>
+              With over 12 years of experience transforming spaces across Singapore and Southeast Asia,
+              I believe every room has a story waiting to be told. My approach blends Eastern philosophies
+              of harmony with contemporary Western design principles.
+            </p>
+            <p>
+              Each project begins with listening — understanding not just how you live, but how you want to feel
+              in your space. From initial concept to final styling, I guide you through a collaborative journey
+              that respects both your vision and the environment.
+            </p>
+          </div>
+        </div>
+
+        <div class="reveal reveal-delay-3 grid grid-cols-2 gap-4">
+          <div class="bg-card p-8 border border-border">
+            <span class="stat-number font-display text-5xl md:text-6xl text-accent">12</span>
+            <span class="text-muted text-sm tracking-widest uppercase mt-2 block">Years Experience</span>
+          </div>
+          <div class="bg-card p-8 border border-border mt-8">
+            <span class="stat-number font-display text-5xl md:text-6xl text-accent">180</span>
+            <span class="text-muted text-sm tracking-widest uppercase mt-2 block">Projects Completed</span>
+          </div>
+          <div class="bg-card p-8 border border-border">
+            <span class="stat-number font-display text-5xl md:text-6xl text-accent">35</span>
+            <span class="text-muted text-sm tracking-widest uppercase mt-2 block">Design Awards</span>
+          </div>
+          <div class="bg-card p-8 border border-border mt-8">
+            <span class="stat-number font-display text-5xl md:text-6xl text-accent">98</span>
+            <span class="text-muted text-sm tracking-widest uppercase mt-2 block">Happy Clients %</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Work Section -->
+  <section id="work" class="py-24 md:py-32 px-6 md:px-12 lg:px-24 bg-card">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-16">
+        <div>
+          <p class="reveal text-accent text-sm tracking-[0.3em] uppercase mb-6">Selected Work</p>
+          <h2 class="reveal reveal-delay-1 font-display text-4xl md:text-5xl lg:text-6xl font-light">
+            Recent Projects
+          </h2>
+        </div>
+        <a href="#" class="reveal reveal-delay-2 mt-6 md:mt-0 text-muted hover:text-fg text-sm tracking-widest uppercase transition-colors inline-flex items-center gap-2">
+          View All Projects
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6 lg:gap-8">
+        <!-- Project 1 -->
+        <article class="reveal project-card group cursor-pointer">
+          <div class="project-image aspect-[4/3] relative">
+            <img
+              src="project1.png"
+              alt="Modern minimalist living room"
+              class="w-full h-full object-cover"
+            >
+            <div class="project-overlay absolute inset-0 bg-gradient-to-t from-bg/80 to-transparent flex items-end p-8">
+              <span class="text-fg text-sm tracking-widest uppercase">View Project</span>
+            </div>
+          </div>
+          <div class="mt-6">
+            <span class="text-accent text-xs tracking-widest uppercase">Residential</span>
+            <h3 class="font-display text-2xl md:text-3xl mt-2 group-hover:text-accent transition-colors">Serene Living Space</h3>
+            <p class="text-muted mt-2">Modern minimalist apartment in Marina Bay</p>
+          </div>
+        </article>
+
+        <!-- Project 2 -->
+        <article class="reveal reveal-delay-1 project-card group cursor-pointer mt-0 md:mt-16">
+          <div class="project-image aspect-[4/3] relative">
+            <img
+              src="project2.png"
+              alt="Elegant reading corner with green walls"
+              class="w-full h-full object-cover"
+            >
+            <div class="project-overlay absolute inset-0 bg-gradient-to-t from-bg/80 to-transparent flex items-end p-8">
+              <span class="text-fg text-sm tracking-widest uppercase">View Project</span>
+            </div>
+          </div>
+          <div class="mt-6">
+            <span class="text-accent text-xs tracking-widest uppercase">Residential</span>
+            <h3 class="font-display text-2xl md:text-3xl mt-2 group-hover:text-accent transition-colors">Botanical Retreat</h3>
+            <p class="text-muted mt-2">Nature-inspired sanctuary in Sentosa Cove</p>
+          </div>
+        </article>
+
+        <!-- Project 3 -->
+        <article class="reveal project-card group cursor-pointer">
+          <div class="project-image aspect-[4/3] relative">
+            <img
+              src="project3.png"
+              alt="Modern city view living room"
+              class="w-full h-full object-cover"
+            >
+            <div class="project-overlay absolute inset-0 bg-gradient-to-t from-bg/80 to-transparent flex items-end p-8">
+              <span class="text-fg text-sm tracking-widest uppercase">View Project</span>
+            </div>
+          </div>
+          <div class="mt-6">
+            <span class="text-accent text-xs tracking-widest uppercase">Penthouse</span>
+            <h3 class="font-display text-2xl md:text-3xl mt-2 group-hover:text-accent transition-colors">Sky Lounge Penthouse</h3>
+            <p class="text-muted mt-2">Luxury penthouse with panoramic city views</p>
+          </div>
+        </article>
+
+        <!-- Project 4 -->
+        <article class="reveal reveal-delay-1 project-card group cursor-pointer mt-0 md:mt-16">
+          <div class="project-image aspect-[4/3] relative">
+            <img
+              src="project4.png"
+              alt="Natural light filled living space"
+              class="w-full h-full object-cover"
+            >
+            <div class="project-overlay absolute inset-0 bg-gradient-to-t from-bg/80 to-transparent flex items-end p-8">
+              <span class="text-fg text-sm tracking-widest uppercase">View Project</span>
+            </div>
+          </div>
+          <div class="mt-6">
+            <span class="text-accent text-xs tracking-widest uppercase">Residential</span>
+            <h3 class="font-display text-2xl md:text-3xl mt-2 group-hover:text-accent transition-colors">Garden Oasis</h3>
+            <p class="text-muted mt-2">Biophilic design in Bukit Timah residence</p>
+          </div>
+        </article>
+
+        <!-- Project 5 -->
+        <article class="reveal project-card group cursor-pointer">
+          <div class="project-image aspect-[4/3] relative">
+            <img
+              src="project5.png"
+              alt="Modern interior with orange accents"
+              class="w-full h-full object-cover"
+            >
+            <div class="project-overlay absolute inset-0 bg-gradient-to-t from-bg/80 to-transparent flex items-end p-8">
+              <span class="text-fg text-sm tracking-widest uppercase">View Project</span>
+            </div>
+          </div>
+          <div class="mt-6">
+            <span class="text-accent text-xs tracking-widest uppercase">Commercial</span>
+            <h3 class="font-display text-2xl md:text-3xl mt-2 group-hover:text-accent transition-colors">Creative Studio HQ</h3>
+            <p class="text-muted mt-2">Vibrant workspace for design agency</p>
+          </div>
+        </article>
+
+        <!-- Project 6 -->
+        <article class="reveal reveal-delay-1 project-card group cursor-pointer mt-0 md:mt-16">
+          <div class="project-image aspect-[4/3] relative">
+            <img
+              src="project6.png"
+              alt="Contemporary living room with yellow chair"
+              class="w-full h-full object-cover"
+            >
+            <div class="project-overlay absolute inset-0 bg-gradient-to-t from-bg/80 to-transparent flex items-end p-8">
+              <span class="text-fg text-sm tracking-widest uppercase">View Project</span>
+            </div>
+          </div>
+          <div class="mt-6">
+            <span class="text-accent text-xs tracking-widest uppercase">Residential</span>
+            <h3 class="font-display text-2xl md:text-3xl mt-2 group-hover:text-accent transition-colors">Amber Residence</h3>
+            <p class="text-muted mt-2">Warm contemporary home in Holland Village</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services Section -->
+  <section id="services" class="py-24 md:py-32 px-6 md:px-12 lg:px-24">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <p class="reveal text-accent text-sm tracking-[0.3em] uppercase mb-6">Services</p>
+        <h2 class="reveal reveal-delay-1 font-display text-4xl md:text-5xl lg:text-6xl font-light">
+          From concept to completion
+        </h2>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="reveal group bg-card border border-border p-8 hover:border-accent transition-colors duration-500">
+          <div class="w-12 h-12 border border-accent flex items-center justify-center mb-6 group-hover:bg-accent transition-colors duration-500">
+            <svg class="w-6 h-6 text-accent group-hover:text-bg transition-colors duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
+            </svg>
+          </div>
+          <h3 class="font-display text-xl mb-3">Consultation</h3>
+          <p class="text-muted text-sm leading-relaxed">Initial design consultation to understand your vision, lifestyle, and spatial requirements.</p>
+        </div>
+
+        <div class="reveal reveal-delay-1 group bg-card border border-border p-8 hover:border-accent transition-colors duration-500">
+          <div class="w-12 h-12 border border-accent flex items-center justify-center mb-6 group-hover:bg-accent transition-colors duration-500">
+            <svg class="w-6 h-6 text-accent group-hover:text-bg transition-colors duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"/>
+            </svg>
+          </div>
+          <h3 class="font-display text-xl mb-3">Space Planning</h3>
+          <p class="text-muted text-sm leading-relaxed">Thoughtful layouts that maximize functionality while creating harmonious flow throughout your space.</p>
+        </div>
+
+        <div class="reveal reveal-delay-2 group bg-card border border-border p-8 hover:border-accent transition-colors duration-500">
+          <div class="w-12 h-12 border border-accent flex items-center justify-center mb-6 group-hover:bg-accent transition-colors duration-500">
+            <svg class="w-6 h-6 text-accent group-hover:text-bg transition-colors duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/>
+            </svg>
+          </div>
+          <h3 class="font-display text-xl mb-3">Material Selection</h3>
+          <p class="text-muted text-sm leading-relaxed">Curated selection of sustainable materials, furniture, and finishes tailored to your aesthetic.</p>
+        </div>
+
+        <div class="reveal reveal-delay-3 group bg-card border border-border p-8 hover:border-accent transition-colors duration-500">
+          <div class="w-12 h-12 border border-accent flex items-center justify-center mb-6 group-hover:bg-accent transition-colors duration-500">
+            <svg class="w-6 h-6 text-accent group-hover:text-bg transition-colors duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+          <h3 class="font-display text-xl mb-3">Project Management</h3>
+          <p class="text-muted text-sm leading-relaxed">End-to-end oversight ensuring your project is delivered on time, on budget, and beyond expectations.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonial Section -->
+  <section class="py-24 md:py-32 px-6 md:px-12 lg:px-24 bg-card relative overflow-hidden">
+    <div class="absolute top-0 left-0 w-full h-full opacity-5">
+      <svg viewBox="0 0 200 200" class="w-full h-full">
+        <defs>
+          <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="currentColor" stroke-width="0.5"/>
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#grid)"/>
+      </svg>
+    </div>
+
+    <div class="max-w-4xl mx-auto text-center relative z-10">
+      <svg class="reveal w-12 h-12 mx-auto mb-8 text-accent" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
+      </svg>
+      <blockquote class="reveal reveal-delay-1 font-display text-2xl md:text-3xl lg:text-4xl font-light leading-relaxed italic mb-8">
+        "Wu Lei transformed our apartment into a sanctuary. Her ability to understand how we live and create spaces that feel both beautiful and deeply personal is extraordinary. Every detail was considered, every corner tells a story."
+      </blockquote>
+      <div class="reveal reveal-delay-2">
+        <p class="text-fg font-medium">Sarah & Michael Chen</p>
+        <p class="text-muted text-sm mt-1">Homeowners, Tanjong Pagar</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Process Section -->
+  <section class="py-24 md:py-32 px-6 md:px-12 lg:px-24">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <p class="reveal text-accent text-sm tracking-[0.3em] uppercase mb-6">Process</p>
+        <h2 class="reveal reveal-delay-1 font-display text-4xl md:text-5xl lg:text-6xl font-light">
+          How we work together
+        </h2>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8 lg:gap-16">
+        <div class="reveal text-center md:text-left">
+          <span class="font-display text-6xl text-accent/20">01</span>
+          <h3 class="font-display text-2xl mt-4 mb-3">Discover</h3>
+          <p class="text-muted leading-relaxed">
+            We begin with in-depth conversations about your lifestyle, preferences, and aspirations for your space. This phase includes site analysis and initial concept exploration.
+          </p>
+        </div>
+
+        <div class="reveal reveal-delay-1 text-center md:text-left">
+          <span class="font-display text-6xl text-accent/20">02</span>
+          <h3 class="font-display text-2xl mt-4 mb-3">Design</h3>
+          <p class="text-muted leading-relaxed">
+            Through mood boards, 3D visualizations, and material samples, we develop a cohesive design narrative. Every element is carefully selected to create harmony.
+          </p>
+        </div>
+
+        <div class="reveal reveal-delay-2 text-center md:text-left">
+          <span class="font-display text-6xl text-accent/20">03</span>
+          <h3 class="font-display text-2xl mt-4 mb-3">Deliver</h3>
+          <p class="text-muted leading-relaxed">
+            From contractor coordination to final styling, we manage every detail. The result is a thoughtfully crafted space ready for you to inhabit and enjoy.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section id="contact" class="py-24 md:py-32 px-6 md:px-12 lg:px-24 relative">
+    <div class="absolute inset-0">
+      <img
+        src="cta-image.png"
+        alt="Modern living space"
+        class="w-full h-full object-cover opacity-20"
+      >
+      <div class="absolute inset-0 bg-gradient-to-t from-bg via-bg/90 to-bg/80"></div>
+    </div>
+
+    <div class="max-w-3xl mx-auto text-center relative z-10">
+      <p class="reveal text-accent text-sm tracking-[0.3em] uppercase mb-6">Start Your Journey</p>
+      <h2 class="reveal reveal-delay-1 font-display text-4xl md:text-5xl lg:text-6xl font-light mb-8">
+        Let's create something beautiful together
+      </h2>
+      <p class="reveal reveal-delay-2 text-muted text-lg mb-12 max-w-xl mx-auto">
+        Whether you're envisioning a complete home transformation or seeking guidance for a single room,
+        I'd love to hear about your project.
+      </p>
+      <div class="reveal reveal-delay-3 flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="mailto:hello@wulei.design" class="btn-primary inline-flex items-center justify-center px-10 py-5 border border-fg text-fg text-sm tracking-widest uppercase hover:text-bg">
+          Schedule a Consultation
+        </a>
+      </div>
+
+      <div class="reveal reveal-delay-4 mt-16 pt-16 border-t border-border grid sm:grid-cols-3 gap-8 text-center sm:text-left">
+        <div>
+          <p class="text-muted text-xs tracking-widest uppercase mb-2">Email</p>
+          <a href="mailto:hello@wulei.design" class="text-fg hover:text-accent transition-colors">hello@wulei.design</a>
+        </div>
+        <div>
+          <p class="text-muted text-xs tracking-widest uppercase mb-2">Studio</p>
+          <p class="text-fg">72 Duxton Road<br>Singapore 089535</p>
+        </div>
+        <div>
+          <p class="text-muted text-xs tracking-widest uppercase mb-2">Social</p>
+          <div class="flex gap-4 justify-center sm:justify-start">
+            <a href="#" class="text-fg hover:text-accent transition-colors" aria-label="Instagram">IG</a>
+            <a href="#" class="text-fg hover:text-accent transition-colors" aria-label="Pinterest">PT</a>
+            <a href="#" class="text-fg hover:text-accent transition-colors" aria-label="LinkedIn">LI</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-8 px-6 md:px-12 lg:px-24 border-t border-border">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+      <p class="text-muted text-sm">© 2026 <a href="https://orionwebworks.github.io/" class="hover:text-accent transition-colors">Orion Webworks</a>. All rights reserved.</p>
+      <p class="text-muted text-sm">Made with ❤️ and intention</p>
+    </div>
+  </footer>
+
+  <script>
+    // Initialize after DOM is ready
+    document.addEventListener('DOMContentLoaded', function() {
+      // Custom cursor
+      const cursor = document.getElementById('cursor');
+      let cursorVisible = false;
+
+      if (cursor && window.matchMedia('(pointer: fine)').matches) {
+        document.addEventListener('mousemove', function(e) {
+          if (!cursorVisible) {
+            cursor.style.opacity = '1';
+            cursorVisible = true;
+          }
+          cursor.style.left = e.clientX - 10 + 'px';
+          cursor.style.top = e.clientY - 10 + 'px';
+        });
+
+        // Hover effect on interactive elements
+        const interactiveElements = document.querySelectorAll('a, button, .project-card');
+        interactiveElements.forEach(function(el) {
+          el.addEventListener('mouseenter', function() {
+            cursor.classList.add('hovering');
+          });
+          el.addEventListener('mouseleave', function() {
+            cursor.classList.remove('hovering');
+          });
+        });
+
+        document.addEventListener('mouseleave', function() {
+          cursor.style.opacity = '0';
+          cursorVisible = false;
+        });
+      }
+
+      // Mobile menu toggle
+      const menuToggle = document.getElementById('menu-toggle');
+      const mobileMenu = document.getElementById('mobile-menu');
+      let menuOpen = false;
+
+      if (menuToggle && mobileMenu) {
+        menuToggle.addEventListener('click', function() {
+          menuOpen = !menuOpen;
+          if (menuOpen) {
+            mobileMenu.style.opacity = '1';
+            mobileMenu.style.pointerEvents = 'auto';
+          } else {
+            mobileMenu.style.opacity = '0';
+            mobileMenu.style.pointerEvents = 'none';
+          }
+        });
+
+        // Close menu when clicking a link
+        const mobileNavLinks = mobileMenu.querySelectorAll('.mobile-nav-link');
+        mobileNavLinks.forEach(function(link) {
+          link.addEventListener('click', function() {
+            menuOpen = false;
+            mobileMenu.style.opacity = '0';
+            mobileMenu.style.pointerEvents = 'none';
+          });
+        });
+      }
+
+      // Scroll reveal
+      const revealElements = document.querySelectorAll('.reveal');
+
+      const revealObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('active');
+          }
+        });
+      }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      });
+
+      revealElements.forEach(function(el) {
+        revealObserver.observe(el);
+      });
+
+      // Smooth scroll for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+        anchor.addEventListener('click', function(e) {
+          const href = this.getAttribute('href');
+          if (href && href !== '#') {
+            e.preventDefault();
+            const target = document.querySelector(href);
+            if (target) {
+              target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+              });
+            }
+          }
+        });
+      });
+
+      // Navbar background on scroll
+      const nav = document.querySelector('nav');
+      let lastScrollY = 0;
+
+      window.addEventListener('scroll', function() {
+        const currentScrollY = window.scrollY;
+
+        if (currentScrollY > 100) {
+          nav.style.background = 'rgba(26, 25, 23, 0.95)';
+          nav.style.backdropFilter = 'blur(10px)';
+        } else {
+          nav.style.background = 'transparent';
+          nav.style.backdropFilter = 'none';
+        }
+
+        lastScrollY = currentScrollY;
+      }, { passive: true });
+
+      // Stat counter animation
+      const statNumbers = document.querySelectorAll('.stat-number');
+
+      const counterObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            const target = entry.target;
+            const finalValue = parseInt(target.textContent);
+            let currentValue = 0;
+            const duration = 2000;
+            const increment = finalValue / (duration / 16);
+
+            function updateCounter() {
+              currentValue += increment;
+              if (currentValue < finalValue) {
+                target.textContent = Math.floor(currentValue);
+                requestAnimationFrame(updateCounter);
+              } else {
+                target.textContent = finalValue;
+              }
+            }
+
+            updateCounter();
+            counterObserver.unobserve(target);
+          }
+        });
+      }, { threshold: 0.5 });
+
+      statNumbers.forEach(function(stat) {
+        counterObserver.observe(stat);
+      });
+
+      // Parallax effect on hero image
+      const heroImage = document.querySelector('section:first-of-type img');
+
+      if (heroImage && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        window.addEventListener('scroll', function() {
+          const scrolled = window.scrollY;
+          if (scrolled < window.innerHeight) {
+            heroImage.style.transform = 'translateY(' + (scrolled * 0.3) + 'px)';
+          }
+        }, { passive: true });
+      }
+    });
+  </script>
+</body>
+</html>
