@@ -1251,18 +1251,18 @@
 
         // --- DATA ---
         const portfolioItems = [
-            { title: "Chow Sushi Singapore", description: "The Art of Japanese Cuisine - A premium dining experience website.", image: "portfolio-chow-sushi.jpg", badge: "Singapore", category: "Restaurant" },
-            { title: "Fiamma Restaurant", description: "Restaurant Italien d'Exception - An elegant Italian dining destination.", image: "portfolio-fiamma-restaurant.jpg", badge: "France", category: "Restaurant" },
-            { title: "Chez Jean Pierre Pizza", description: "Artisanal wood-fired pizza with Neapolitan tradition since 1987.", image: "portfolio-chez-jean-pierre.jpg", badge: "France", category: "Restaurant" },
-            { title: "L'Artisan Patisserie", description: "Artisan bakery showcasing the art of French pastry since 2020.", image: "portfolio-lartisan-patisserie.jpg", badge: "France", category: "Food & Beverage" },
-            { title: "Spa Bien-etre", description: "A serene digital sanctuary for a premium Parisian spa experience.", image: "portfolio-spa-bien-etre.jpg", badge: "France", category: "Wellness" },
-            { title: "Academie Equestre", description: "L'Art de l'Equitation - A prestigious equestrian academy since 1892.", image: "portfolio-academie-equestre.jpg", badge: "France", category: "Sports" },
-            { title: "Chen Wei Lun Film Academy", description: "Singapore's Premier Film Academy crafting cinematic visionaries.", image: "portfolio-chen-wei-lun.jpg", badge: "Singapore", category: "Education" },
-            { title: "L'Aube Maison de Mode", description: "Timeless elegance - A Parisian fashion house with exquisite collections.", image: "portfolio-laube-maison.jpg", badge: "France", category: "Fashion" },
-            { title: "Laurent Barbershop", description: "L'Art du Style Masculin - French artisanal barbershop experience.", image: "portfolio-laurent-barbershop.jpg", badge: "France", category: "Lifestyle" },
-            { title: "Robbie's Badminton Academy", description: "Singapore's Premier Badminton Academy - Smash Your Limits with elite training programs.", image: "portfolio-badminton.jpg", badge: "Singapore", category: "Sports" },
-            { title: "Wu Lei Interior Design Studio", description: "Bespoke interior design solutions - Crafting elegant spaces with modern aesthetics.", image: "portfolio-interior-design.jpg", badge: "Singapore", category: "Design" },
-            { title: "Sole Theory", description: "Singapore's Premier Footwear Destination - Curating the finest sneaker collections.", image: "portfolio-sole-theory.jpg", badge: "Singapore", category: "Retail" }
+            { title: "Chow Sushi Singapore", description: "The Art of Japanese Cuisine - A premium dining experience website.", image: "portfolio-chow-sushi.jpg", badge: "Singapore", category: "Restaurant", link: "https://chowsushi.com.sg/" },
+            { title: "Fiamma Restaurant", description: "Restaurant Italien d'Exception - An elegant Italian dining destination.", image: "portfolio-fiamma-restaurant.jpg", badge: "France", category: "Restaurant", link: "https://fiamma-restaurant.fr/" },
+            { title: "Chez Jean Pierre Pizza", description: "Artisanal wood-fired pizza with Neapolitan tradition since 1987.", image: "portfolio-chez-jean-pierre.jpg", badge: "France", category: "Restaurant", link: "https://chezjeanpierre.fr/" },
+            { title: "L'Artisan Patisserie", description: "Artisan bakery showcasing the art of French pastry since 2020.", image: "portfolio-lartisan-patisserie.jpg", badge: "France", category: "Food & Beverage", link: "https://lartisan-patisserie.fr/" },
+            { title: "Spa Bien-etre", description: "A serene digital sanctuary for a premium Parisian spa experience.", image: "portfolio-spa-bien-etre.jpg", badge: "France", category: "Wellness", link: "https://spa-bienetre.fr/" },
+            { title: "Academie Equestre", description: "L'Art de l'Equitation - A prestigious equestrian academy since 1892.", image: "portfolio-academie-equestre.jpg", badge: "France", category: "Sports", link: "https://academie-equestre.fr/" },
+            { title: "Chen Wei Lun Film Academy", description: "Singapore's Premier Film Academy crafting cinematic visionaries.", image: "portfolio-chen-wei-lun.jpg", badge: "Singapore", category: "Education", link: "https://chenweilun.sg/" },
+            { title: "L'Aube Maison de Mode", description: "Timeless elegance - A Parisian fashion house with exquisite collections.", image: "portfolio-laube-maison.jpg", badge: "France", category: "Fashion", link: "https://laube-maison.fr/" },
+            { title: "Laurent Barbershop", description: "L'Art du Style Masculin - French artisanal barbershop experience.", image: "portfolio-laurent-barbershop.jpg", badge: "France", category: "Lifestyle", link: "https://laurent-barbershop.fr/" },
+            { title: "Robbie's Badminton Academy", description: "Singapore's Premier Badminton Academy - Smash Your Limits with elite training programs.", image: "portfolio-badminton.jpg", badge: "Singapore", category: "Sports", link: "https://robbies-badminton.sg/" },
+            { title: "Wu Lei Interior Design Studio", description: "Bespoke interior design solutions - Crafting elegant spaces with modern aesthetics.", image: "portfolio-interior-design.jpg", badge: "Singapore", category: "Design", link: "https://wulei-interior.sg/" },
+            { title: "Sole Theory", description: "Singapore's Premier Footwear Destination - Curating the finest sneaker collections.", image: "portfolio-sole-theory.jpg", badge: "Singapore", category: "Retail", link: "https://soletheory.sg/" }
         ];
 
         const testimonials = [
@@ -1289,7 +1289,7 @@
                 <div class="portfolio-content">
                     <h3>${item.title}</h3>
                     <p>${item.description}</p>
-                    <a href="#" class="portfolio-link">View Project <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
+                    <a href="${item.link}" class="portfolio-link" target="_blank" rel="noopener noreferrer">View Project <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
                 </div>`;
             portfolioGrid.appendChild(card);
         });
