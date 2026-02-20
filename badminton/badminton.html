@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Robbie's Badminton Academy | Singapore</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['Bebas Neue', 'sans-serif'],
+            body: ['DM Sans', 'sans-serif'],
+          },
+          colors: {
+            bg: '#0d0d0d',
+            fg: '#f5f5f5',
+            muted: '#737373',
+            accent: '#c8ff00',
+            card: '#1a1a1a',
+            border: '#2a2a2a',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    :root {
+      --bg: #0d0d0d;
+      --fg: #f5f5f5;
+      --muted: #737373;
+      --accent: #c8ff00;
+      --card: #1a1a1a;
+      --border: #2a2a2a;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      overflow-x: hidden;
+    }
+
+    .font-display {
+      font-family: 'Bebas Neue', sans-serif;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--accent);
+    }
+
+    /* Hero Background Pattern */
+    .hero-pattern {
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(circle at 20% 80%, rgba(200, 255, 0, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(200, 255, 0, 0.05) 0%, transparent 40%);
+      pointer-events: none;
+    }
+
+    .grid-overlay {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+    }
+
+    /* Floating Animation */
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(3deg); }
+    }
+
+    @keyframes float-delay {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-15px) rotate(-2deg); }
+    }
+
+    .float-element {
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .float-element-delay {
+      animation: float-delay 5s ease-in-out infinite;
+      animation-delay: 1s;
+    }
+
+    /* Reveal Animations */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-left {
+      opacity: 0;
+      transform: translateX(-60px);
+      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal-left.active {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .reveal-right {
+      opacity: 0;
+      transform: translateX(60px);
+      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal-right.active {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .reveal-scale {
+      opacity: 0;
+      transform: scale(0.9);
+      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal-scale.active {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Hero Image Styling */
+    .hero-image-container {
+      position: relative;
+      transform: perspective(1000px) rotateY(-5deg);
+      transition: transform 0.6s ease;
+    }
+
+    .hero-image-container:hover {
+      transform: perspective(1000px) rotateY(0deg);
+    }
+
+    .hero-image-frame {
+      position: absolute;
+      inset: -8px;
+      border: 2px solid var(--accent);
+      border-radius: 16px;
+      transform: translate(16px, 16px);
+      z-index: -1;
+      opacity: 0.6;
+    }
+
+    /* Button Styles */
+    .btn-primary {
+      position: relative;
+      background: var(--accent);
+      color: var(--bg);
+      font-weight: 600;
+      padding: 16px 32px;
+      border-radius: 8px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0.2);
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+    }
+
+    .btn-primary:hover::before {
+      transform: translateX(0);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 40px rgba(200, 255, 0, 0.3);
+    }
+
+    .btn-secondary {
+      position: relative;
+      background: transparent;
+      color: var(--fg);
+      font-weight: 500;
+      padding: 16px 32px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      transition: all 0.3s ease;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    /* Card Hover */
+    .program-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .program-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transition: transform 0.4s ease;
+    }
+
+    .program-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--accent);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+
+    .program-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    /* Gallery Grid */
+    .gallery-item {
+      position: relative;
+      overflow: hidden;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+
+    .gallery-item img {
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.1);
+    }
+
+    .gallery-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .gallery-item:hover .gallery-overlay {
+      opacity: 1;
+    }
+
+    /* Stats Counter */
+    .stat-number {
+      font-size: clamp(48px, 8vw, 80px);
+      line-height: 1;
+      background: linear-gradient(135deg, var(--fg) 0%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Navigation */
+    .nav-link {
+      position: relative;
+      color: var(--muted);
+      transition: color 0.3s ease;
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--accent);
+      transition: width 0.3s ease;
+    }
+
+    .nav-link:hover {
+      color: var(--fg);
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    /* Shuttlecock decoration */
+    .shuttlecock-bg {
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      opacity: 0.03;
+      pointer-events: none;
+    }
+
+    /* Focus states */
+    button:focus-visible,
+    a:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 4px;
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      .float-element,
+      .float-element-delay {
+        animation: none;
+      }
+      .reveal,
+      .reveal-left,
+      .reveal-right,
+      .reveal-scale {
+        transition: opacity 0.3s ease;
+        transform: none;
+      }
+    }
+
+    /* Mobile adjustments */
+    @media (max-width: 768px) {
+      .hero-image-container {
+        transform: none;
+      }
+      .hero-image-container:hover {
+        transform: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-bg/80 backdrop-blur-lg border-b border-border">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="#" class="font-display text-2xl tracking-wider text-fg">
+        ROBBIE<span class="text-accent">.</span>BADMINTON
+      </a>
+
+      <div class="hidden md:flex items-center gap-8">
+        <a href="#about" class="nav-link font-medium">About</a>
+        <a href="#programs" class="nav-link font-medium">Programs</a>
+        <a href="#gallery" class="nav-link font-medium">Gallery</a>
+        <a href="#contact" class="btn-primary text-sm">Book Session</a>
+      </div>
+
+      <button id="mobile-menu-btn" class="md:hidden p-2 text-fg" aria-label="Toggle menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="md:hidden hidden bg-card border-t border-border">
+      <div class="px-6 py-6 flex flex-col gap-4">
+        <a href="#about" class="text-lg font-medium text-fg hover:text-accent transition-colors">About</a>
+        <a href="#programs" class="text-lg font-medium text-fg hover:text-accent transition-colors">Programs</a>
+        <a href="#gallery" class="text-lg font-medium text-fg hover:text-accent transition-colors">Gallery</a>
+        <a href="#contact" class="btn-primary text-center mt-2">Book Session</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="relative min-h-screen flex items-center pt-20 overflow-hidden">
+    <div class="hero-pattern"></div>
+    <div class="grid-overlay"></div>
+
+    <!-- Decorative Elements -->
+    <div class="absolute top-1/4 right-10 w-32 h-32 border border-accent/20 rounded-full float-element" style="animation-delay: 0s;"></div>
+    <div class="absolute bottom-1/4 left-10 w-20 h-20 bg-accent/5 rounded-full float-element-delay"></div>
+
+    <div class="max-w-7xl mx-auto px-6 py-16 grid lg:grid-cols-2 gap-12 items-center relative z-10">
+      <!-- Hero Content -->
+      <div class="order-2 lg:order-1">
+        <div class="reveal">
+          <span class="inline-block px-4 py-2 bg-accent/10 text-accent text-sm font-medium rounded-full mb-6">
+            Singapore's Premier Badminton Academy
+          </span>
+        </div>
+
+        <h1 class="font-display text-6xl sm:text-7xl lg:text-8xl leading-none mb-6 reveal" style="transition-delay: 0.1s;">
+          SMASH<br>
+          YOUR<br>
+          <span class="text-accent">LIMITS</span>
+        </h1>
+
+        <p class="text-xl text-muted max-w-lg mb-8 reveal" style="transition-delay: 0.2s;">
+          Train with Robbie, Singapore's elite badminton coach. From beginners to competitive players, unlock your full potential on the court.
+        </p>
+
+        <div class="flex flex-wrap gap-4 reveal" style="transition-delay: 0.3s;">
+          <a href="#contact" class="btn-primary">Start Your Journey</a>
+          <a href="#programs" class="btn-secondary">View Programs</a>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="grid grid-cols-3 gap-6 mt-12 reveal" style="transition-delay: 0.4s;">
+          <div>
+            <div class="font-display text-4xl text-accent" data-count="15">15+</div>
+            <div class="text-sm text-muted">Years Experience</div>
+          </div>
+          <div>
+            <div class="font-display text-4xl text-accent" data-count="500">500+</div>
+            <div class="text-sm text-muted">Students Trained</div>
+          </div>
+          <div>
+            <div class="font-display text-4xl text-accent" data-count="50">50+</div>
+            <div class="text-sm text-muted">Champions Made</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hero Image -->
+      <div class="order-1 lg:order-2 flex justify-center lg:justify-end reveal-scale" style="transition-delay: 0.2s;">
+        <div class="hero-image-container relative">
+          <div class="hero-image-frame"></div>
+          <img
+            src="robbie-coach.jpg"
+            alt="Robbie - Professional Badminton Coach in Singapore"
+            class="w-full max-w-md rounded-2xl shadow-2xl"
+          >
+          <!-- Floating Badge -->
+          <div class="absolute -bottom-4 -left-4 bg-card border border-border rounded-xl px-4 py-3 shadow-xl float-element-delay">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 bg-accent rounded-full flex items-center justify-center">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0d0d0d" stroke-width="2.5">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </div>
+              <div>
+                <div class="text-sm font-semibold text-fg">Certified Coach</div>
+                <div class="text-xs text-muted">Singapore Sports Council</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scroll Indicator -->
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-muted reveal" style="transition-delay: 0.5s;">
+      <span class="text-xs uppercase tracking-widest">Scroll</span>
+      <div class="w-px h-12 bg-gradient-to-b from-muted to-transparent"></div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="py-24 relative overflow-hidden">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="grid lg:grid-cols-2 gap-16 items-center">
+        <!-- About Images Grid -->
+        <div class="relative reveal-left">
+          <div class="grid grid-cols-2 gap-4">
+            <div class="space-y-4">
+              <img
+                src="badminton-racket.png"
+                alt="Badminton racket and shuttlecock"
+                class="rounded-2xl w-full h-48 object-cover"
+              >
+              <img
+                src="badminton-player-action.png"
+                alt="Badminton player in action"
+                class="rounded-2xl w-full h-64 object-cover"
+              >
+            </div>
+            <div class="pt-8 space-y-4">
+              <img
+                src="badminton-court.png"
+                alt="Badminton on court"
+                class="rounded-2xl w-full h-64 object-cover"
+              >
+              <img
+                src="athletic-jump-shot.png"
+                alt="Athletic jump shot"
+                class="rounded-2xl w-full h-48 object-cover"
+              >
+            </div>
+          </div>
+          <!-- Decorative -->
+          <div class="absolute -z-10 -bottom-8 -right-8 w-48 h-48 bg-accent/10 rounded-full blur-3xl"></div>
+        </div>
+
+        <!-- About Content -->
+        <div class="reveal-right">
+          <span class="inline-block px-4 py-2 bg-accent/10 text-accent text-sm font-medium rounded-full mb-6">
+            Meet Robbie
+          </span>
+
+          <h2 class="font-display text-5xl lg:text-6xl mb-6">
+            PASSION MEETS<br><span class="text-accent">PROFESSION</span>
+          </h2>
+
+          <p class="text-lg text-muted mb-6">
+            With over 15 years of coaching experience in Singapore, Robbie has transformed hundreds of aspiring players into confident athletes. His approach combines technical precision with infectious enthusiasm.
+          </p>
+
+          <p class="text-muted mb-8">
+            A former national player himself, Robbie understands what it takes to excel at the highest level. His training methodology focuses on building strong fundamentals while developing each player's unique style and strengths.
+          </p>
+
+          <div class="grid grid-cols-2 gap-6 mb-8">
+            <div class="flex items-start gap-3">
+              <div class="w-8 h-8 bg-accent/10 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-accent">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </div>
+              <div>
+                <div class="font-semibold text-fg">Personalized Training</div>
+                <div class="text-sm text-muted">Tailored to your skill level</div>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <div class="w-8 h-8 bg-accent/10 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-accent">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </div>
+              <div>
+                <div class="font-semibold text-fg">Modern Techniques</div>
+                <div class="text-sm text-muted">Latest coaching methods</div>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <div class="w-8 h-8 bg-accent/10 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-accent">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </div>
+              <div>
+                <div class="font-semibold text-fg">Proven Results</div>
+                <div class="text-sm text-muted">50+ tournament winners</div>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <div class="w-8 h-8 bg-accent/10 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-accent">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </div>
+              <div>
+                <div class="font-semibold text-fg">Fun Environment</div>
+                <div class="text-sm text-muted">Learn while enjoying</div>
+              </div>
+            </div>
+          </div>
+
+          <a href="#contact" class="btn-primary inline-block">Train With Robbie</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Programs Section -->
+  <section id="programs" class="py-24 bg-card relative overflow-hidden">
+    <div class="absolute inset-0 grid-overlay opacity-50"></div>
+
+    <div class="max-w-7xl mx-auto px-6 relative z-10">
+      <div class="text-center mb-16 reveal">
+        <span class="inline-block px-4 py-2 bg-accent/10 text-accent text-sm font-medium rounded-full mb-6">
+          Training Programs
+        </span>
+        <h2 class="font-display text-5xl lg:text-6xl mb-4">
+          FIND YOUR <span class="text-accent">PROGRAM</span>
+        </h2>
+        <p class="text-xl text-muted max-w-2xl mx-auto">
+          From first-timers to tournament players, we have the perfect program for every skill level.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Program 1 -->
+        <div class="program-card reveal" style="transition-delay: 0.1s;">
+          <div class="w-14 h-14 bg-accent/10 rounded-xl flex items-center justify-center mb-6">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-accent">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M12 6v6l4 2"></path>
+            </svg>
+          </div>
+          <h3 class="font-display text-2xl mb-3">STARTER SMASH</h3>
+          <p class="text-muted mb-6">Perfect for beginners. Learn the fundamentals of grip, stance, and basic strokes in a supportive environment.</p>
+          <ul class="space-y-2 mb-6">
+            <li class="flex items-center gap-2 text-sm text-muted">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-accent"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              4 sessions per month
+            </li>
+            <li class="flex items-center gap-2 text-sm text-muted">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-accent"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              1-hour group sessions
+            </li>
+            <li class="flex items-center gap-2 text-sm text-muted">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-accent"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              Equipment provided
+            </li>
+          </ul>
+          <div class="flex items-end justify-between">
+            <div>
+              <span class="text-sm text-muted">From</span>
+              <div class="font-display text-3xl text-accent">$180<span class="text-lg text-muted">/mo</span></div>
+            </div>
+            <button class="btn-secondary text-sm py-2 px-4">Enroll Now</button>
+          </div>
+        </div>
+
+        <!-- Program 2 -->
+        <div class="program-card reveal" style="transition-delay: 0.2s;">
+          <div class="absolute top-0 right-0 bg-accent text-bg text-xs font-bold px-3 py-1 rounded-bl-lg rounded-tr-lg">POPULAR</div>
+          <div class="w-14 h-14 bg-accent/10 rounded-xl flex items-center justify-center mb-6">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-accent">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+          </div>
+          <h3 class="font-display text-2xl mb-3">ACE DEVELOPER</h3>
+          <p class="text-muted mb-6">For intermediate players ready to elevate their game. Focus on strategy, footwork, and advanced techniques.</p>
+          <ul class="space-y-2 mb-6">
+            <li class="flex items-center gap-2 text-sm text-muted">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-accent"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              8 sessions per month
+            </li>
+            <li class="flex items-center gap-2 text-sm text-muted">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-accent"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              1.5-hour sessions
+            </li>
+            <li class="flex items-center gap-2 text-sm text-muted">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-accent"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              Video analysis included
+            </li>
+          </ul>
+          <div class="flex items-end justify-between">
+            <div>
+              <span class="text-sm text-muted">From</span>
+              <div class="font-display text-3xl text-accent">$320<span class="text-lg text-muted">/mo</span></div>
+            </div>
+            <button class="btn-primary text-sm py-2 px-4">Enroll Now</button>
+          </div>
+        </div>
+
+        <!-- Program 3 -->
+        <div class="program-card reveal" style="transition-delay: 0.3s;">
+          <div class="w-14 h-14 bg-accent/10 rounded-xl flex items-center justify-center mb-6">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-accent">
+              <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+              <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+              <path d="M4 22h16"></path>
+              <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path>
+              <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path>
+              <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path>
+            </svg>
+          </div>
+          <h3 class="font-display text-2xl mb-3">ELITE CHAMPION</h3>
+          <p class="text-muted mb-6">Intensive training for competitive players. Tournament preparation, mental conditioning, and personalized coaching.</p>
+          <ul class="space-y-2 mb-6">
+            <li class="flex items-center gap-2 text-sm text-muted">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-accent"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              Unlimited sessions
+            </li>
+            <li class="flex items-center gap-2 text-sm text-muted">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-accent"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              2-hour intensive training
+            </li>
+            <li class="flex items-center gap-2 text-sm text-muted">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-accent"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              Tournament coaching
+            </li>
+          </ul>
+          <div class="flex items-end justify-between">
+            <div>
+              <span class="text-sm text-muted">From</span>
+              <div class="font-display text-3xl text-accent">$580<span class="text-lg text-muted">/mo</span></div>
+            </div>
+            <button class="btn-secondary text-sm py-2 px-4">Enroll Now</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery Section -->
+  <section id="gallery" class="py-24 relative overflow-hidden">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center mb-16 reveal">
+        <span class="inline-block px-4 py-2 bg-accent/10 text-accent text-sm font-medium rounded-full mb-6">
+          Gallery
+        </span>
+        <h2 class="font-display text-5xl lg:text-6xl mb-4">
+          LIFE ON THE <span class="text-accent">COURT</span>
+        </h2>
+        <p class="text-xl text-muted max-w-2xl mx-auto">
+          Glimpses of passion, dedication, and the spirit of badminton at Robbie's Academy.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="gallery-item col-span-2 row-span-2 h-80 md:h-auto reveal" style="transition-delay: 0.1s;">
+          <img
+            src="player-action.png"
+            alt="Player in action"
+            class="w-full h-full object-cover"
+          >
+          <div class="gallery-overlay flex items-end p-6">
+            <span class="font-display text-xl">Competitive Spirit</span>
+          </div>
+        </div>
+
+        <div class="gallery-item h-40 reveal" style="transition-delay: 0.2s;">
+          <img
+            src="badminton-racket.png"
+            alt="Equipment detail"
+            class="w-full h-full object-cover"
+          >
+          <div class="gallery-overlay flex items-end p-4">
+            <span class="text-sm font-medium">Precision Equipment</span>
+          </div>
+        </div>
+
+        <div class="gallery-item h-40 reveal" style="transition-delay: 0.3s;">
+          <img
+            src="badminton-court.png"
+            alt="Court view"
+            class="w-full h-full object-cover"
+          >
+          <div class="gallery-overlay flex items-end p-4">
+            <span class="text-sm font-medium">The Court</span>
+          </div>
+        </div>
+
+        <div class="gallery-item h-40 reveal" style="transition-delay: 0.4s;">
+          <img
+            src="badminton-player-action.png"
+            alt="Training session"
+            class="w-full h-full object-cover"
+          >
+          <div class="gallery-overlay flex items-end p-4">
+            <span class="text-sm font-medium">Focused Training</span>
+          </div>
+        </div>
+
+        <div class="gallery-item h-40 reveal" style="transition-delay: 0.5s;">
+          <img
+            src="athletic-jump-shot.png"
+            alt="Athletic move"
+            class="w-full h-full object-cover"
+          >
+          <div class="gallery-overlay flex items-end p-4">
+            <span class="text-sm font-medium">Power & Grace</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="py-24 bg-card relative overflow-hidden">
+    <div class="absolute inset-0 grid-overlay opacity-30"></div>
+
+    <div class="max-w-7xl mx-auto px-6 relative z-10">
+      <div class="text-center mb-16 reveal">
+        <span class="inline-block px-4 py-2 bg-accent/10 text-accent text-sm font-medium rounded-full mb-6">
+          Testimonials
+        </span>
+        <h2 class="font-display text-5xl lg:text-6xl mb-4">
+          PLAYER <span class="text-accent">STORIES</span>
+        </h2>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="bg-bg border border-border rounded-2xl p-8 reveal" style="transition-delay: 0.1s;">
+          <div class="flex items-center gap-1 mb-4">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#c8ff00"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#c8ff00"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#c8ff00"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#c8ff00"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#c8ff00"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          </div>
+          <p class="text-muted mb-6">"Robbie transformed my game completely. His attention to detail and ability to break down complex techniques made learning so much easier. I went from a casual player to winning my first tournament in just 8 months."</p>
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 bg-accent/20 rounded-full flex items-center justify-center font-display text-lg text-accent">JL</div>
+            <div>
+              <div class="font-semibold text-fg">Jason Lim</div>
+              <div class="text-sm text-muted">National Schools Champion 2025</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-bg border border-border rounded-2xl p-8 reveal" style="transition-delay: 0.2s;">
+          <div class="flex items-center gap-1 mb-4">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#c8ff00"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#c8ff00"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#c8ff00"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#c8ff00"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#c8ff00"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          </div>
+          <p class="text-muted mb-6">"My kids absolutely love their sessions with Robbie. He makes every class fun while ensuring they develop proper technique. The improvement in their confidence and skills has been remarkable to witness."</p>
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 bg-accent/20 rounded-full flex items-center justify-center font-display text-lg text-accent">ST</div>
+            <div>
+              <div class="font-semibold text-fg">Sarah Tan</div>
+              <div class="text-sm text-muted">Parent of two students</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-bg border border-border rounded-2xl p-8 reveal" style="transition-delay: 0.3s;">
+          <div class="flex items-center gap-1 mb-4">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#c8ff00"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#c8ff00"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#c8ff00"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#c8ff00"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#c8ff00"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          </div>
+          <p class="text-muted mb-6">"At 45, I thought it was too late to learn badminton properly. Robbie proved me wrong. His patient, methodical approach helped me develop skills I never thought possible. Best decision I ever made."</p>
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 bg-accent/20 rounded-full flex items-center justify-center font-display text-lg text-accent">MK</div>
+            <div>
+              <div class="font-semibold text-fg">Michael Koh</div>
+              <div class="text-sm text-muted">Adult learner, 2 years</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact CTA Section -->
+  <section id="contact" class="py-24 relative overflow-hidden">
+    <div class="absolute inset-0">
+      <div class="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-transparent"></div>
+      <div class="absolute top-0 right-0 w-96 h-96 bg-accent/10 rounded-full blur-3xl"></div>
+      <div class="absolute bottom-0 left-0 w-64 h-64 bg-accent/5 rounded-full blur-2xl"></div>
+    </div>
+
+    <div class="max-w-4xl mx-auto px-6 relative z-10">
+      <div class="text-center reveal">
+        <span class="inline-block px-4 py-2 bg-accent/10 text-accent text-sm font-medium rounded-full mb-6">
+          Start Today
+        </span>
+        <h2 class="font-display text-5xl lg:text-7xl mb-6">
+          READY TO <span class="text-accent">DOMINATE</span>?
+        </h2>
+        <p class="text-xl text-muted max-w-2xl mx-auto mb-12">
+          Book your first session with Robbie and discover the champion within you. Limited slots available.
+        </p>
+      </div>
+
+      <form class="bg-card border border-border rounded-3xl p-8 md:p-12 reveal" style="transition-delay: 0.2s;">
+        <div class="grid md:grid-cols-2 gap-6 mb-6">
+          <div>
+            <label for="name" class="block text-sm font-medium text-fg mb-2">Full Name</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              placeholder="Your name"
+              class="w-full bg-bg border border-border rounded-xl px-4 py-3 text-fg placeholder-muted focus:outline-none focus:border-accent transition-colors"
+              required
+            >
+          </div>
+          <div>
+            <label for="email" class="block text-sm font-medium text-fg mb-2">Email Address</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="your@email.com"
+              class="w-full bg-bg border border-border rounded-xl px-4 py-3 text-fg placeholder-muted focus:outline-none focus:border-accent transition-colors"
+              required
+            >
+          </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-6 mb-6">
+          <div>
+            <label for="phone" class="block text-sm font-medium text-fg mb-2">Phone Number</label>
+            <input
+              type="tel"
+              id="phone"
+              name="phone"
+              placeholder="+65 XXXX XXXX"
+              class="w-full bg-bg border border-border rounded-xl px-4 py-3 text-fg placeholder-muted focus:outline-none focus:border-accent transition-colors"
+            >
+          </div>
+          <div>
+            <label for="program" class="block text-sm font-medium text-fg mb-2">Interested Program</label>
+            <select
+              id="program"
+              name="program"
+              class="w-full bg-bg border border-border rounded-xl px-4 py-3 text-fg focus:outline-none focus:border-accent transition-colors"
+            >
+              <option value="">Select a program</option>
+              <option value="starter">Starter Smash</option>
+              <option value="ace">Ace Developer</option>
+              <option value="elite">Elite Champion</option>
+              <option value="private">Private Sessions</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="mb-6">
+          <label for="message" class="block text-sm font-medium text-fg mb-2">Tell us about your experience</label>
+          <textarea
+            id="message"
+            name="message"
+            rows="4"
+            placeholder="Share your badminton background or goals..."
+            class="w-full bg-bg border border-border rounded-xl px-4 py-3 text-fg placeholder-muted focus:outline-none focus:border-accent transition-colors resize-none"
+          ></textarea>
+        </div>
+
+        <button type="submit" class="btn-primary w-full md:w-auto">
+          Book Your Session
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="inline ml-2">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </button>
+      </form>
+
+      <!-- Contact Info -->
+      <div class="grid md:grid-cols-3 gap-6 mt-12 reveal" style="transition-delay: 0.3s;">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 bg-card border border-border rounded-xl flex items-center justify-center">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-accent">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+          </div>
+          <div>
+            <div class="text-sm text-muted">Location</div>
+            <div class="font-medium text-fg">Singapore Sports Hub</div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 bg-card border border-border rounded-xl flex items-center justify-center">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-accent">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+            </svg>
+          </div>
+          <div>
+            <div class="text-sm text-muted">Phone</div>
+            <div class="font-medium text-fg">+65 9123 4567</div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 bg-card border border-border rounded-xl flex items-center justify-center">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-accent">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+          </div>
+          <div>
+            <div class="text-sm text-muted">Hours</div>
+            <div class="font-medium text-fg">Mon-Sat, 7AM-10PM</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-12 border-t border-border">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="font-display text-2xl tracking-wider">
+          ROBBIE<span class="text-accent">.</span>BADMINTON
+        </div>
+
+        <div class="flex items-center gap-6">
+          <a href="#" class="text-muted hover:text-accent transition-colors" aria-label="Instagram">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+            </svg>
+          </a>
+          <a href="#" class="text-muted hover:text-accent transition-colors" aria-label="Facebook">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+            </svg>
+          </a>
+          <a href="#" class="text-muted hover:text-accent transition-colors" aria-label="YouTube">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
+              <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
+            </svg>
+          </a>
+        </div>
+
+        <div class="text-sm text-muted flex items-center gap-2">
+          <span>&copy; 2026</span>
+          <a href="https://orionwebworks.github.io/" target="_blank" rel="noopener noreferrer" class="hover:text-accent transition-colors">orionwebworks.github.io</a>
+          <span>&bull;</span>
+          <span class="text-accent">Made with</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="text-accent">
+            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+          </svg>
+          <span class="text-accent">love</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Initialize elements
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    // Mobile menu toggle
+    if (mobileMenuBtn && mobileMenu) {
+      mobileMenuBtn.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+      });
+
+      // Close mobile menu on link click
+      mobileMenu.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+          mobileMenu.classList.add('hidden');
+        });
+      });
+    }
+
+    // Scroll reveal with IntersectionObserver
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.1
+    };
+
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+        }
+      });
+    }, observerOptions);
+
+    // Observe all reveal elements
+    document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale').forEach(el => {
+      revealObserver.observe(el);
+    });
+
+    // Navbar background on scroll
+    const nav = document.querySelector('nav');
+    let lastScroll = 0;
+
+    window.addEventListener('scroll', () => {
+      const currentScroll = window.pageYOffset;
+
+      if (nav) {
+        if (currentScroll > 50) {
+          nav.style.background = 'rgba(13, 13, 13, 0.95)';
+        } else {
+          nav.style.background = 'rgba(13, 13, 13, 0.8)';
+        }
+      }
+
+      lastScroll = currentScroll;
+    });
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+
+    // Form submission (prevent default for demo)
+    const form = document.querySelector('form');
+    if (form) {
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        // Get button
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (submitBtn) {
+          const originalText = submitBtn.innerHTML;
+          submitBtn.innerHTML = 'Sending...';
+          submitBtn.disabled = true;
+
+          // Simulate submission
+          setTimeout(() => {
+            submitBtn.innerHTML = `
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="inline mr-2">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              Session Requested!
+            `;
+            submitBtn.style.background = '#22c55e';
+
+            setTimeout(() => {
+              submitBtn.innerHTML = originalText;
+              submitBtn.style.background = '';
+              submitBtn.disabled = false;
+              form.reset();
+            }, 3000);
+          }, 1500);
+        }
+      });
+    }
+
+    // Reduced motion check
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    if (prefersReducedMotion.matches) {
+      // Instantly reveal all elements
+      document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale').forEach(el => {
+        el.classList.add('active');
+      });
+    }
+  </script>
+</body>
+</html>
